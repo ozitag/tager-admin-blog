@@ -1,4 +1,3 @@
-const EN = {
-};
+const EN = {};
 
 export default EN;

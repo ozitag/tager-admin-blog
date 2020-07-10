@@ -1,4 +1,3 @@
-const RU = {
-};
+const RU = {};
 
 export default RU;
