@@ -1,5 +1,6 @@
-import { Post, BlogCategory } from '@/typings/model';
 import { request, Nullable, ResponseBody } from '@tager/admin-services';
+
+import { Post, BlogCategory } from '../typings/model';
 
 /** Blog Posts */
 

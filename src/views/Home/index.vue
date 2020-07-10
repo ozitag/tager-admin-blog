@@ -5,10 +5,11 @@
 <script lang="ts">
 import Vue from 'vue';
 import { NavigationGridItem } from '@tager/admin-ui';
+
 import {
   BLOG_CATEGORY_LIST_ROUTE,
   BLOG_POST_LIST_ROUTE,
-} from '@/constants/routes';
+} from '../../constants/routes';
 
 export default Vue.extend({
   name: 'Home',

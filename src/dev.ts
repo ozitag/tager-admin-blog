@@ -15,10 +15,10 @@ import {
   BLOG_CATEGORY_LIST_ROUTE,
   BLOG_POST_FORM_ROUTE,
   BLOG_POST_LIST_ROUTE,
-} from '@/constants/routes';
-import config from '@/config/config.json';
-import App from '@/views/App.vue';
-import Home from '@/views/Home/index.vue';
+} from './constants/routes';
+import config from './config/config.json';
+import App from './views/App.vue';
+import Home from './views/Home/index.vue';
 
 configStore.setConfig(config);
 

@@ -48,13 +48,13 @@ import { ColumnDefinition, LinkCellValue } from '@tager/admin-ui';
 import { compile } from 'path-to-regexp';
 import { getImageUrl } from '@tager/admin-services';
 
-import { BlogCategory, Post } from '@/typings/model';
+import { BlogCategory, Post } from '../../typings/model';
 import {
   deleteBlogCategory,
   getBlogCategoryList,
   getBlogPostList,
-} from '@/services/requests';
-import { ROUTE_PATHS } from '@/constants/paths';
+} from '../../services/requests';
+import { BLOG_ROUTE_PATHS } from '../../constants/paths';
 
 const COLUMN_DEFS: Array<ColumnDefinition<BlogCategory>> = [
   { id: 1, name: 'ID', field: 'id' },
@@ -117,7 +117,7 @@ export default Vue.extend({
   },
   methods: {
     getCategoryUrl(categoryId: string | number): string {
-      return compile(ROUTE_PATHS.BLOG_CATEGORY_FORM)({
+      return compile(BLOG_ROUTE_PATHS.CATEGORY_FORM)({
         categoryId,
       });
     },
@@ -176,7 +176,7 @@ export default Vue.extend({
       }, 0);
     },
     getLinkToPostsByCategory(categoryId: number) {
-      return `${ROUTE_PATHS.BLOG_POST_LIST}?category=${categoryId}`;
+      return `${BLOG_ROUTE_PATHS.POST_LIST}?category=${categoryId}`;
     },
     getLinkToCategoryForm(categoryId: number) {
       return this.getCategoryUrl(categoryId);

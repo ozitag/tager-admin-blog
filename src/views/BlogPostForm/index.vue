@@ -116,6 +116,7 @@ import {
   ImageType,
   Nullable,
 } from '@tager/admin-services';
+import { OptionType } from '@tager/admin-ui';
 
 import {
   createBlogPost,
@@ -124,10 +125,9 @@ import {
   PostCreationPayload,
   PostUpdatePayload,
   updateBlogPost,
-} from '@/services/requests';
-import { Post } from '@/typings/model';
-import { OptionType } from '@tager/admin-ui';
-import { ROUTE_PATHS } from '@/constants/paths';
+} from '../../services/requests';
+import { Post } from '../../typings/model';
+import { BLOG_ROUTE_PATHS } from '../../constants/paths';
 
 type FormValues = {
   title: string;
@@ -262,7 +262,7 @@ export default Vue.extend({
       requestPromise
         .then(() => {
           this.errors = {};
-          this.$router.push(ROUTE_PATHS.BLOG_POST_LIST);
+          this.$router.push(BLOG_ROUTE_PATHS.POST_LIST);
 
           this.$toast({
             variant: 'success',
@@ -285,7 +285,7 @@ export default Vue.extend({
         });
     },
     goBackToPostList() {
-      this.$router.push(ROUTE_PATHS.BLOG_POST_LIST);
+      this.$router.push(BLOG_ROUTE_PATHS.POST_LIST);
     },
   },
 });

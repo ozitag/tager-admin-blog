@@ -50,13 +50,13 @@ import { compile } from 'path-to-regexp';
 import { ColumnDefinition } from '@tager/admin-ui';
 import { getImageUrl } from '@tager/admin-services';
 
-import { BlogCategory, Post } from '@/typings/model';
+import { BlogCategory, Post } from '../../typings/model';
 import {
   deleteBlogPost,
   getBlogCategoryList,
   getBlogPostList,
-} from '@/services/requests';
-import { ROUTE_PATHS } from '@/constants/paths';
+} from '../../services/requests';
+import { BLOG_ROUTE_PATHS } from '../../constants/paths';
 
 const COLUMN_DEFS: Array<ColumnDefinition<Post>> = [
   {
@@ -150,7 +150,7 @@ export default Vue.extend({
   },
   methods: {
     getPostUrl(postId: string | number): string {
-      return compile(ROUTE_PATHS.BLOG_POST_FORM)({
+      return compile(BLOG_ROUTE_PATHS.POST_FORM)({
         postId,
       });
     },
