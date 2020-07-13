@@ -96,6 +96,7 @@ const COLUMN_DEFS: Array<ColumnDefinition<Post>> = [
     field: 'websiteUrl',
     type: 'link',
     shouldUseRouter: false,
+    format: ({ row }): LinkCellValue | string => `/blog/${row.urlAlias}`,
   },
   {
     id: 8,
