@@ -1,9 +1,9 @@
-import { Nullable, ImageType } from '@tager/admin-services';
+import { Nullable, FileType } from '@tager/admin-services';
 
 export type SeoInfo = {
   pageTitle: Nullable<string>;
   pageDescription: Nullable<string>;
-  openGraphImage: Nullable<ImageType>;
+  openGraphImage: Nullable<FileType>;
 };
 
 export type BlogCategory = {
@@ -21,7 +21,7 @@ export type Post = {
   status: string;
   excerpt: string;
   body: string;
-  image: Nullable<ImageType>;
-  coverImage: Nullable<ImageType>;
+  image: Nullable<FileType>;
+  coverImage: Nullable<FileType>;
   categories: Array<BlogCategory>;
 } & SeoInfo;

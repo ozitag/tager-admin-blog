@@ -34,15 +34,18 @@ export const HOME_ROUTE: CustomRouteConfig = {
   },
 };
 
-const router = createRouter({
-  routes: [
-    HOME_ROUTE,
-    BLOG_POST_LIST_ROUTE,
-    BLOG_POST_FORM_ROUTE,
-    BLOG_CATEGORY_LIST_ROUTE,
-    BLOG_CATEGORY_FORM_ROUTE,
-  ],
-});
+const router = createRouter(
+  {
+    routes: [
+      HOME_ROUTE,
+      BLOG_POST_LIST_ROUTE,
+      BLOG_POST_FORM_ROUTE,
+      BLOG_CATEGORY_LIST_ROUTE,
+      BLOG_CATEGORY_FORM_ROUTE,
+    ],
+  },
+  { useTitleSync: false }
+);
 
 i18n.init().then(() => {
   Vue.use(i18n.getPlugin());

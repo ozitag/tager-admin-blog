@@ -68,7 +68,7 @@
 import Vue from 'vue';
 import {
   convertRequestErrorToMap,
-  ImageType,
+  FileType,
   Nullable,
 } from '@tager/admin-services';
 
@@ -86,7 +86,7 @@ type FormValues = {
   name: string;
   pageTitle: string;
   pageDescription: string;
-  openGraphImage: Nullable<ImageType>;
+  openGraphImage: Nullable<FileType>;
   urlAlias: string;
 };
 

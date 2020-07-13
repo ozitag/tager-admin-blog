@@ -99,3 +99,12 @@ export function deleteBlogCategory(
     path: `/blog/categories/${categoryId}`,
   });
 }
+
+export function moveBlogCategory(
+  categoryId: number | string,
+  direction: 'up' | 'down'
+): Promise<{ success: boolean }> {
+  return request.post({
+    path: `/blog/categories/move/${categoryId}/${direction}`,
+  });
+}

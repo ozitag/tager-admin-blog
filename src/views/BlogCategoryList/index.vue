@@ -8,18 +8,18 @@
         :column-defs="columnDefs"
         :row-data="rowData"
         :loading="isRowDataLoading"
+        :error-message="errorMessage"
       >
-        <template v-slot:cell(name)="{ row }">
-          <router-link :to="getLinkToCategoryForm(row.id)">
-            {{ row.name }}
-          </router-link>
+        <template v-slot:cell(link-to-posts)="{ row }">
+          <base-button
+            :href="getLinkToPostsByCategory(row.id)"
+            variant="outline-secondary"
+          >
+            Posts ({{ getPostCountByCategory(row.id) }})
+          </base-button>
         </template>
 
-        <template v-slot:cell(actions)="{ row }">
-          <router-link :to="getLinkToPostsByCategory(row.id)">
-            Posts ({{ getPostCountByCategory(row.id) }})
-          </router-link>
-
+        <template v-slot:cell(actions)="{ row, rowIndex }">
           <base-button
             variant="icon"
             title="Edit"
@@ -28,6 +28,25 @@
           >
             <svg-icon name="edit"></svg-icon>
           </base-button>
+
+          <base-button
+            variant="icon"
+            title="Move up"
+            :disabled="rowIndex === 0 || isCategoryMoving"
+            @click="moveCategory(row.id, 'up')"
+          >
+            <svg-icon name="north"></svg-icon>
+          </base-button>
+
+          <base-button
+            variant="icon"
+            title="Move down"
+            :disabled="rowIndex === rowData.length - 1 || isCategoryMoving"
+            @click="moveCategory(row.id, 'down')"
+          >
+            <svg-icon name="south"></svg-icon>
+          </base-button>
+
           <base-button
             variant="icon"
             title="Remove"
@@ -46,29 +65,49 @@
 import Vue from 'vue';
 import { ColumnDefinition, LinkCellValue } from '@tager/admin-ui';
 import { compile } from 'path-to-regexp';
-import { getImageUrl } from '@tager/admin-services';
+import {
+  getImageUrl,
+  getMessageFromError,
+  Nullable,
+} from '@tager/admin-services';
 
 import { BlogCategory, Post } from '../../typings/model';
 import {
   deleteBlogCategory,
   getBlogCategoryList,
   getBlogPostList,
+  moveBlogCategory,
 } from '../../services/requests';
 import { BLOG_ROUTE_PATHS } from '../../constants/paths';
 
+function getCategoryUrl(categoryId: string | number): string {
+  return compile(BLOG_ROUTE_PATHS.CATEGORY_FORM)({
+    categoryId,
+  });
+}
+
 const COLUMN_DEFS: Array<ColumnDefinition<BlogCategory>> = [
-  { id: 1, name: 'ID', field: 'id' },
-  { id: 2, name: 'Name', field: 'name' },
+  { id: 1, name: 'ID', field: 'id', style: { width: '25px' } },
+  {
+    id: 2,
+    name: 'Name',
+    field: 'name',
+    type: 'link',
+    shouldUseRouter: true,
+    format: ({ row }): LinkCellValue => ({
+      href: getCategoryUrl(row.id),
+      label: row.name,
+    }),
+  },
   { id: 3, name: 'Url alias', field: 'urlAlias' },
   {
     id: 4,
     name: 'Website URL',
     field: 'websiteUrl',
     type: 'link',
-    format: ({ row }): LinkCellValue => ({
-      href: `/blog/category/${row.urlAlias}`,
-      label: `/blog/category/${row.urlAlias}`,
-    }),
+    shouldUseRouter: false,
+    format: ({ row }): LinkCellValue | string =>
+      `/blog/category/${row.urlAlias}`,
   },
 
   { id: 5, name: 'Page title', field: 'pageTitle' },
@@ -82,9 +121,15 @@ const COLUMN_DEFS: Array<ColumnDefinition<BlogCategory>> = [
   },
   {
     id: 8,
+    name: 'Posts',
+    field: 'linkToPosts',
+    style: { whiteSpace: 'nowrap', textAlign: 'center', width: '130px' },
+  },
+  {
+    id: 9,
     name: 'Actions',
     field: 'actions',
-    style: { whiteSpace: 'nowrap' },
+    style: { whiteSpace: 'nowrap', width: '205px' },
     class: 'actions-cell',
   },
 ];
@@ -96,14 +141,18 @@ export default Vue.extend({
     rowData: Array<BlogCategory>;
     deletingCategoryIdList: Array<number>;
     postList: Array<Post>;
+    isCategoryMoving: boolean;
     isRowDataLoading: boolean;
+    errorMessage: Nullable<string>;
   } {
     return {
       columnDefs: COLUMN_DEFS,
       rowData: [],
       deletingCategoryIdList: [],
+      isCategoryMoving: false,
       postList: [],
       isRowDataLoading: false,
+      errorMessage: null,
     };
   },
   mounted(): void {
@@ -116,20 +165,35 @@ export default Vue.extend({
       .catch(console.error);
   },
   methods: {
-    getCategoryUrl(categoryId: string | number): string {
-      return compile(BLOG_ROUTE_PATHS.CATEGORY_FORM)({
-        categoryId,
-      });
-    },
+    getCategoryUrl,
     refreshCategoryList(): Promise<void> {
       this.isRowDataLoading = true;
       return getBlogCategoryList()
         .then((response) => {
           this.rowData = response.data;
+          this.errorMessage = null;
+        })
+        .catch((error) => {
+          console.error(error);
+          this.rowData = [];
+          this.errorMessage = getMessageFromError(error);
+        })
+        .finally(() => {
+          this.isRowDataLoading = false;
+        });
+    },
+    moveCategory(categoryId: number, direction: 'up' | 'down') {
+      this.isCategoryMoving = true;
+
+      moveBlogCategory(categoryId, direction)
+        .then((response) => {
+          if (response.success) {
+            return this.refreshCategoryList();
+          }
         })
         .catch(console.error)
         .finally(() => {
-          this.isRowDataLoading = false;
+          this.isCategoryMoving = false;
         });
     },
     handleCategoryDelete(category: BlogCategory) {
@@ -189,16 +253,6 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-td {
-  a {
-    color: #007bff;
-
-    &:hover {
-      color: #0056b3;
-      text-decoration: underline;
-    }
-  }
-}
 .actions-cell {
   button:not(:last-child) {
     margin-right: 0.5rem;

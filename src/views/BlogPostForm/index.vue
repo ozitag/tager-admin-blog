@@ -113,7 +113,7 @@
 import Vue from 'vue';
 import {
   convertRequestErrorToMap,
-  ImageType,
+  FileType,
   Nullable,
 } from '@tager/admin-services';
 import { OptionType } from '@tager/admin-ui';
@@ -134,11 +134,11 @@ type FormValues = {
   excerpt: string;
   body: string;
   date: string;
-  image: Nullable<ImageType>;
-  coverImage: Nullable<ImageType>;
+  image: Nullable<FileType>;
+  coverImage: Nullable<FileType>;
   pageTitle: string;
   pageDescription: string;
-  openGraphImage: Nullable<ImageType>;
+  openGraphImage: Nullable<FileType>;
   urlAlias: string;
   categories: Array<OptionType<number>>;
 };

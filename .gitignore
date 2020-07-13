@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
 /dist
+.yalc
+yalc.lock
 
 src/config/app.json
 

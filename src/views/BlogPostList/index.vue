@@ -8,19 +8,8 @@
         :column-defs="columnDefs"
         :row-data="displayedRowData"
         :loading="isRowDataLoading"
+        :error-message="errorMessage"
       >
-        <template v-slot:cell(title)="{ row }">
-          <router-link :to="getLinkToPostForm(row.id)">
-            {{ row.title }}
-          </router-link>
-        </template>
-
-        <template v-slot:cell(website-url)="{ row }">
-          <a :href="row.websiteUrl" target="_blank">
-            {{ row.websiteUrl }}
-          </a>
-        </template>
-
         <template v-slot:cell(actions)="{ row }">
           <base-button
             variant="icon"
@@ -47,8 +36,12 @@
 <script lang="ts">
 import Vue from 'vue';
 import { compile } from 'path-to-regexp';
-import { ColumnDefinition } from '@tager/admin-ui';
-import { getImageUrl } from '@tager/admin-services';
+import { ColumnDefinition, LinkCellValue } from '@tager/admin-ui';
+import {
+  getImageUrl,
+  getMessageFromError,
+  Nullable,
+} from '@tager/admin-services';
 
 import { BlogCategory, Post } from '../../typings/model';
 import {
@@ -58,11 +51,18 @@ import {
 } from '../../services/requests';
 import { BLOG_ROUTE_PATHS } from '../../constants/paths';
 
+function getPostUrl(postId: string | number): string {
+  return compile(BLOG_ROUTE_PATHS.POST_FORM)({
+    postId,
+  });
+}
+
 const COLUMN_DEFS: Array<ColumnDefinition<Post>> = [
   {
     id: 1,
     name: 'ID',
     field: 'id',
+    style: { width: '25px' },
   },
   {
     id: 2,
@@ -71,7 +71,17 @@ const COLUMN_DEFS: Array<ColumnDefinition<Post>> = [
     type: 'image',
     format: ({ row }) => getImageUrl(row.coverImage),
   },
-  { id: 4, name: 'Title', field: 'title', class: 'link-cell' },
+  {
+    id: 4,
+    name: 'Title',
+    field: 'title',
+    type: 'link',
+    shouldUseRouter: true,
+    format: ({ row }): LinkCellValue => ({
+      href: getPostUrl(row.id),
+      label: row.title,
+    }),
+  },
   { id: 5, name: 'Date', field: 'date', type: 'date' },
   {
     id: 6,
@@ -84,13 +94,14 @@ const COLUMN_DEFS: Array<ColumnDefinition<Post>> = [
     id: 7,
     name: 'Website URL',
     field: 'websiteUrl',
-    class: 'link-cell',
+    type: 'link',
+    shouldUseRouter: false,
   },
   {
     id: 8,
     name: 'Actions',
     field: 'actions',
-    style: { whiteSpace: 'nowrap' },
+    style: { whiteSpace: 'nowrap', width: '120px' },
     class: 'actions-cell',
   },
 ];
@@ -103,6 +114,7 @@ export default Vue.extend({
     deletingPostIdList: Array<number>;
     categoryList: Array<BlogCategory>;
     isRowDataLoading: boolean;
+    errorMessage: Nullable<string>;
   } {
     return {
       columnDefs: COLUMN_DEFS,
@@ -110,6 +122,7 @@ export default Vue.extend({
       deletingPostIdList: [],
       categoryList: [],
       isRowDataLoading: false,
+      errorMessage: null,
     };
   },
   computed: {
@@ -149,19 +162,20 @@ export default Vue.extend({
     this.refreshPostList();
   },
   methods: {
-    getPostUrl(postId: string | number): string {
-      return compile(BLOG_ROUTE_PATHS.POST_FORM)({
-        postId,
-      });
-    },
+    getPostUrl,
     refreshPostList(): Promise<void> {
       this.isRowDataLoading = true;
 
       return getBlogPostList()
         .then((response) => {
           this.rowData = response.data;
+          this.errorMessage = null;
         })
-        .catch(console.error)
+        .catch((error) => {
+          console.error(error);
+          this.rowData = [];
+          this.errorMessage = getMessageFromError(error);
+        })
         .finally(() => {
           this.isRowDataLoading = false;
         });
@@ -216,17 +230,6 @@ export default Vue.extend({
 .actions-cell {
   button:not(:last-child) {
     margin-right: 0.5rem;
-  }
-}
-
-.link-cell {
-  a {
-    color: #007bff;
-
-    &:hover {
-      color: #0056b3;
-      text-decoration: underline;
-    }
   }
 }
 </style>
