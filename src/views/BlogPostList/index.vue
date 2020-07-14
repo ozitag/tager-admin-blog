@@ -62,7 +62,8 @@ const COLUMN_DEFS: Array<ColumnDefinition<Post>> = [
     id: 1,
     name: 'ID',
     field: 'id',
-    style: { width: '25px' },
+    style: { width: '50px', textAlign: 'center' },
+    headStyle: { width: '50px', textAlign: 'center' },
   },
   {
     id: 2,
@@ -103,6 +104,7 @@ const COLUMN_DEFS: Array<ColumnDefinition<Post>> = [
     name: 'Actions',
     field: 'actions',
     style: { whiteSpace: 'nowrap', width: '120px' },
+    headStyle: { whiteSpace: 'nowrap', width: '120px' },
     class: 'actions-cell',
   },
 ];

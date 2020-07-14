@@ -87,7 +87,13 @@ function getCategoryUrl(categoryId: string | number): string {
 }
 
 const COLUMN_DEFS: Array<ColumnDefinition<BlogCategory>> = [
-  { id: 1, name: 'ID', field: 'id', style: { width: '25px' } },
+  {
+    id: 1,
+    name: 'ID',
+    field: 'id',
+    style: { width: '50px', textAlign: 'center' },
+    headStyle: { width: '50px', textAlign: 'center' },
+  },
   {
     id: 2,
     name: 'Name',
@@ -130,6 +136,7 @@ const COLUMN_DEFS: Array<ColumnDefinition<BlogCategory>> = [
     name: 'Actions',
     field: 'actions',
     style: { whiteSpace: 'nowrap', width: '205px' },
+    headStyle: { whiteSpace: 'nowrap', width: '205px' },
     class: 'actions-cell',
   },
 ];

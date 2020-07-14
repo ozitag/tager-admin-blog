@@ -950,10 +950,10 @@
   dependencies:
     "@babel/runtime" "^7.10.4"
 
-"@tager/admin-services@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@tager/admin-services/-/admin-services-0.1.5.tgz#1b489c0028ac9bb1d60cc141404dcdd15a9374fb"
-  integrity sha512-7tPiRFZ2IvcrrWlC9NmWn2J0fT7THQnCR32r/7fZrM+lSJhmi8QdMJvdPkP5JauSKaKtMIIApDQFrM5u5GY5tw==
+"@tager/admin-services@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@tager/admin-services/-/admin-services-0.1.6.tgz#ec300e279af67f478433bc09a1313a6a03fb4b52"
+  integrity sha512-QZgYprMn5LRkicfHOZZLQFDGPX+z0vC7Gex6A+mvoWgb7tcUT7csIx6AxOd0DksNHnXZnvUNRA8Ae/6MMF9RdA==
   dependencies:
     i18next "^19.5.4"
 
