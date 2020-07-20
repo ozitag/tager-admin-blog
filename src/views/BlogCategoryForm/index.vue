@@ -80,7 +80,7 @@ import {
   updateBlogCategory,
 } from '../../services/requests';
 import { BlogCategory } from '../../typings/model';
-import { BLOG_ROUTE_PATHS } from '../../constants/paths';
+import { getBlogCategoryListUrl } from '../../constants/paths';
 
 type FormValues = {
   name: string;
@@ -165,7 +165,7 @@ export default Vue.extend({
       requestPromise
         .then(() => {
           this.errors = {};
-          this.$router.push(BLOG_ROUTE_PATHS.CATEGORY_LIST);
+          this.$router.push(getBlogCategoryListUrl());
 
           this.$toast({
             variant: 'success',
@@ -188,7 +188,7 @@ export default Vue.extend({
         });
     },
     goBackToCategoryList() {
-      this.$router.push(BLOG_ROUTE_PATHS.CATEGORY_LIST);
+      this.$router.push(getBlogCategoryListUrl());
     },
   },
 });

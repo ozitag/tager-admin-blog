@@ -35,7 +35,6 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { compile } from 'path-to-regexp';
 import { ColumnDefinition, LinkCellValue } from '@tager/admin-ui';
 import {
   getImageUrl,
@@ -49,13 +48,7 @@ import {
   getBlogCategoryList,
   getBlogPostList,
 } from '../../services/requests';
-import { BLOG_ROUTE_PATHS } from '../../constants/paths';
-
-function getPostUrl(postId: string | number): string {
-  return compile(BLOG_ROUTE_PATHS.POST_FORM)({
-    postId,
-  });
-}
+import { getBlogPostFormUrl } from '../../constants/paths';
 
 const COLUMN_DEFS: Array<ColumnDefinition<Post>> = [
   {
@@ -79,7 +72,7 @@ const COLUMN_DEFS: Array<ColumnDefinition<Post>> = [
     type: 'link',
     shouldUseRouter: true,
     format: ({ row }): LinkCellValue => ({
-      href: getPostUrl(row.id),
+      href: getBlogPostFormUrl({ postId: row.id }),
       label: row.title,
     }),
   },
@@ -165,7 +158,9 @@ export default Vue.extend({
     this.refreshPostList();
   },
   methods: {
-    getPostUrl,
+    getPostUrl(postId: string | number): string {
+      return getBlogPostFormUrl({ postId });
+    },
     refreshPostList(): Promise<void> {
       this.isRowDataLoading = true;
 
@@ -218,9 +213,6 @@ export default Vue.extend({
             });
           });
       }
-    },
-    getLinkToPostForm(postId: number) {
-      return this.getPostUrl(postId);
     },
     goToEditPost(postId: number) {
       this.$router.push(this.getPostUrl(postId));

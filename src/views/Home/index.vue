@@ -7,9 +7,9 @@ import Vue from 'vue';
 import { NavigationGridItem } from '@tager/admin-ui';
 
 import {
-  BLOG_CATEGORY_LIST_ROUTE,
-  BLOG_POST_LIST_ROUTE,
-} from '../../constants/routes';
+  getBlogCategoryListUrl,
+  getBlogPostListUrl,
+} from '../../constants/paths';
 
 export default Vue.extend({
   name: 'Home',
@@ -18,10 +18,10 @@ export default Vue.extend({
   } {
     return {
       blogNavItem: {
-        name: 'Blog',
+        name: this.$t('blog:blog'),
         linkList: [
-          { href: BLOG_POST_LIST_ROUTE.path, label: 'Posts' },
-          { href: BLOG_CATEGORY_LIST_ROUTE.path, label: 'Categories' },
+          { href: getBlogPostListUrl(), label: this.$t('blog:posts') },
+          { href: getBlogCategoryListUrl(), label: this.$t('blog:categories') },
         ],
       },
     };

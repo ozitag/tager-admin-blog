@@ -1,14 +1,30 @@
 import { MenuItemType } from '@tager/admin-layout';
+import {
+  getBlogCategoryFormUrl,
+  getBlogCategoryListUrl,
+  getBlogPostFormUrl,
+  getBlogPostListUrl,
+} from './paths';
 
-export const BLOG_MENU_ITEM: MenuItemType = {
-  id: 'blog',
-  name: 'Blog',
-  path: '/blog/posts',
-  icon: 'viewList',
-  children: [
-    { name: 'New Post', path: '/blog/posts/create' },
-    { name: 'Posts', path: '/blog/posts' },
-    { name: 'New Category', path: '/blog/categories/create' },
-    { name: 'Categories', path: '/blog/categories' },
-  ],
-};
+export function getBlogMenuItem(params: {
+  t: (key: string) => string;
+}): MenuItemType {
+  return {
+    id: 'blog',
+    name: params.t('blog:blog'),
+    path: '',
+    icon: 'viewList',
+    children: [
+      {
+        name: params.t('blog:createPost'),
+        path: getBlogPostFormUrl({ postId: 'create' }),
+      },
+      { name: params.t('blog:posts'), path: getBlogPostListUrl() },
+      {
+        name: params.t('blog:createCategory'),
+        path: getBlogCategoryFormUrl({ categoryId: 'create' }),
+      },
+      { name: params.t('blog:categories'), path: getBlogCategoryListUrl() },
+    ],
+  };
+}

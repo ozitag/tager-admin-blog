@@ -64,7 +64,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import { ColumnDefinition, LinkCellValue } from '@tager/admin-ui';
-import { compile } from 'path-to-regexp';
 import {
   getImageUrl,
   getMessageFromError,
@@ -78,13 +77,10 @@ import {
   getBlogPostList,
   moveBlogCategory,
 } from '../../services/requests';
-import { BLOG_ROUTE_PATHS } from '../../constants/paths';
-
-function getCategoryUrl(categoryId: string | number): string {
-  return compile(BLOG_ROUTE_PATHS.CATEGORY_FORM)({
-    categoryId,
-  });
-}
+import {
+  getBlogCategoryFormUrl,
+  getBlogPostListUrl,
+} from '../../constants/paths';
 
 const COLUMN_DEFS: Array<ColumnDefinition<BlogCategory>> = [
   {
@@ -101,7 +97,7 @@ const COLUMN_DEFS: Array<ColumnDefinition<BlogCategory>> = [
     type: 'link',
     shouldUseRouter: true,
     format: ({ row }): LinkCellValue => ({
-      href: getCategoryUrl(row.id),
+      href: getBlogCategoryFormUrl({ categoryId: row.id }),
       label: row.name,
     }),
   },
@@ -172,7 +168,9 @@ export default Vue.extend({
       .catch(console.error);
   },
   methods: {
-    getCategoryUrl,
+    getCategoryUrl(categoryId: string | number) {
+      return getBlogCategoryFormUrl({ categoryId });
+    },
     refreshCategoryList(): Promise<void> {
       this.isRowDataLoading = true;
       return getBlogCategoryList()
@@ -247,10 +245,7 @@ export default Vue.extend({
       }, 0);
     },
     getLinkToPostsByCategory(categoryId: number) {
-      return `${BLOG_ROUTE_PATHS.POST_LIST}?category=${categoryId}`;
-    },
-    getLinkToCategoryForm(categoryId: number) {
-      return this.getCategoryUrl(categoryId);
+      return `${getBlogPostListUrl()}?category=${categoryId}`;
     },
     goToEditCategory(categoryId: number): void {
       this.$router.push(this.getCategoryUrl(categoryId));

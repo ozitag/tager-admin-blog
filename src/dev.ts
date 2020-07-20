@@ -19,6 +19,8 @@ import {
 import config from './config/config.json';
 import App from './views/App.vue';
 import Home from './views/Home/index.vue';
+import EN from './locales/en';
+import RU from './locales/ru';
 
 configStore.setConfig(config);
 
@@ -47,7 +49,10 @@ const router = createRouter(
   { useTitleSync: false }
 );
 
-i18n.init().then(() => {
+i18n.addTranslations('en', 'blog', EN);
+i18n.addTranslations('ru', 'blog', RU);
+
+i18n.init({ debug: true }).then(() => {
   Vue.use(i18n.getPlugin());
 
   new Vue({

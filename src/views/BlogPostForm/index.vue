@@ -127,7 +127,7 @@ import {
   updateBlogPost,
 } from '../../services/requests';
 import { Post } from '../../typings/model';
-import { BLOG_ROUTE_PATHS } from '../../constants/paths';
+import { getBlogPostListUrl } from '../../constants/paths';
 
 type FormValues = {
   title: string;
@@ -262,7 +262,7 @@ export default Vue.extend({
       requestPromise
         .then(() => {
           this.errors = {};
-          this.$router.push(BLOG_ROUTE_PATHS.POST_LIST);
+          this.$router.push(getBlogPostListUrl());
 
           this.$toast({
             variant: 'success',
@@ -285,7 +285,7 @@ export default Vue.extend({
         });
     },
     goBackToPostList() {
-      this.$router.push(BLOG_ROUTE_PATHS.POST_LIST);
+      this.$router.push(getBlogPostListUrl());
     },
   },
 });
