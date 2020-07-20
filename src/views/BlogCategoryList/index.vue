@@ -84,13 +84,6 @@ import {
 
 const COLUMN_DEFS: Array<ColumnDefinition<BlogCategory>> = [
   {
-    id: 1,
-    name: 'ID',
-    field: 'id',
-    style: { width: '50px', textAlign: 'center' },
-    headStyle: { width: '50px', textAlign: 'center' },
-  },
-  {
     id: 2,
     name: 'Name',
     field: 'name',
@@ -110,16 +103,6 @@ const COLUMN_DEFS: Array<ColumnDefinition<BlogCategory>> = [
     shouldUseRouter: false,
     format: ({ row }): LinkCellValue | string =>
       `/blog/category/${row.urlAlias}`,
-  },
-
-  { id: 5, name: 'Page title', field: 'pageTitle' },
-  { id: 6, name: 'Page description', field: 'pageDescription' },
-  {
-    id: 7,
-    name: 'Open Graph image',
-    field: 'openGraphImage',
-    type: 'image',
-    format: ({ row }) => getImageUrl(row.openGraphImage),
   },
   {
     id: 8,
