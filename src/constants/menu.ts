@@ -1,4 +1,5 @@
 import { MenuItemType } from '@tager/admin-layout';
+import { TranslateFunction } from '@tager/admin-services';
 import {
   getBlogCategoryFormUrl,
   getBlogCategoryListUrl,
@@ -7,7 +8,7 @@ import {
 } from './paths';
 
 export function getBlogMenuItem(params: {
-  t: (key: string) => string;
+  t: TranslateFunction;
 }): MenuItemType {
   return {
     id: 'blog',
