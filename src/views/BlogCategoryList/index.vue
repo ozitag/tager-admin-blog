@@ -88,11 +88,13 @@ const COLUMN_DEFS: Array<ColumnDefinition<BlogCategory>> = [
     name: 'Name',
     field: 'name',
     type: 'link',
-    shouldUseRouter: true,
-    format: ({ row }): LinkCellValue => ({
+    format: ({ row }) => ({
       href: getBlogCategoryFormUrl({ categoryId: row.id }),
       label: row.name,
     }),
+    options: {
+      shouldUseRouter: true,
+    },
   },
   { id: 3, name: 'Url alias', field: 'urlAlias' },
   {
@@ -100,9 +102,10 @@ const COLUMN_DEFS: Array<ColumnDefinition<BlogCategory>> = [
     name: 'Website URL',
     field: 'websiteUrl',
     type: 'link',
-    shouldUseRouter: false,
-    format: ({ row }): LinkCellValue | string =>
-      `/blog/category/${row.urlAlias}`,
+    format: ({ row }) => `/blog/category/${row.urlAlias}`,
+    options: {
+      shouldUseRouter: false,
+    },
   },
   {
     id: 8,

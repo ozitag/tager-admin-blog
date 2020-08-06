@@ -70,11 +70,13 @@ const COLUMN_DEFS: Array<ColumnDefinition<Post>> = [
     name: 'Title',
     field: 'title',
     type: 'link',
-    shouldUseRouter: true,
-    format: ({ row }): LinkCellValue => ({
+    format: ({ row }) => ({
       href: getBlogPostFormUrl({ postId: row.id }),
       label: row.title,
     }),
+    options: {
+      shouldUseRouter: true,
+    },
   },
   { id: 5, name: 'Date', field: 'date', type: 'date' },
   {
@@ -89,8 +91,10 @@ const COLUMN_DEFS: Array<ColumnDefinition<Post>> = [
     name: 'Website URL',
     field: 'websiteUrl',
     type: 'link',
-    shouldUseRouter: false,
-    format: ({ row }): LinkCellValue | string => `/blog/${row.urlAlias}`,
+    format: ({ row }) => `/blog/${row.urlAlias}`,
+    options: {
+      shouldUseRouter: false,
+    },
   },
   {
     id: 8,
