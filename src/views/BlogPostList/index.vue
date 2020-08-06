@@ -71,8 +71,8 @@ const COLUMN_DEFS: Array<ColumnDefinition<Post>> = [
     field: 'title',
     type: 'link',
     format: ({ row }) => ({
-      href: getBlogPostFormUrl({ postId: row.id }),
-      label: row.title,
+      url: getBlogPostFormUrl({ postId: row.id }),
+      text: row.title,
     }),
     options: {
       shouldUseRouter: true,

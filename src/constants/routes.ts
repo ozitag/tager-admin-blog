@@ -7,7 +7,7 @@ import BlogCategoryForm from '../views/BlogCategoryForm/index.vue';
 
 import { BLOG_ROUTE_PATHS } from './paths';
 
-const HOME_BREADCRUMB = { path: 'href', label: 'Home' };
+const HOME_BREADCRUMB = { url: '/', text: 'Home' };
 
 export const BLOG_POST_LIST_ROUTE: CustomRouteConfig = {
   path: BLOG_ROUTE_PATHS.POST_LIST,
@@ -16,7 +16,7 @@ export const BLOG_POST_LIST_ROUTE: CustomRouteConfig = {
   meta: {
     getBreadcrumbs: () => [
       HOME_BREADCRUMB,
-      { path: BLOG_ROUTE_PATHS.POST_LIST, label: 'All posts' },
+      { url: BLOG_ROUTE_PATHS.POST_LIST, text: 'All posts' },
     ],
   },
 };
@@ -28,8 +28,8 @@ export const BLOG_POST_FORM_ROUTE: CustomRouteConfig = {
   meta: {
     getBreadcrumbs: (route: CustomRoute) => [
       HOME_BREADCRUMB,
-      { path: BLOG_ROUTE_PATHS.POST_LIST, label: 'All posts' },
-      { path: route.path, label: 'Blog post form' },
+      { url: BLOG_ROUTE_PATHS.POST_LIST, text: 'All posts' },
+      { url: route.path, text: 'Blog post form' },
     ],
   },
 };
@@ -41,7 +41,7 @@ export const BLOG_CATEGORY_LIST_ROUTE: CustomRouteConfig = {
   meta: {
     getBreadcrumbs: () => [
       HOME_BREADCRUMB,
-      { path: BLOG_ROUTE_PATHS.CATEGORY_LIST, label: 'All categories' },
+      { url: BLOG_ROUTE_PATHS.CATEGORY_LIST, text: 'All categories' },
     ],
   },
 };
@@ -53,8 +53,8 @@ export const BLOG_CATEGORY_FORM_ROUTE: CustomRouteConfig = {
   meta: {
     getBreadcrumbs: (route: CustomRoute) => [
       HOME_BREADCRUMB,
-      { path: BLOG_ROUTE_PATHS.CATEGORY_LIST, label: 'All categories' },
-      { path: route.path, label: 'Blog Category form' },
+      { url: BLOG_ROUTE_PATHS.CATEGORY_LIST, text: 'All categories' },
+      { url: route.path, text: 'Blog Category form' },
     ],
   },
 };

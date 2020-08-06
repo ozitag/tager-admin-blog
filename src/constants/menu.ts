@@ -12,20 +12,19 @@ export function getBlogMenuItem(params: {
 }): MenuItemType {
   return {
     id: 'blog',
-    name: params.t('blog:blog'),
-    path: '',
+    text: params.t('blog:blog'),
     icon: 'viewList',
     children: [
       {
-        name: params.t('blog:createPost'),
-        path: getBlogPostFormUrl({ postId: 'create' }),
+        text: params.t('blog:createPost'),
+        url: getBlogPostFormUrl({ postId: 'create' }),
       },
-      { name: params.t('blog:posts'), path: getBlogPostListUrl() },
+      { text: params.t('blog:posts'), url: getBlogPostListUrl() },
       {
-        name: params.t('blog:createCategory'),
-        path: getBlogCategoryFormUrl({ categoryId: 'create' }),
+        text: params.t('blog:createCategory'),
+        url: getBlogCategoryFormUrl({ categoryId: 'create' }),
       },
-      { name: params.t('blog:categories'), path: getBlogCategoryListUrl() },
+      { text: params.t('blog:categories'), url: getBlogCategoryListUrl() },
     ],
   };
 }

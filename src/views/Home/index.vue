@@ -20,8 +20,8 @@ export default Vue.extend({
       blogNavItem: {
         name: this.$t('blog:blog'),
         linkList: [
-          { href: getBlogPostListUrl(), label: this.$t('blog:posts') },
-          { href: getBlogCategoryListUrl(), label: this.$t('blog:categories') },
+          { url: getBlogPostListUrl(), text: this.$t('blog:posts') },
+          { url: getBlogCategoryListUrl(), text: this.$t('blog:categories') },
         ],
       },
     };

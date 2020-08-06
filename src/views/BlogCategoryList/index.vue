@@ -63,12 +63,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { ColumnDefinition, LinkCellValue } from '@tager/admin-ui';
-import {
-  getImageUrl,
-  getMessageFromError,
-  Nullable,
-} from '@tager/admin-services';
+import { ColumnDefinition } from '@tager/admin-ui';
+import { getMessageFromError, Nullable } from '@tager/admin-services';
 
 import { BlogCategory, Post } from '../../typings/model';
 import {
@@ -89,8 +85,8 @@ const COLUMN_DEFS: Array<ColumnDefinition<BlogCategory>> = [
     field: 'name',
     type: 'link',
     format: ({ row }) => ({
-      href: getBlogCategoryFormUrl({ categoryId: row.id }),
-      label: row.name,
+      url: getBlogCategoryFormUrl({ categoryId: row.id }),
+      text: row.name,
     }),
     options: {
       shouldUseRouter: true,
