@@ -5,6 +5,7 @@ import {
   BlogModuleConfigType,
   PostShort,
   PostFull,
+  SettingsItemType,
 } from '../typings/model';
 
 /** Blog Posts */
@@ -121,5 +122,13 @@ export function getBlogModuleConfig(): Promise<
 > {
   return request.get({
     path: `/admin/blog/module-info`,
+  });
+}
+
+export function getBlogSettingList(): Promise<
+  ResponseBody<Array<SettingsItemType>>
+> {
+  return request.get({
+    path: `/admin/blog/settings`,
   });
 }

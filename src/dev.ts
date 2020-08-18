@@ -19,7 +19,7 @@ import {
 } from './constants/routes';
 import config from './config/config.json';
 import App from './views/App.vue';
-import Home from './views/Home/index.vue';
+import Home from './views/Home.vue';
 import EN from './locales/en';
 import RU from './locales/ru';
 

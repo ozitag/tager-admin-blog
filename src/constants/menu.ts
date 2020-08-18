@@ -5,6 +5,7 @@ import {
   getBlogCategoryListUrl,
   getBlogPostFormUrl,
   getBlogPostListUrl,
+  getBlogSettingsUrl,
 } from './paths';
 
 export function getBlogMenuItem(params: {
@@ -25,6 +26,7 @@ export function getBlogMenuItem(params: {
         url: getBlogCategoryFormUrl({ categoryId: 'create' }),
       },
       { text: params.t('blog:categories'), url: getBlogCategoryListUrl() },
+      { text: params.t('blog:settings'), url: getBlogSettingsUrl() },
     ],
   };
 }

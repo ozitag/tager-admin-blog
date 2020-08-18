@@ -4,6 +4,7 @@ const EN = {
   categories: 'Categories',
   createPost: 'Create post',
   createCategory: 'Create category',
+  settings: 'Settings',
 };
 
 export default EN;

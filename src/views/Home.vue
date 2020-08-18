@@ -6,10 +6,7 @@
 import Vue from 'vue';
 import { NavigationGridItem } from '@tager/admin-ui';
 
-import {
-  getBlogCategoryListUrl,
-  getBlogPostListUrl,
-} from '../../constants/paths';
+import { getBlogCategoryListUrl, getBlogPostListUrl } from '../constants/paths';
 
 export default Vue.extend({
   name: 'Home',

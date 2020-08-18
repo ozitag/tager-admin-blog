@@ -2,6 +2,11 @@
   <page
     :title="isCreation ? 'Create Blog post' : 'Update Blog post'"
     :is-content-loading="isContentLoading"
+    :footer="{
+      backHref: postListUrl,
+      onSubmit: submitForm,
+      isSubmitting: isSubmitting,
+    }"
   >
     <template v-slot:content>
       <form novalidate @submit.prevent="submitForm">
@@ -97,22 +102,6 @@
           name="openGraphImage"
           file-type="image"
         />
-
-        <div class="bottom">
-          <base-button
-            class="save-button"
-            variant="outline-secondary"
-            @click="goBackToPostList"
-          >
-            Back to posts
-          </base-button>
-
-          <base-button
-            type="submit"
-            class="save-button"
-            variant="outline-secondary"
-          />
-        </div>
       </form>
     </template>
   </page>
@@ -210,6 +199,7 @@ export default defineComponent({
       convertPostToFormValues(post.value, languageOptionList.value)
     );
     const errors = ref<Record<string, string>>({});
+    const isSubmitting = ref<boolean>(false);
 
     watch(post, () => {
       values.value = convertPostToFormValues(
@@ -219,6 +209,8 @@ export default defineComponent({
     });
 
     function submitForm() {
+      isSubmitting.value = true;
+
       const creationBody = convertFormValuesToCreationPayload(values.value);
       const updateBody = convertFormValuesToUpdatePayload(values.value);
 
@@ -249,14 +241,13 @@ export default defineComponent({
               isCreation.value ? 'creation' : 'update'
             } was failed`,
           });
+        })
+        .finally(() => {
+          isSubmitting.value = false;
         });
     }
 
     /** Misc */
-
-    function goBackToPostList() {
-      context.root.$router.push(getBlogPostListUrl());
-    }
 
     const isContentLoading = computed<boolean>(
       () =>
@@ -277,10 +268,11 @@ export default defineComponent({
       values,
       errors,
       isContentLoading,
-      goBackToPostList,
+      postListUrl: getBlogPostListUrl(),
       submitForm,
       isLangSpecific,
       languageOptionList,
+      isSubmitting,
     };
   },
 });
