@@ -2,6 +2,11 @@
   <page
     :title="isCreation ? 'Create Blog category' : 'Update Blog category'"
     :is-content-loading="isContentLoading"
+    :footer="{
+      backHref: categoryListUrl,
+      onSubmit: submitForm,
+      isSubmitting: isSubmitting,
+    }"
   >
     <template v-slot:content>
       <form novalidate @submit.prevent="submitForm">
@@ -52,22 +57,6 @@
           name="openGraphImage"
           file-type="image"
         />
-
-        <div class="bottom">
-          <base-button
-            class="save-button"
-            variant="outline-secondary"
-            :href="categoryListUrl"
-          >
-            Back to categories
-          </base-button>
-
-          <base-button
-            type="submit"
-            class="save-button"
-            variant="outline-secondary"
-          />
-        </div>
       </form>
     </template>
   </page>
@@ -153,6 +142,7 @@ export default defineComponent({
       convertCategoryToFormValues(category.value, languageOptionList.value)
     );
     const errors = ref<Record<string, string>>({});
+    const isSubmitting = ref<boolean>(false);
 
     watch(category, () => {
       values.value = convertCategoryToFormValues(
@@ -162,6 +152,8 @@ export default defineComponent({
     });
 
     function submitForm() {
+      isSubmitting.value = true;
+
       const creationBody = convertCategoryFormValuesToCreationPayload(
         values.value
       );
@@ -194,6 +186,9 @@ export default defineComponent({
               isCreation.value ? 'creation' : 'update'
             } was failed`,
           });
+        })
+        .finally(() => {
+          isSubmitting.value = false;
         });
     }
 
@@ -218,29 +213,10 @@ export default defineComponent({
       pagePath: categoryPagePath,
       categoryListUrl: getBlogCategoryListUrl(),
       submitForm,
+      isSubmitting,
     };
   },
 });
 </script>
 
-<style scoped lang="scss">
-.bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.save-button {
-  min-width: 100px;
-}
-
-.alias-field-inner {
-  display: flex;
-  align-items: center;
-
-  span {
-    font-size: 0.9em;
-    margin-right: 10px;
-  }
-}
-</style>
+<style scoped lang="scss"></style>

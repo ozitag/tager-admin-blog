@@ -6,6 +6,7 @@ const RU: typeof EN = {
   categories: 'Категории',
   createPost: 'Создать пост',
   createCategory: 'Создать категорию',
+  settings: 'Настройки',
 };
 
 export default RU;

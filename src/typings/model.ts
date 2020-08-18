@@ -50,3 +50,30 @@ export type BlogModuleConfigType = {
     name: string;
   }>;
 };
+
+interface SettingsItem {
+  readonly field: string;
+  readonly label: string;
+  readonly type: string;
+  readonly value: any;
+}
+
+interface SettingsItemFile extends SettingsItem {
+  type: 'IMAGE' | 'FILE';
+  value: Nullable<FileType>;
+}
+
+interface SettingsItemFileList extends SettingsItem {
+  type: 'GALLERY';
+  value: Array<FileType>;
+}
+
+interface SettingsItemString extends SettingsItem {
+  type: 'NUMBER' | 'STRING' | 'TEXT';
+  value: Nullable<string>;
+}
+
+export type SettingsItemType =
+  | SettingsItemFile
+  | SettingsItemFileList
+  | SettingsItemString;
