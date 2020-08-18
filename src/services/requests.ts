@@ -1,16 +1,21 @@
 import { request, Nullable, ResponseBody } from '@tager/admin-services';
 
-import { Post, BlogCategory } from '../typings/model';
+import {
+  BlogCategory,
+  BlogModuleConfigType,
+  PostShort,
+  PostFull,
+} from '../typings/model';
 
 /** Blog Posts */
 
-export function getBlogPostList(): Promise<ResponseBody<Array<Post>>> {
+export function getBlogPostList(): Promise<ResponseBody<Array<PostShort>>> {
   return request.get({ path: '/admin/blog/posts' });
 }
 
 export function getBlogPost(
   postId: number | string
-): Promise<ResponseBody<Post>> {
+): Promise<ResponseBody<PostFull>> {
   return request.get({ path: `/admin/blog/posts/${postId}` });
 }
 
@@ -26,11 +31,12 @@ export type PostCreationPayload = {
   pageDescription: string;
   openGraphImage: Nullable<number>;
   categories: Array<number>;
+  language: Nullable<string>;
 };
 
 export function createBlogPost(
   payload: PostCreationPayload
-): Promise<ResponseBody<Post>> {
+): Promise<ResponseBody<PostFull>> {
   return request.post({ path: '/admin/blog/posts', body: payload });
 }
 
@@ -41,7 +47,7 @@ export type PostUpdatePayload = PostCreationPayload & {
 export function updateBlogPost(
   postId: number | string,
   payload: PostUpdatePayload
-): Promise<ResponseBody<Post>> {
+): Promise<ResponseBody<PostFull>> {
   return request.put({ path: `/admin/blog/posts/${postId}`, body: payload });
 }
 
@@ -68,6 +74,7 @@ export function getBlogCategory(
 export type BlogCategoryCreationPayload = {
   name: string;
   pageTitle: Nullable<string>;
+  language: Nullable<string>;
   pageDescription: Nullable<string>;
   openGraphImage: Nullable<number>;
 };
@@ -106,5 +113,13 @@ export function moveBlogCategory(
 ): Promise<{ success: boolean }> {
   return request.post({
     path: `/admin/blog/categories/move/${categoryId}/${direction}`,
+  });
+}
+
+export function getBlogModuleConfig(): Promise<
+  ResponseBody<BlogModuleConfigType>
+> {
+  return request.get({
+    path: `/admin/blog/module-info`,
   });
 }

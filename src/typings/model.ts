@@ -1,27 +1,52 @@
 import { Nullable, FileType } from '@tager/admin-services';
 
 export type SeoInfo = {
-  pageTitle: Nullable<string>;
-  pageDescription: Nullable<string>;
-  openGraphImage: Nullable<FileType>;
+  readonly pageTitle: Nullable<string>;
+  readonly pageDescription: Nullable<string>;
+  readonly openGraphImage: Nullable<FileType>;
 };
 
 export type BlogCategory = {
-  id: number;
-  name: string;
-  urlAlias: string;
+  readonly id: number;
+  readonly name: string;
+  readonly language: string;
+  readonly url: string;
+  readonly urlTemplate: string;
+  readonly urlAlias: string;
+  readonly postsCount: string;
 } & SeoInfo;
 
-export type Post = {
-  id: number;
-  title: string;
-  urlAlias: string;
-  websiteUrl: string;
-  date: string;
-  status: string;
-  excerpt: string;
-  body: string;
-  image: Nullable<FileType>;
-  coverImage: Nullable<FileType>;
-  categories: Array<BlogCategory>;
+export type PostShort = {
+  readonly id: number;
+  readonly title: string;
+  readonly url: string;
+  readonly excerpt: string;
+  readonly status: string;
+  readonly language: string;
+  readonly categories: Array<BlogCategory>;
+  readonly date: string;
+  readonly image: Nullable<FileType>;
+};
+
+export type PostFull = {
+  readonly id: number;
+  readonly language: string;
+  readonly title: string;
+  readonly url: string;
+  readonly urlTemplate: string;
+  readonly urlAlias: string;
+  readonly date: string;
+  readonly status: string;
+  readonly excerpt: string;
+  readonly image: Nullable<FileType>;
+  readonly categories: Array<BlogCategory>;
+  readonly body: string;
+  readonly coverImage: Nullable<FileType>;
 } & SeoInfo;
+
+export type BlogModuleConfigType = {
+  readonly languages: Array<{
+    id: string;
+    name: string;
+  }>;
+};

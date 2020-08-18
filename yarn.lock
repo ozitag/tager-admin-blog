@@ -938,10 +938,10 @@
   resolved "https://registry.yarnpkg.com/@soda/get-current-script/-/get-current-script-1.0.2.tgz#a53515db25d8038374381b73af20bb4f2e508d87"
   integrity sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==
 
-"@tager/admin-layout@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@tager/admin-layout/-/admin-layout-0.3.2.tgz#3f030d0f2187c6b4496d6483b4cb030f83909256"
-  integrity sha512-4dgx4GHjtCdXof6xj+555UOegkI3pHoM67fwqKDyXUzo0iN6IHgZjILU6CmhEDR/bF6DgjfeI3CIbDUerg4jOQ==
+"@tager/admin-layout@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@tager/admin-layout/-/admin-layout-0.4.1.tgz#689d5264e6e66115009872c7e8da89732cbcd845"
+  integrity sha512-L95ynh6C7o4ngJZdjs3CNNUOKGAH+/o+ZpUg5cIPyckRj4sRFutuPeYfuz6XkHIPHKO+odmNpHgke+zFQkJXgw==
   dependencies:
     "@babel/runtime" "^7.10.4"
 
@@ -952,10 +952,10 @@
   dependencies:
     i18next "^19.6.3"
 
-"@tager/admin-ui@^0.5.5":
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/@tager/admin-ui/-/admin-ui-0.5.5.tgz#fcb0562adf48da9704ab32171861df76ab97c1c8"
-  integrity sha512-48EtFjPJKp+gOU7iM/km6rHiy815lvLSIwsd8/5HnfQVpBRt9j/fG0qMgJPg70xLysCTZV7OPDB5U7JD7MyqfA==
+"@tager/admin-ui@^0.6.5":
+  version "0.6.5"
+  resolved "https://registry.yarnpkg.com/@tager/admin-ui/-/admin-ui-0.6.5.tgz#561612f231449a8c82bb8745ddc94817a2a83cca"
+  integrity sha512-ELZfUrtIAcUd5X6kg66iacRmetQbR3CKbWZGD1QafnBs8SwWLsW0xcTVTeX4IYrc2+ddPsVVC67t+e898ARQKw==
   dependencies:
     "@babel/runtime" "^7.10.2"
     "@ckeditor/ckeditor5-vue" "^1.0.1"
@@ -1343,6 +1343,13 @@
     pug "^2.0.3"
     sass "^1.18.0"
     stylus "^0.54.5"
+
+"@vue/composition-api@^1.0.0-beta.10":
+  version "1.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/@vue/composition-api/-/composition-api-1.0.0-beta.10.tgz#0494982b684c87b474c7869499ba37d1255a43c5"
+  integrity sha512-/uhUyexcEbFh+nyXF/KMC2H5gJjdMqAMdgc5tp+FASpEGFCXZp7+8yyR1Y91fkt1d0xYUJ2rPB0Hr2fpzyBTVw==
+  dependencies:
+    tslib "^2.0.1"
 
 "@vue/eslint-config-prettier@^6.0.0":
   version "6.0.0"
@@ -8478,6 +8485,11 @@ tslib@^1.10.0, tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0:
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.13.0.tgz#c881e13cc7015894ed914862d276436fa9a47043"
   integrity sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==
+
+tslib@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.1.tgz#410eb0d113e5b6356490eec749603725b021b43e"
+  integrity sha512-SgIkNheinmEBgx1IUNirK0TUD4X9yjjBRTqqjggWCU3pUEqIk3/Uwl3yRixYKT6WjQuGiwDv4NomL3wqRCj+CQ==
 
 tslint@^5.20.1:
   version "5.20.1"

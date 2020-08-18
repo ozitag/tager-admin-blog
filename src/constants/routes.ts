@@ -1,9 +1,9 @@
 import { CustomRoute, CustomRouteConfig } from '@tager/admin-layout';
 
-import BlogPostList from '../views/BlogPostList/index.vue';
-import BlogPostForm from '../views/BlogPostForm/index.vue';
-import BlogCategoryList from '../views/BlogCategoryList/index.vue';
-import BlogCategoryForm from '../views/BlogCategoryForm/index.vue';
+import BlogPostList from '../views/BlogPostList';
+import BlogPostForm from '../views/BlogPostForm';
+import BlogCategoryList from '../views/BlogCategoryList';
+import BlogCategoryForm from '../views/BlogCategoryForm';
 
 import { BLOG_ROUTE_PATHS } from './paths';
 
