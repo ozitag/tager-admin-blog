@@ -4,7 +4,7 @@ import vue from 'rollup-plugin-vue';
 import commonjs from '@rollup/plugin-commonjs';
 
 export default {
-  input: 'src/index.ts',
+  input: 'src/main.ts',
   output: [
     {
       file: 'dist/index.esm.js',
@@ -18,6 +18,7 @@ export default {
   ],
   external: [
     'vue',
+    '@vue/composition-api',
     '@tager/admin-services',
     '@tager/admin-ui',
     '@tager/admin-layout',
