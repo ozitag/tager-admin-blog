@@ -49,6 +49,9 @@
           name="body"
           label="Body"
           :error="errors.body"
+          :image-upload-scenario="
+            moduleConfig ? moduleConfig.postContentImageScenario : null
+          "
         />
 
         <form-field-multi-select
@@ -130,6 +133,7 @@ import useModuleConfig from '../../hooks/useModuleConfig';
 import useBlogCategoryList from '../../hooks/useBlogCategoryList';
 
 import {
+  convertCategoryListToOptions,
   convertFormValuesToCreationPayload,
   convertFormValuesToUpdatePayload,
   convertPostToFormValues,
@@ -163,13 +167,6 @@ export default defineComponent({
       data: categoryList,
       loading: isCategoryListLoading,
     } = useBlogCategoryList({ context });
-
-    const categoryOptionList = computed<Array<OptionType<number>>>(() =>
-      categoryList.value.map((category) => ({
-        value: category.id,
-        label: category.name,
-      }))
-    );
 
     /** Fetch Post */
 
@@ -247,6 +244,27 @@ export default defineComponent({
         });
     }
 
+    /** Category Options */
+
+    const categoryOptionList = computed<Array<OptionType<number>>>(() =>
+      convertCategoryListToOptions(
+        categoryList.value,
+        values.value.language?.value ?? null
+      )
+    );
+
+    watch([categoryOptionList], () => {
+      function isOptionExist(
+        selectedCategoryOption: OptionType<number>
+      ): boolean {
+        return categoryOptionList.value.some(
+          (option) => option.value === selectedCategoryOption.value
+        );
+      }
+
+      values.value.categories = values.value.categories.filter(isOptionExist);
+    });
+
     /** Misc */
 
     const isContentLoading = computed<boolean>(
@@ -273,19 +291,10 @@ export default defineComponent({
       isLangSpecific,
       languageOptionList,
       isSubmitting,
+      moduleConfig,
     };
   },
 });
 </script>
 
-<style scoped lang="scss">
-.bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.save-button {
-  min-width: 100px;
-}
-</style>
+<style scoped lang="scss"></style>

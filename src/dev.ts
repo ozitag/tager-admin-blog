@@ -16,6 +16,7 @@ import {
   BLOG_CATEGORY_LIST_ROUTE,
   BLOG_POST_FORM_ROUTE,
   BLOG_POST_LIST_ROUTE,
+  BLOG_SETTINGS_ROUTE,
 } from './constants/routes';
 import config from './config/config.json';
 import App from './views/App.vue';
@@ -44,6 +45,7 @@ const router = createRouter(
       BLOG_POST_FORM_ROUTE,
       BLOG_CATEGORY_LIST_ROUTE,
       BLOG_CATEGORY_FORM_ROUTE,
+      BLOG_SETTINGS_ROUTE,
     ],
   },
   { useTitleSync: false }

@@ -132,3 +132,25 @@ export function getBlogSettingList(): Promise<
     path: `/admin/blog/settings`,
   });
 }
+
+export type SettingsFieldType<Value> = {
+  name: string;
+  value: Value;
+};
+
+export type SettingsUpdatePayload = {
+  values: Array<
+    | SettingsFieldType<string>
+    | SettingsFieldType<null>
+    | SettingsFieldType<number>
+    | SettingsFieldType<Array<number>>
+  >;
+};
+export function updateBlogSettingList(
+  payload: SettingsUpdatePayload
+): Promise<ResponseBody<Array<SettingsItemType>>> {
+  return request.post({
+    path: `/admin/blog/settings`,
+    body: payload,
+  });
+}

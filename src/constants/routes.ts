@@ -4,8 +4,9 @@ import BlogPostList from '../views/BlogPostList';
 import BlogPostForm from '../views/BlogPostForm';
 import BlogCategoryList from '../views/BlogCategoryList';
 import BlogCategoryForm from '../views/BlogCategoryForm';
+import BlogSettings from '../views/BlogSettings';
 
-import { BLOG_ROUTE_PATHS } from './paths';
+import { BLOG_ROUTE_PATHS, getBlogSettingsUrl } from './paths';
 
 const HOME_BREADCRUMB = { url: '/', text: 'Home' };
 
@@ -55,6 +56,18 @@ export const BLOG_CATEGORY_FORM_ROUTE: CustomRouteConfig = {
       HOME_BREADCRUMB,
       { url: BLOG_ROUTE_PATHS.CATEGORY_LIST, text: 'All categories' },
       { url: route.path, text: 'Blog Category form' },
+    ],
+  },
+};
+
+export const BLOG_SETTINGS_ROUTE: CustomRouteConfig = {
+  path: BLOG_ROUTE_PATHS.SETTINGS,
+  component: BlogSettings,
+  name: 'Settings',
+  meta: {
+    getBreadcrumbs: (route: CustomRoute) => [
+      HOME_BREADCRUMB,
+      { url: getBlogSettingsUrl(), text: 'Blog settings' },
     ],
   },
 };

@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import { TFunction } from 'i18next';
 
 declare module 'vue/types/vue' {

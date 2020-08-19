@@ -49,27 +49,28 @@ export type BlogModuleConfigType = {
     id: string;
     name: string;
   }>;
+  readonly postContentImageScenario: string;
 };
 
 interface SettingsItem {
-  readonly field: string;
+  readonly name: string;
   readonly label: string;
   readonly type: string;
   readonly value: any;
 }
 
-interface SettingsItemFile extends SettingsItem {
+export interface SettingsItemFile extends SettingsItem {
   type: 'IMAGE' | 'FILE';
   value: Nullable<FileType>;
 }
 
-interface SettingsItemFileList extends SettingsItem {
+export interface SettingsItemFileList extends SettingsItem {
   type: 'GALLERY';
   value: Array<FileType>;
 }
 
-interface SettingsItemString extends SettingsItem {
-  type: 'NUMBER' | 'STRING' | 'TEXT';
+export interface SettingsItemString extends SettingsItem {
+  type: 'NUMBER' | 'STRING' | 'TEXT' | 'HTML';
   value: Nullable<string>;
 }
 

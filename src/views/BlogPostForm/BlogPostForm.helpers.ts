@@ -1,4 +1,4 @@
-import { PostFull } from '../../typings/model';
+import { BlogCategory, PostFull } from '../../typings/model';
 import { FileType, Nullable } from '@tager/admin-services';
 import { OptionType } from '@tager/admin-ui';
 import {
@@ -90,4 +90,18 @@ export function convertFormValuesToUpdatePayload(
     ...convertFormValuesToCreationPayload(values),
     urlAlias: values.urlAlias,
   };
+}
+
+export function convertCategoryListToOptions(
+  categoryList: Array<BlogCategory>,
+  languageId: Nullable<string>
+): Array<OptionType<number>> {
+  return categoryList
+    .filter((category) =>
+      languageId ? category.language === languageId : true
+    )
+    .map((category) => ({
+      value: category.id,
+      label: category.name,
+    }));
 }
