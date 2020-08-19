@@ -952,10 +952,10 @@
   dependencies:
     i18next "^19.6.3"
 
-"@tager/admin-ui@^0.6.5":
-  version "0.6.5"
-  resolved "https://registry.yarnpkg.com/@tager/admin-ui/-/admin-ui-0.6.5.tgz#561612f231449a8c82bb8745ddc94817a2a83cca"
-  integrity sha512-ELZfUrtIAcUd5X6kg66iacRmetQbR3CKbWZGD1QafnBs8SwWLsW0xcTVTeX4IYrc2+ddPsVVC67t+e898ARQKw==
+"@tager/admin-ui@^0.6.6":
+  version "0.6.6"
+  resolved "https://registry.yarnpkg.com/@tager/admin-ui/-/admin-ui-0.6.6.tgz#e965e0c8692af7e85c9f5320dfe6330cb5e7b172"
+  integrity sha512-98mLELht/oCJEkuQQwm9ng2Fl/mFwvR5LWncNSaQ9KX303ux9QmhulsDK2CcC/vAmufMqeteNYW/rzRNGV+sNA==
   dependencies:
     "@babel/runtime" "^7.10.2"
     "@ckeditor/ckeditor5-vue" "^1.0.1"

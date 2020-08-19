@@ -26,7 +26,7 @@
     "@rollup/plugin-node-resolve": "^8.1.0",
     "@tager/admin-layout": "^0.4.1",
     "@tager/admin-services": "^0.2.2",
-    "@tager/admin-ui": "^0.6.5",
+    "@tager/admin-ui": "^0.6.6",
     "@types/node": "12.x",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
