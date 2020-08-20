@@ -97,7 +97,7 @@ export default defineComponent({
       fetchResource: getBlogPostList,
       initialValue: [],
       context,
-      resourceName: 'Post list',
+      resourceName: 'Blog post list',
     });
 
     onMounted(() => {

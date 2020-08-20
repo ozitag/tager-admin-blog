@@ -1,4 +1,4 @@
-import { BlogCategory, PostFull } from '../../typings/model';
+import { BlogCategory, PostFull, PostShort } from '../../typings/model';
 import { FileType, Nullable } from '@tager/admin-services';
 import { OptionType } from '@tager/admin-ui';
 import {
@@ -19,16 +19,15 @@ export type FormValues = {
   urlAlias: string;
   categories: Array<OptionType<number>>;
   language: Nullable<OptionType>;
+  relatedPosts: Array<OptionType<number>>;
+  tags: string;
 };
 
 export function convertPostToFormValues(
   post: Nullable<PostFull>,
-  languageOptionList: Array<OptionType>
+  languageOptionList: Array<OptionType>,
+  postOptionList: Array<OptionType<number>>
 ): FormValues {
-  const currentLangOption = languageOptionList.find(
-    (option) => option.value === post?.language
-  );
-
   if (!post) {
     return {
       title: '',
@@ -42,9 +41,20 @@ export function convertPostToFormValues(
       openGraphImage: null,
       urlAlias: '',
       categories: [],
-      language: currentLangOption ?? null,
+      language: null,
+      relatedPosts: [],
+      tags: '',
     };
   }
+
+  const currentLangOption = languageOptionList.find(
+    (option) => option.value === post.language
+  );
+
+  const selectedPostOptionList = postOptionList.filter((option) =>
+    post.relatedPosts.some((relatedPost) => relatedPost.id === option.value)
+  );
+
   return {
     title: post.title,
     excerpt: post.excerpt,
@@ -61,6 +71,8 @@ export function convertPostToFormValues(
       label: category.name,
     })),
     language: currentLangOption ?? null,
+    relatedPosts: selectedPostOptionList,
+    tags: post.tags.join(','),
   };
 }
 
@@ -80,6 +92,10 @@ export function convertFormValuesToCreationPayload(
     status: 'PUBLISHED',
     categories: values.categories.map((option) => option.value),
     language: values.language?.value ?? null,
+    relatedPosts: values.relatedPosts.map(
+      (relatedPostOption) => relatedPostOption.value
+    ),
+    tags: values.tags.split(',').filter((tag) => tag.trim().length > 0),
   };
 }
 

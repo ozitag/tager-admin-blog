@@ -10,101 +10,124 @@
   >
     <template v-slot:content>
       <form novalidate @submit.prevent="submitForm">
-        <form-field
-          v-model="values.title"
-          name="title"
-          label="Title"
-          :error="errors.title"
+        <tab-list
+          :tab-list="tabList"
+          :selected-tab-id="selectedTabId"
+          @tab:update="selectedTabId = $event.tabId"
         />
 
-        <form-field-select
-          v-if="isCreation && isLangSpecific"
-          v-model="values.language"
-          name="language"
-          label="Language"
-          :options="languageOptionList"
-          :error="errors.language"
-        />
+        <template v-if="selectedTabId === 'common'">
+          <form-field
+            v-model="values.title"
+            name="title"
+            label="Title"
+            :error="errors.title"
+          />
 
-        <form-field-url-alias-input
-          v-if="!isCreation"
-          id="urlAlias"
-          v-model="values.urlAlias"
-          name="urlAlias"
-          label="URL alias"
-          :url-template="pagePath"
-          :error="errors.urlAlias"
-        />
+          <form-field-select
+            v-if="isCreation && isLangSpecific"
+            v-model="values.language"
+            name="language"
+            label="Language"
+            :options="languageOptionList"
+            :error="errors.language"
+          />
+          <form-field-url-alias-input
+            v-if="!isCreation"
+            id="urlAlias"
+            v-model="values.urlAlias"
+            name="urlAlias"
+            label="URL alias"
+            :url-template="pagePath"
+            :error="errors.urlAlias"
+          />
 
-        <form-field
-          v-model="values.excerpt"
-          name="excerpt"
-          label="Excerpt"
-          type="textarea"
-          :error="errors.excerpt"
-        />
+          <form-field
+            v-model="values.excerpt"
+            name="excerpt"
+            label="Excerpt"
+            type="textarea"
+            :error="errors.excerpt"
+          />
+          <form-field-rich-text-input
+            v-model="values.body"
+            name="body"
+            label="Body"
+            :error="errors.body"
+            :get-upload-adapter-options="getUploadAdapterOptions"
+          />
 
-        <form-field-rich-text-input
-          v-model="values.body"
-          name="body"
-          label="Body"
-          :error="errors.body"
-          :image-upload-scenario="
-            moduleConfig ? moduleConfig.postContentImageScenario : null
-          "
-        />
+          <form-field
+            v-model="values.date"
+            name="date"
+            label="Date"
+            type="date"
+            :error="errors.date"
+          />
+        </template>
 
-        <form-field-multi-select
-          v-model="values.categories"
-          name="categories"
-          label="Categories"
-          :options="categoryOptionList"
-          :error="errors.categories"
-        />
+        <template v-if="selectedTabId === 'images'">
+          <form-field-file-input
+            v-model="values.image"
+            name="image"
+            label="Inner Image"
+            file-type="image"
+          />
 
-        <form-field
-          v-model="values.date"
-          name="date"
-          label="Date"
-          type="date"
-          :error="errors.date"
-        />
+          <form-field-file-input
+            v-model="values.coverImage"
+            label="Cover image"
+            name="coverImage"
+            file-type="image"
+          />
+        </template>
 
-        <form-field-file-input
-          v-model="values.image"
-          name="image"
-          label="Image"
-          file-type="image"
-        />
+        <template v-if="selectedTabId === 'relations'">
+          <form-field
+            v-model="values.tags"
+            name="tags"
+            label="Tags"
+            :error="errors.tags"
+          />
+          <form-field-multi-select
+            v-model="values.categories"
+            name="categories"
+            label="Categories"
+            :options="categoryOptionList"
+            :error="errors.categories"
+          />
+          <form-field-multi-select
+            v-model="values.relatedPosts"
+            name="relatedPosts"
+            label="Related posts"
+            :options="postOptionList"
+            :error="errors.relatedPosts"
+          />
+        </template>
 
-        <form-field-file-input
-          v-model="values.coverImage"
-          label="Cover image"
-          name="coverImage"
-          file-type="image"
-        />
+        <template v-if="selectedTabId === 'seo'">
+          <form-field
+            v-model="values.pageTitle"
+            name="pageTitle"
+            label="Page title"
+            :error="errors.pageTitle"
+          />
 
-        <form-field
-          v-model="values.pageTitle"
-          name="pageTitle"
-          label="Page title"
-          :error="errors.pageTitle"
-        />
+          <form-field
+            v-model="values.pageDescription"
+            name="pageDescription"
+            label="Page description"
+            type="textarea"
+            :error="errors.pageDescription"
+          />
 
-        <form-field
-          v-model="values.pageDescription"
-          name="pageDescription"
-          label="Page description"
-          type="textarea"
-          :error="errors.pageDescription"
-        />
-
-        <form-field-file-input
-          v-model="values.openGraphImage"
-          label="Open graph image"
-          name="openGraphImage"
-          file-type="image"
-        />
+          <form-field-file-input
+            v-model="values.openGraphImage"
+            label="Open graph image"
+            name="openGraphImage"
+            file-type="image"
+          />
+        </template>
       </form>
     </template>
   </page>
@@ -118,8 +141,12 @@ import {
   ref,
   watch,
 } from '@vue/composition-api';
-import { convertRequestErrorToMap, Nullable } from '@tager/admin-services';
-import { OptionType } from '@tager/admin-ui';
+import {
+  convertRequestErrorToMap,
+  notEmpty,
+  Nullable,
+} from '@tager/admin-services';
+import { createTabErrorFinder, OptionType, TabType } from '@tager/admin-ui';
 
 import {
   createBlogPost,
@@ -131,6 +158,7 @@ import { getBlogPostListUrl } from '../../constants/paths';
 import useResource from '../../hooks/useResource';
 import useModuleConfig from '../../hooks/useModuleConfig';
 import useBlogCategoryList from '../../hooks/useBlogCategoryList';
+import useBlogPostList from '../../hooks/useBlogPostList';
 
 import {
   convertCategoryListToOptions,
@@ -191,17 +219,36 @@ export default defineComponent({
       fetchPost();
     });
 
+    /** Fetch post list */
+    const { data: postList, loading: isPostListLoading } = useBlogPostList({
+      context,
+    });
+
+    const postOptionList = computed<Array<OptionType<number>>>(() =>
+      postList.value
+        .filter((relatedPost) => relatedPost.id !== post.value?.id)
+        .map((post) => ({
+          value: post.id,
+          label: post.title,
+        }))
+    );
+
     /** Form State */
     const values = ref<FormValues>(
-      convertPostToFormValues(post.value, languageOptionList.value)
+      convertPostToFormValues(
+        post.value,
+        languageOptionList.value,
+        postOptionList.value
+      )
     );
     const errors = ref<Record<string, string>>({});
     const isSubmitting = ref<boolean>(false);
 
-    watch(post, () => {
+    watch([post, languageOptionList, postOptionList], () => {
       values.value = convertPostToFormValues(
         post.value,
-        languageOptionList.value
+        languageOptionList.value,
+        postOptionList.value
       );
     });
 
@@ -271,13 +318,57 @@ export default defineComponent({
       () =>
         isPostLoading.value ||
         isCategoryListLoading.value ||
+        isPostListLoading.value ||
         isModuleConfigLoading.value
     );
+
+    function getUploadAdapterOptions() {
+      return { uploadScenario: moduleConfig.value?.postContentImageScenario };
+    }
 
     const blogPagePath = computed<string>(() => {
       const origin = process.env.VUE_APP_WEBSITE_URL || window.location.origin;
       return origin + post.value?.urlTemplate ?? '';
     });
+
+    const tabList = computed<Array<TabType>>(() => {
+      const hasErrors = createTabErrorFinder(errors.value);
+      return [
+        {
+          id: 'common',
+          label: 'Common',
+          hasErrors: hasErrors([
+            'title',
+            'language',
+            'urlAlias',
+            'excerpt',
+            'body',
+            'date',
+          ]),
+        },
+        {
+          id: 'images',
+          label: 'Images',
+          hasErrors: hasErrors(['coverImage', 'image']),
+        },
+        {
+          id: 'relations',
+          label: 'Relations',
+          hasErrors: hasErrors(['categories', 'relatedPosts', 'tags']),
+        },
+        {
+          id: 'seo',
+          label: 'SEO',
+          hasErrors: hasErrors([
+            'pageTitle',
+            'pageDescription',
+            'openGraphImage',
+          ]),
+        },
+      ];
+    });
+
+    const selectedTabId = ref<string>(tabList.value[0].id);
 
     return {
       isCreation,
@@ -292,6 +383,10 @@ export default defineComponent({
       languageOptionList,
       isSubmitting,
       moduleConfig,
+      postOptionList,
+      getUploadAdapterOptions,
+      tabList,
+      selectedTabId,
     };
   },
 });

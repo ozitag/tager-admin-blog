@@ -56,6 +56,8 @@ export function getPostTableColumnDefs(
       name: 'Image',
       field: 'image',
       type: 'image',
+      style: { width: '250px' },
+      headStyle: { width: '250px' },
     },
     {
       id: 3,

@@ -33,6 +33,8 @@ export type PostCreationPayload = {
   openGraphImage: Nullable<number>;
   categories: Array<number>;
   language: Nullable<string>;
+  relatedPosts: Array<number>;
+  tags: Array<string>;
 };
 
 export function createBlogPost(

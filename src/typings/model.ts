@@ -42,6 +42,8 @@ export type PostFull = {
   readonly categories: Array<BlogCategory>;
   readonly body: string;
   readonly coverImage: Nullable<FileType>;
+  readonly relatedPosts: Array<Pick<PostShort, 'id' | 'title'>>;
+  readonly tags: Array<string>;
 } & SeoInfo;
 
 export type BlogModuleConfigType = {
