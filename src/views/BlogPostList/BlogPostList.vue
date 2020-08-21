@@ -25,7 +25,7 @@
             variant="icon"
             title="Remove"
             :disabled="isDeleting(row.id)"
-            @click="handleEntityDelete(row.id)"
+            @click="handleResourceDelete(row.id)"
           >
             <svg-icon name="delete"></svg-icon>
           </base-button>
@@ -38,13 +38,15 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted } from '@vue/composition-api';
 import { ColumnDefinition } from '@tager/admin-ui';
-import { Nullable } from '@tager/admin-services';
+import {
+  Nullable,
+  useResource,
+  useResourceDelete,
+} from '@tager/admin-services';
 
 import { BlogCategory, PostShort } from '../../typings/model';
 import { deleteBlogPost, getBlogPostList } from '../../services/requests';
 import { getBlogPostFormUrl } from '../../constants/paths';
-import useResource from '../../hooks/useResource';
-import useEntityDelete from '../../hooks/useEntityDelete';
 import useModuleConfig from '../../hooks/useModuleConfig';
 import useBlogCategoryList from '../../hooks/useBlogCategoryList';
 
@@ -112,9 +114,9 @@ export default defineComponent({
       )
     );
 
-    const { handleEntityDelete, isDeleting } = useEntityDelete({
-      deleteEntity: deleteBlogPost,
-      entityName: 'Post',
+    const { handleResourceDelete, isDeleting } = useResourceDelete({
+      deleteResource: deleteBlogPost,
+      resourceName: 'Post',
       onSuccess: fetchPostList,
       context,
     });
@@ -133,7 +135,7 @@ export default defineComponent({
     return {
       columnDefs,
       rowData: displayedPostList,
-      handleEntityDelete,
+      handleResourceDelete,
       isDeleting,
       categoryList,
       isRowDataLoading,

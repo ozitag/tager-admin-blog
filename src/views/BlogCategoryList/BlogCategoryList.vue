@@ -69,6 +69,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { computed, onMounted, ref } from '@vue/composition-api';
+import { useResource, useResourceDelete } from '@tager/admin-services';
 import { OptionType } from '@tager/admin-ui';
 
 import { BlogCategory } from '../../typings/model';
@@ -82,8 +83,6 @@ import {
   getBlogPostListUrl,
 } from '../../constants/paths';
 import useModuleConfig from '../../hooks/useModuleConfig';
-import useResource from '../../hooks/useResource';
-import useEntityDelete from '../../hooks/useEntityDelete';
 
 import {
   convertCategoryList,
@@ -126,11 +125,11 @@ export default Vue.extend({
     });
 
     const {
-      handleEntityDelete: handleCategoryDelete,
+      handleResourceDelete: handleCategoryDelete,
       isDeleting,
-    } = useEntityDelete({
-      deleteEntity: deleteBlogCategory,
-      entityName: 'Post',
+    } = useResourceDelete({
+      deleteResource: deleteBlogCategory,
+      resourceName: 'Post',
       onSuccess: fetchBlogCategoryList,
       context,
     });

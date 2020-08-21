@@ -22,9 +22,8 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from '@vue/composition-api';
-import { convertRequestErrorToMap } from '@tager/admin-services';
+import { convertRequestErrorToMap, useResource } from '@tager/admin-services';
 
-import useResource from '../../hooks/useResource';
 import { SettingsItemType } from '../../typings/model';
 import {
   getBlogSettingList,

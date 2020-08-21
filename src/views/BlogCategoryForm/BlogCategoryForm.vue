@@ -32,7 +32,7 @@
           v-model="values.urlAlias"
           name="urlAlias"
           label="URL alias"
-          :url-prefix="pagePath"
+          :url-template="pagePath"
           :error="errors.urlAlias"
         />
 
@@ -70,7 +70,11 @@ import {
   ref,
   watch,
 } from '@vue/composition-api';
-import { convertRequestErrorToMap, Nullable } from '@tager/admin-services';
+import {
+  convertRequestErrorToMap,
+  Nullable,
+  useResource,
+} from '@tager/admin-services';
 import { OptionType } from '@tager/admin-ui';
 
 import {
@@ -80,7 +84,6 @@ import {
 } from '../../services/requests';
 import { BlogCategory } from '../../typings/model';
 import { getBlogCategoryListUrl } from '../../constants/paths';
-import useResource from '../../hooks/useResource';
 import {
   CategoryFormValues,
   convertCategoryFormValuesToCreationPayload,
@@ -200,7 +203,7 @@ export default defineComponent({
 
     const categoryPagePath = computed<string>(() => {
       const origin = process.env.VUE_APP_WEBSITE_URL || window.location.origin;
-      return origin + category.value?.urlTemplate ?? '';
+      return origin + (category.value?.urlTemplate ?? '');
     });
 
     return {

@@ -68,16 +68,16 @@
 
         <template v-if="selectedTabId === 'images'">
           <form-field-file-input
-            v-model="values.image"
-            name="image"
-            label="Inner Image"
+            v-model="values.coverImage"
+            label="Cover image"
+            name="coverImage"
             file-type="image"
           />
 
           <form-field-file-input
-            v-model="values.coverImage"
-            label="Cover image"
-            name="coverImage"
+            v-model="values.image"
+            name="image"
+            label="Inner Image"
             file-type="image"
           />
         </template>
@@ -143,8 +143,8 @@ import {
 } from '@vue/composition-api';
 import {
   convertRequestErrorToMap,
-  notEmpty,
   Nullable,
+  useResource,
 } from '@tager/admin-services';
 import { createTabErrorFinder, OptionType, TabType } from '@tager/admin-ui';
 
@@ -155,7 +155,6 @@ import {
 } from '../../services/requests';
 import { PostFull } from '../../typings/model';
 import { getBlogPostListUrl } from '../../constants/paths';
-import useResource from '../../hooks/useResource';
 import useModuleConfig from '../../hooks/useModuleConfig';
 import useBlogCategoryList from '../../hooks/useBlogCategoryList';
 import useBlogPostList from '../../hooks/useBlogPostList';
@@ -328,7 +327,7 @@ export default defineComponent({
 
     const blogPagePath = computed<string>(() => {
       const origin = process.env.VUE_APP_WEBSITE_URL || window.location.origin;
-      return origin + post.value?.urlTemplate ?? '';
+      return origin + (post.value?.urlTemplate ?? '');
     });
 
     const tabList = computed<Array<TabType>>(() => {
