@@ -14,6 +14,10 @@ export function getBlogPostList(): Promise<ResponseBody<Array<PostShort>>> {
   return request.get({ path: '/admin/blog/posts' });
 }
 
+export function getBlogPostCount(): Promise<ResponseBody<{ count: number }>> {
+  return request.get({ path: '/admin/blog/posts/count' });
+}
+
 export function getBlogPost(
   postId: number | string
 ): Promise<ResponseBody<PostFull>> {
