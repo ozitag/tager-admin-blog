@@ -11,6 +11,7 @@
         :row-data="rowData"
         :loading="isRowDataLoading"
         :error-message="errorMessage"
+        data-table="blog-post"
       >
         <template v-slot:cell(actions)="{ row }">
           <base-button

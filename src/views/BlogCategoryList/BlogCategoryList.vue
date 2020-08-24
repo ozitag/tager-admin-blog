@@ -14,6 +14,7 @@
         :row-data="rowData"
         :loading="isRowDataLoading"
         :error-message="errorMessage"
+        data-table="blog-category"
       >
         <template v-slot:cell(link-to-posts)="{ row }">
           <base-button
