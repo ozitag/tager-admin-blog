@@ -11,8 +11,8 @@
     <template v-slot:content>
       <form novalidate @submit.prevent="submitForm">
         <DynamicField
-          v-for="field of fieldList"
-          :key="field.name"
+          v-for="field of values"
+          :key="field.config.name"
           :field="field"
         />
       </form>
@@ -21,26 +21,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@vue/composition-api';
+import { defineComponent, onMounted, ref, watch } from '@vue/composition-api';
 import { convertRequestErrorToMap, useResource } from '@tager/admin-services';
+import { DynamicField } from '@tager/admin-dynamic-field';
 
-import { SettingsItemType } from '../../typings/model';
+import { SettingItemType } from '../../typings/model';
 import {
   getBlogSettingList,
   updateBlogSettingList,
 } from '../../services/requests';
 
-import DynamicField from './component/DynamicField.vue';
 import { getBlogPostListUrl } from '../../constants/paths';
 
-import { convertFieldListToRequestPayload } from './BlogSettings.helpers';
+import {
+  convertBlogSettingsToFormValues,
+  SettingsFormValues,
+  convertSettingValuesToRequestPayload,
+} from './BlogSettings.helpers';
 
 export default defineComponent({
   name: 'BlogSettings',
   components: { DynamicField },
   setup(props, context) {
     const [fetchSettingList, { data: settingList, loading }] = useResource<
-      Array<SettingsItemType>
+      Array<SettingItemType>
     >({
       fetchResource: getBlogSettingList,
       initialValue: [],
@@ -53,14 +57,20 @@ export default defineComponent({
     });
 
     const isSubmitting = ref<boolean>(false);
-    const fieldList = settingList;
+    const values = ref<SettingsFormValues>(
+      convertBlogSettingsToFormValues(settingList.value)
+    );
+
+    watch(settingList, () => {
+      values.value = convertBlogSettingsToFormValues(settingList.value);
+    });
 
     const errors = ref<Record<string, string>>({});
 
     function submitForm() {
       isSubmitting.value = true;
 
-      const body = convertFieldListToRequestPayload(fieldList.value);
+      const body = convertSettingValuesToRequestPayload(values.value);
 
       updateBlogSettingList(body)
         .then(() => {
@@ -87,7 +97,7 @@ export default defineComponent({
         });
     }
 
-    return { isContentLoading: loading, submitForm, isSubmitting, fieldList };
+    return { isContentLoading: loading, submitForm, isSubmitting, values };
   },
 });
 </script>

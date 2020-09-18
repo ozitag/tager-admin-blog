@@ -5,8 +5,9 @@ import {
   BlogModuleConfigType,
   PostShort,
   PostFull,
-  SettingsItemType,
+  SettingItemType,
 } from '../typings/model';
+import { FieldShortType, OutgoingValueUnion } from '@tager/admin-dynamic-field';
 
 /** Blog Posts */
 
@@ -132,29 +133,19 @@ export function getBlogModuleConfig(): Promise<
 }
 
 export function getBlogSettingList(): Promise<
-  ResponseBody<Array<SettingsItemType>>
+  ResponseBody<Array<SettingItemType>>
 > {
   return request.get({
     path: `/admin/blog/settings`,
   });
 }
 
-export type SettingsFieldType<Value> = {
-  name: string;
-  value: Value;
-};
-
 export type SettingsUpdatePayload = {
-  values: Array<
-    | SettingsFieldType<string>
-    | SettingsFieldType<null>
-    | SettingsFieldType<number>
-    | SettingsFieldType<Array<number>>
-  >;
+  values: Array<FieldShortType<OutgoingValueUnion>>;
 };
 export function updateBlogSettingList(
   payload: SettingsUpdatePayload
-): Promise<ResponseBody<Array<SettingsItemType>>> {
+): Promise<ResponseBody<Array<SettingItemType>>> {
   return request.post({
     path: `/admin/blog/settings`,
     body: payload,
