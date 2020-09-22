@@ -1,8 +1,9 @@
 import { onMounted, SetupContext } from '@vue/composition-api';
 
+import { ResourceRef, useResource } from '@tager/admin-services';
+
 import { BlogCategory } from '../typings/model';
 import { getBlogCategoryList } from '../services/requests';
-import { ResourceRef, useResource } from '@tager/admin-services';
 
 export function useBlogCategoryList(params: {
   context: SetupContext;

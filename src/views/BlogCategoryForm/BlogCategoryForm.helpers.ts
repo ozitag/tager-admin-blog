@@ -1,5 +1,6 @@
-import { FileType, Nullable } from '@tager/admin-services';
-import { OptionType } from '@tager/admin-ui';
+import { createId, Nullable } from '@tager/admin-services';
+import { OptionType, SingleFileInputValueType } from '@tager/admin-ui';
+
 import { BlogCategory } from '../../typings/model';
 import {
   BlogCategoryCreationPayload,
@@ -10,7 +11,7 @@ export type CategoryFormValues = {
   name: string;
   pageTitle: string;
   pageDescription: string;
-  openGraphImage: Nullable<FileType>;
+  openGraphImage: Nullable<SingleFileInputValueType>;
   urlAlias: string;
   language: Nullable<OptionType>;
 };
@@ -37,7 +38,9 @@ export function convertCategoryToFormValues(
     name: category.name,
     pageTitle: category.pageTitle ?? '',
     pageDescription: category.pageDescription ?? '',
-    openGraphImage: category.openGraphImage,
+    openGraphImage: category.openGraphImage
+      ? { id: createId(), file: category.openGraphImage }
+      : null,
     urlAlias: category.urlAlias,
     language: currentLangOption ?? null,
   };
@@ -50,7 +53,7 @@ export function convertCategoryFormValuesToCreationPayload(
     name: values.name,
     pageTitle: values.pageTitle,
     pageDescription: values.pageDescription,
-    openGraphImage: values.openGraphImage?.id ?? null,
+    openGraphImage: values.openGraphImage?.file.id ?? null,
     language: values.language?.value ?? null,
   };
 }

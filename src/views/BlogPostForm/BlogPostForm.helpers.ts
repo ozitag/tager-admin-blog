@@ -1,6 +1,7 @@
-import { BlogCategory, PostFull, PostShort } from '../../typings/model';
-import { FileType, Nullable } from '@tager/admin-services';
-import { OptionType } from '@tager/admin-ui';
+import { createId, Nullable } from '@tager/admin-services';
+import { OptionType, SingleFileInputValueType } from '@tager/admin-ui';
+
+import { BlogCategory, PostFull } from '../../typings/model';
 import {
   PostCreationPayload,
   PostUpdatePayload,
@@ -11,11 +12,11 @@ export type FormValues = {
   excerpt: string;
   body: string;
   date: string;
-  image: Nullable<FileType>;
-  coverImage: Nullable<FileType>;
+  image: Nullable<SingleFileInputValueType>;
+  coverImage: Nullable<SingleFileInputValueType>;
   pageTitle: string;
   pageDescription: string;
-  openGraphImage: Nullable<FileType>;
+  openGraphImage: Nullable<SingleFileInputValueType>;
   urlAlias: string;
   categories: Array<OptionType<number>>;
   language: Nullable<OptionType>;
@@ -60,11 +61,15 @@ export function convertPostToFormValues(
     excerpt: post.excerpt,
     body: post.body,
     date: post.date,
-    image: post.image,
-    coverImage: post.coverImage,
+    image: post.image ? { id: createId(), file: post.image } : null,
+    coverImage: post.coverImage
+      ? { id: createId(), file: post.coverImage }
+      : null,
     pageTitle: post.pageTitle ?? '',
     pageDescription: post.pageDescription ?? '',
-    openGraphImage: post.openGraphImage,
+    openGraphImage: post.openGraphImage
+      ? { id: createId(), file: post.openGraphImage }
+      : null,
     urlAlias: post.urlAlias,
     categories: post.categories.map((category) => ({
       value: category.id,
@@ -84,11 +89,11 @@ export function convertFormValuesToCreationPayload(
     excerpt: values.excerpt,
     body: values.body,
     date: values.date,
-    image: values.image?.id ?? null,
-    coverImage: values.coverImage?.id ?? null,
+    image: values.image?.file.id ?? null,
+    coverImage: values.coverImage?.file.id ?? null,
     pageTitle: values.pageTitle,
     pageDescription: values.pageDescription,
-    openGraphImage: values.openGraphImage?.id ?? null,
+    openGraphImage: values.openGraphImage?.file.id ?? null,
     status: 'PUBLISHED',
     categories: values.categories.map((option) => option.value),
     language: values.language?.value ?? null,

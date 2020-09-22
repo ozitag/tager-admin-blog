@@ -1,6 +1,7 @@
+import { FieldUnion, universalFieldUtils } from '@tager/admin-dynamic-field';
+
 import { SettingItemType } from '../../typings/model';
 import { SettingsUpdatePayload } from '../../services/requests';
-import { FieldUnion, universalFieldUtils } from '@tager/admin-dynamic-field';
 
 export type SettingsFormValues = Array<FieldUnion>;
 

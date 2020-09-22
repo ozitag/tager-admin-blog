@@ -22,6 +22,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from '@vue/composition-api';
+
 import { convertRequestErrorToMap, useResource } from '@tager/admin-services';
 import { DynamicField } from '@tager/admin-dynamic-field';
 
@@ -30,7 +31,6 @@ import {
   getBlogSettingList,
   updateBlogSettingList,
 } from '../../services/requests';
-
 import { getBlogPostListUrl } from '../../constants/paths';
 
 import {

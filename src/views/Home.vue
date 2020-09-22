@@ -3,6 +3,8 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, ref } from '@vue/composition-api';
+
 import { NavigationGridItem } from '@tager/admin-ui';
 
 import {
@@ -10,8 +12,6 @@ import {
   getBlogPostListUrl,
   getBlogSettingsUrl,
 } from '../constants/paths';
-import { computed, defineComponent, ref } from '@vue/composition-api';
-import { TranslateFunction } from '@tager/admin-services';
 
 export default defineComponent({
   name: 'Home',

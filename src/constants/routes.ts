@@ -65,7 +65,7 @@ export const BLOG_SETTINGS_ROUTE: CustomRouteConfig = {
   component: BlogSettings,
   name: 'Settings',
   meta: {
-    getBreadcrumbs: (route: CustomRoute) => [
+    getBreadcrumbs: () => [
       HOME_BREADCRUMB,
       { url: getBlogSettingsUrl(), text: 'Blog settings' },
     ],

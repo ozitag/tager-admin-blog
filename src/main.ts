@@ -1,4 +1,5 @@
 import { i18n } from '@tager/admin-services';
+
 import EN from './locales/en';
 import RU from './locales/ru';
 

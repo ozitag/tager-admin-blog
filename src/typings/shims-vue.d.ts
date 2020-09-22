@@ -1,4 +1,5 @@
 declare module '*.vue' {
+  // eslint-disable-next-line import/order
   import Vue from 'vue';
   export default Vue;
 }

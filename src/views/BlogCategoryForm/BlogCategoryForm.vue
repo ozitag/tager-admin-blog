@@ -70,6 +70,7 @@ import {
   ref,
   watch,
 } from '@vue/composition-api';
+
 import {
   convertRequestErrorToMap,
   Nullable,
@@ -84,13 +85,14 @@ import {
 } from '../../services/requests';
 import { BlogCategory } from '../../typings/model';
 import { getBlogCategoryListUrl } from '../../constants/paths';
+import useModuleConfig from '../../hooks/useModuleConfig';
+
 import {
   CategoryFormValues,
   convertCategoryFormValuesToCreationPayload,
   convertCategoryFormValuesToUpdatePayload,
   convertCategoryToFormValues,
 } from './BlogCategoryForm.helpers';
-import useModuleConfig from '../../hooks/useModuleConfig';
 
 export default defineComponent({
   name: 'BlogCategoryForm',

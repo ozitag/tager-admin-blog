@@ -1,14 +1,8 @@
-import {
-  BlogCategory,
-  BlogModuleConfigType,
-  PostShort,
-} from '../../typings/model';
 import { notEmpty, Nullable } from '@tager/admin-services';
 import { ColumnDefinition } from '@tager/admin-ui';
-import {
-  getBlogCategoryFormUrl,
-  getBlogPostFormUrl,
-} from '../../constants/paths';
+
+import { BlogCategory, BlogModuleConfigType } from '../../typings/model';
+import { getBlogCategoryFormUrl } from '../../constants/paths';
 
 export function convertCategoryList(
   categoryList: Array<BlogCategory>,

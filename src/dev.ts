@@ -1,5 +1,6 @@
 import Vue, { CreateElement } from 'vue';
 import VueCompositionApi, { createApp } from '@vue/composition-api';
+
 import { configStore, i18n } from '@tager/admin-services';
 import { AdminUiPlugin } from '@tager/admin-ui';
 import {

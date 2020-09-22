@@ -1,5 +1,7 @@
 import { onMounted, SetupContext } from '@vue/composition-api';
+
 import { Nullable, ResourceRef, useResource } from '@tager/admin-services';
+
 import { BlogModuleConfigType } from '../typings/model';
 import { getBlogModuleConfig } from '../services/requests';
 
