@@ -1054,10 +1054,10 @@
   resolved "https://registry.yarnpkg.com/@soda/get-current-script/-/get-current-script-1.0.2.tgz#a53515db25d8038374381b73af20bb4f2e508d87"
   integrity sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==
 
-"@tager/admin-dynamic-field@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@tager/admin-dynamic-field/-/admin-dynamic-field-0.1.2.tgz#a2ef9b3b5e382ffbd7c59070d1cf185342c455b1"
-  integrity sha512-OgzvLiX6SEcY3sjGR9X5wGmezyzRo/LFrDoEKUTMjDpYdM5LTVgAgzmAMuKLqKPhzisOGuZSPQq/GWrd/sEjQg==
+"@tager/admin-dynamic-field@^0.1.3":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/@tager/admin-dynamic-field/-/admin-dynamic-field-0.1.3.tgz#496c87853a47cf3233449c60cd0eedbdf3378c7c"
+  integrity sha512-OKRVIdcJ8ig0IPGzek2Bi5/AW7Pxl3ZWQgWHvZIcUX5loUyGjE8JuA2rfSoHctCZoVhSZo2biVxmMWs1ocIDEw==
   dependencies:
     "@babel/runtime" "^7.11.2"
     lodash.kebabcase "^4.1.1"
@@ -1070,14 +1070,14 @@
   dependencies:
     "@babel/runtime" "^7.10.4"
 
-"@tager/admin-services@^0.2.11":
-  version "0.2.11"
-  resolved "https://registry.yarnpkg.com/@tager/admin-services/-/admin-services-0.2.11.tgz#d19a1729d5e83f6341722afe17c410cb2942b5ce"
-  integrity sha512-mtXt2bAL4O74okO0QxBIOmx0rHlrcPdfXSvcFTT3YlFgYxaAPZhqlkdKxVCFcj+6bd4FZbGeDRbxWesTXOHVyQ==
+"@tager/admin-services@^0.2.12":
+  version "0.2.12"
+  resolved "https://registry.yarnpkg.com/@tager/admin-services/-/admin-services-0.2.12.tgz#b173de72f299bba8edeafc1ee3469ea9cfdd4da4"
+  integrity sha512-A7kBoPPqKmRUFhAMfnU8oJjkH9hqWlp8yZAJVOGc9XMohVfCgttYaxrNFNu4Fasd1uKrBP8aFK3Oxadh+F+9UQ==
   dependencies:
     i18next "^19.7.0"
     nanoid "^3.1.12"
-    zod "^1.11.8"
+    zod "^1.11.9"
 
 "@tager/admin-ui@^0.7.5":
   version "0.7.5"
@@ -9927,7 +9927,7 @@ yorkie@^2.0.0:
     normalize-path "^1.0.0"
     strip-indent "^2.0.0"
 
-zod@^1.11.8:
-  version "1.11.8"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-1.11.8.tgz#5e6b2eb3114c73d5043889fa9dfbab0b60a93ff6"
-  integrity sha512-iusmIB00ll0Fxzyhrp8EJPaJDTSyQMKMCwk2hH2XrtgY/QcygPJTX13fSof/r7b4hL5cBeN5aeVl6WN1xpr90g==
+zod@^1.11.9:
+  version "1.11.9"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-1.11.9.tgz#c6c503804d394f8ef009d44ce464bbf8aa3c1bd6"
+  integrity sha512-qZjs9DkvPYHOiOUdAtNcxOC0u5cv7tx9DCmlNZN0MxWeFvgqyr3XkXFqUlaSpmTiZ4A4YVkB2s1Zw2ENJ9/fSg==

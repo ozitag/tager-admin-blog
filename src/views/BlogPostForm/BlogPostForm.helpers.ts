@@ -1,5 +1,10 @@
 import { createId, Nullable } from '@tager/admin-services';
 import { OptionType, SingleFileInputValueType } from '@tager/admin-ui';
+import {
+  FieldConfigUnion,
+  FieldUnion,
+  universalFieldUtils,
+} from '@tager/admin-dynamic-field';
 
 import { BlogCategory, PostFull } from '../../typings/model';
 import {
@@ -22,12 +27,14 @@ export type FormValues = {
   language: Nullable<OptionType>;
   relatedPosts: Array<OptionType<number>>;
   tags: string;
+  additionalFields: Array<FieldUnion>;
 };
 
 export function convertPostToFormValues(
   post: Nullable<PostFull>,
   languageOptionList: Array<OptionType>,
-  postOptionList: Array<OptionType<number>>
+  postOptionList: Array<OptionType<number>>,
+  additionalFieldList: Array<FieldConfigUnion>
 ): FormValues {
   if (!post) {
     return {
@@ -45,6 +52,9 @@ export function convertPostToFormValues(
       language: null,
       relatedPosts: [],
       tags: '',
+      additionalFields: additionalFieldList.map((fieldConfig) =>
+        universalFieldUtils.createFormField(fieldConfig, null)
+      ),
     };
   }
 
@@ -78,6 +88,13 @@ export function convertPostToFormValues(
     language: currentLangOption ?? null,
     relatedPosts: selectedPostOptionList,
     tags: post.tags.join(','),
+    additionalFields: additionalFieldList.map((fieldConfig, index) => {
+      debugger;
+      return universalFieldUtils.createFormField(
+        fieldConfig,
+        post.additionalFields[index]?.value
+      );
+    }),
   };
 }
 
@@ -101,6 +118,10 @@ export function convertFormValuesToCreationPayload(
       (relatedPostOption) => relatedPostOption.value
     ),
     tags: values.tags.split(',').filter((tag) => tag.trim().length > 0),
+    additionalFields: values.additionalFields.map((field) => ({
+      name: field.config.name,
+      value: universalFieldUtils.getOutgoingValue(field),
+    })),
   };
 }
 

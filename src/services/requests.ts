@@ -40,6 +40,7 @@ export type PostCreationPayload = {
   language: Nullable<string>;
   relatedPosts: Array<number>;
   tags: Array<string>;
+  additionalFields: Array<FieldShortType<OutgoingValueUnion>>;
 };
 
 export function createBlogPost(

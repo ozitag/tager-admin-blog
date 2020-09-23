@@ -1,6 +1,7 @@
 import { Nullable, FileType } from '@tager/admin-services';
 import {
   FieldConfigUnion,
+  FieldShortType,
   IncomingValueUnion,
 } from '@tager/admin-dynamic-field';
 
@@ -48,14 +49,25 @@ export type PostFull = {
   readonly coverImage: Nullable<FileType>;
   readonly relatedPosts: Array<Pick<PostShort, 'id' | 'title'>>;
   readonly tags: Array<string>;
+  readonly additionalFields: Array<FieldShortType<IncomingValueUnion>>;
 } & SeoInfo;
 
+export type ShortCodeParamType = {
+  name: string;
+  label: string;
+};
+
 export type BlogModuleConfigType = {
+  readonly postContentImageScenario: string;
   readonly languages: Array<{
     id: string;
     name: string;
   }>;
-  readonly postContentImageScenario: string;
+  readonly fields: Array<FieldConfigUnion>;
+  readonly shortcodes: Array<{
+    shortcode: string;
+    params: Array<ShortCodeParamType>;
+  }>;
 };
 
 export type SettingItemType = {

@@ -105,6 +105,14 @@
           />
         </template>
 
+        <template v-if="selectedTabId === 'additional'">
+          <DynamicField
+            v-for="field of values.additionalFields"
+            :key="field.name"
+            :field="field"
+          />
+        </template>
+
         <template v-if="selectedTabId === 'seo'">
           <form-field
             v-model="values.pageTitle"
@@ -144,10 +152,12 @@ import {
 
 import {
   convertRequestErrorToMap,
+  isNotNullish,
   Nullable,
   useResource,
 } from '@tager/admin-services';
 import { createTabErrorFinder, OptionType, TabType } from '@tager/admin-ui';
+import { DynamicField } from '@tager/admin-dynamic-field';
 
 import {
   createBlogPost,
@@ -170,6 +180,7 @@ import {
 
 export default defineComponent({
   name: 'BlogPostForm',
+  components: { DynamicField },
   setup(props, context) {
     const postId = computed<string>(() => context.root.$route.params.postId);
     const isCreation = computed<boolean>(() => postId.value === 'create');
@@ -238,17 +249,19 @@ export default defineComponent({
       convertPostToFormValues(
         post.value,
         languageOptionList.value,
-        postOptionList.value
+        postOptionList.value,
+        moduleConfig.value?.fields ?? []
       )
     );
     const errors = ref<Record<string, string>>({});
     const isSubmitting = ref<boolean>(false);
 
-    watch([post, languageOptionList, postOptionList], () => {
+    watch([post, languageOptionList, postOptionList, moduleConfig], () => {
       values.value = convertPostToFormValues(
         post.value,
         languageOptionList.value,
-        postOptionList.value
+        postOptionList.value,
+        moduleConfig.value?.fields ?? []
       );
     });
 
@@ -356,6 +369,13 @@ export default defineComponent({
           label: 'Relations',
           hasErrors: hasErrors(['categories', 'relatedPosts', 'tags']),
         },
+        values.value.additionalFields.length > 0
+          ? {
+              id: 'additional',
+              label: 'Additional Fields',
+              hasErrors: hasErrors([]),
+            }
+          : null,
         {
           id: 'seo',
           label: 'SEO',
@@ -365,7 +385,7 @@ export default defineComponent({
             'openGraphImage',
           ]),
         },
-      ];
+      ].filter(isNotNullish);
     });
 
     const selectedTabId = ref<string>(tabList.value[0].id);
