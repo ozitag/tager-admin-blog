@@ -2,6 +2,7 @@
   <page
     :title="isCreation ? 'Create Blog post' : 'Update Blog post'"
     :is-content-loading="isContentLoading"
+    :header-buttons="headerButtonList"
     :footer="{
       backHref: postListUrl,
       onSubmit: submitForm,
@@ -396,6 +397,20 @@ export default defineComponent({
 
     const selectedTabId = ref<string>(tabList.value[0].id);
 
+    const headerButtonList = computed<
+      Array<{ text: string; href: string; target?: string }>
+    >(() =>
+      [
+        post.value
+          ? {
+              text: 'View Post',
+              href: process.env.VUE_APP_WEBSITE_URL + post.value.url,
+              target: '_blank',
+            }
+          : null,
+      ].filter(isNotNullish)
+    );
+
     return {
       isCreation,
       pagePath: blogPagePath,
@@ -413,6 +428,7 @@ export default defineComponent({
       getUploadAdapterOptions,
       tabList,
       selectedTabId,
+      headerButtonList,
     };
   },
 });
