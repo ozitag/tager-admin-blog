@@ -4,6 +4,7 @@ import {
   FieldShortType,
   IncomingValueUnion,
 } from '@tager/admin-dynamic-field';
+import { ShortCodeItemType } from '@tager/admin-ui';
 
 export type SeoInfo = {
   readonly pageTitle: Nullable<string>;
@@ -51,16 +52,6 @@ export type PostFull = {
   readonly tags: Array<string>;
   readonly additionalFields: Array<FieldShortType<IncomingValueUnion>>;
 } & SeoInfo;
-
-export type ShortCodeParamType = {
-  readonly name: string;
-  readonly label: string;
-};
-
-export type ShortCodeItemType = {
-  readonly shortcode: string;
-  readonly params: Array<ShortCodeParamType>;
-};
 
 export type BlogModuleConfigType = {
   readonly postContentImageScenario: string;

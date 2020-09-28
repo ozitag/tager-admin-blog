@@ -1054,14 +1054,13 @@
   resolved "https://registry.yarnpkg.com/@soda/get-current-script/-/get-current-script-1.0.2.tgz#a53515db25d8038374381b73af20bb4f2e508d87"
   integrity sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==
 
-"@tager/admin-dynamic-field@^0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@tager/admin-dynamic-field/-/admin-dynamic-field-0.1.3.tgz#496c87853a47cf3233449c60cd0eedbdf3378c7c"
-  integrity sha512-OKRVIdcJ8ig0IPGzek2Bi5/AW7Pxl3ZWQgWHvZIcUX5loUyGjE8JuA2rfSoHctCZoVhSZo2biVxmMWs1ocIDEw==
+"@tager/admin-dynamic-field@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@tager/admin-dynamic-field/-/admin-dynamic-field-0.1.6.tgz#d93901cc1bae61a08c8dcc6a6c794fd70c838d1f"
+  integrity sha512-C8FJ0V+3rXAEF5mvnFa1PVFOY+KePuajL/MOaHFBQgZHsuI3voP0Tc27kOqcag1HOwRHyvym73ODMZfTf3DVVQ==
   dependencies:
     "@babel/runtime" "^7.11.2"
     lodash.kebabcase "^4.1.1"
-    nanoid "^3.1.12"
 
 "@tager/admin-layout@^0.4.2":
   version "0.4.2"
@@ -1079,14 +1078,15 @@
     nanoid "^3.1.12"
     zod "^1.11.9"
 
-"@tager/admin-ui@^0.7.5":
-  version "0.7.5"
-  resolved "https://registry.yarnpkg.com/@tager/admin-ui/-/admin-ui-0.7.5.tgz#8a24b96ac1a9c8803197b86795b1312510637eff"
-  integrity sha512-OlvoTjBaiwecMzomX1ZATp0B70CwHEuBDrT2eyFjGvguaarsI9CMEz9+S0Eof+T+zOQaqsbzuCc3tDcHQppZjw==
+"@tager/admin-ui@^0.7.13":
+  version "0.7.13"
+  resolved "https://registry.yarnpkg.com/@tager/admin-ui/-/admin-ui-0.7.13.tgz#df790599b17ad7310eadccec1692647289ca7c3f"
+  integrity sha512-N38PKyK2JB8Dfl86fYZl9sCUjb9Vr6IUmo/ElSuD22iRr/sPU51TyVIr3Cf34GfLicLgzpZxLICt9q1ERb608g==
   dependencies:
     "@babel/runtime" "^7.11.2"
     "@ckeditor/ckeditor5-vue" "^1.0.2"
     "@tager/admin-wysiwyg" "^0.1.0"
+    leaflet "^1.7.1"
     lodash.get "^4.4.2"
     lodash.kebabcase "^4.1.1"
     vue-color "^2.7.1"
@@ -5870,6 +5870,11 @@ lazy-cache@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/lazy-cache/-/lazy-cache-1.0.4.tgz#a1d78fc3a50474cb80845d3b3b6e1da49a446e8e"
   integrity sha1-odePw6UEdMuAhF07O24dpJpEbo4=
+
+leaflet@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.7.1.tgz#10d684916edfe1bf41d688a3b97127c0322a2a19"
+  integrity sha512-/xwPEBidtg69Q3HlqPdU3DnrXQOvQU/CCHA1tcDQVzOwm91YMYaILjNp7L4Eaw5Z4sOYdbBz6koWyibppd8Zqw==
 
 less@^3.9.0:
   version "3.11.3"

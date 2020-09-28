@@ -162,7 +162,12 @@ import {
   Nullable,
   useResource,
 } from '@tager/admin-services';
-import { createTabErrorFinder, OptionType, TabType } from '@tager/admin-ui';
+import {
+  createTabErrorFinder,
+  OptionType,
+  TabType,
+  ShortCodeConstructor,
+} from '@tager/admin-ui';
 import { DynamicField } from '@tager/admin-dynamic-field';
 
 import {
@@ -183,7 +188,6 @@ import {
   convertPostToFormValues,
   FormValues,
 } from './BlogPostForm.helpers';
-import ShortCodeConstructor from './components/ShortCodeConstructor.vue';
 
 export default defineComponent({
   name: 'BlogPostForm',
