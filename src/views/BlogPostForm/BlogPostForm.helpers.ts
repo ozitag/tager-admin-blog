@@ -89,7 +89,6 @@ export function convertPostToFormValues(
     relatedPosts: selectedPostOptionList,
     tags: post.tags.join(','),
     additionalFields: additionalFieldList.map((fieldConfig, index) => {
-      debugger;
       return universalFieldUtils.createFormField(
         fieldConfig,
         post.additionalFields[index]?.value

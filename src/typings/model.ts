@@ -53,8 +53,13 @@ export type PostFull = {
 } & SeoInfo;
 
 export type ShortCodeParamType = {
-  name: string;
-  label: string;
+  readonly name: string;
+  readonly label: string;
+};
+
+export type ShortCodeItemType = {
+  readonly shortcode: string;
+  readonly params: Array<ShortCodeParamType>;
 };
 
 export type BlogModuleConfigType = {
@@ -64,10 +69,7 @@ export type BlogModuleConfigType = {
     name: string;
   }>;
   readonly fields: Array<FieldConfigUnion>;
-  readonly shortcodes: Array<{
-    shortcode: string;
-    params: Array<ShortCodeParamType>;
-  }>;
+  readonly shortcodes: Array<ShortCodeItemType>;
 };
 
 export type SettingItemType = {

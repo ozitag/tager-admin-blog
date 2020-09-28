@@ -56,6 +56,11 @@
             :error="errors.body"
             :get-upload-adapter-options="getUploadAdapterOptions"
           />
+          <ShortCodeConstructor
+            :short-code-config-list="
+              moduleConfig ? moduleConfig.shortcodes : []
+            "
+          />
 
           <form-field
             v-model="values.date"
@@ -177,10 +182,11 @@ import {
   convertPostToFormValues,
   FormValues,
 } from './BlogPostForm.helpers';
+import ShortCodeConstructor from './components/ShortCodeConstructor.vue';
 
 export default defineComponent({
   name: 'BlogPostForm',
-  components: { DynamicField },
+  components: { DynamicField, ShortCodeConstructor },
   setup(props, context) {
     const postId = computed<string>(() => context.root.$route.params.postId);
     const isCreation = computed<boolean>(() => postId.value === 'create');
