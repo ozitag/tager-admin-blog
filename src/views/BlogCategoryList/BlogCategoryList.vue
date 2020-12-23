@@ -17,12 +17,13 @@
         data-table="blog-category"
       >
         <template v-slot:cell(link-to-posts)="{ row }">
-          <base-button
+          <count-button
             :href="getLinkToPostsByCategory(row.id)"
             variant="outline-secondary"
+            :count="row.postsCount"
           >
-            Posts ({{ row.postsCount }})
-          </base-button>
+            Posts
+          </count-button>
         </template>
 
         <template v-slot:cell(actions)="{ row, rowIndex }">
