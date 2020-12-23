@@ -36,40 +36,32 @@ export function getCategoryTableColumnDefs(
       id: 2,
       name: 'Name',
       field: 'name',
-      type: 'link',
-      format: ({ row }) => ({
-        url: getBlogCategoryFormUrl({ categoryId: row.id }),
-        text: row.name,
-      }),
-      options: {
-        shouldUseRouter: true,
-      },
-    },
-    {
-      id: 5,
-      name: 'Website URL',
-      field: 'url',
-      type: 'link',
-      format: ({ row }) => ({
-        url: [
-          process.env.VUE_APP_WEBSITE_URL || window.location.origin,
-          row.url,
-        ].join(''),
-        text: row.url,
-      }),
-      options: {
-        shouldUseRouter: false,
+      type: 'name',
+      format: ({ row }) => {
+        return {
+          adminLink: {
+            url: getBlogCategoryFormUrl({ categoryId: row.id }),
+            text: row.name,
+          },
+          websiteLink: {
+            url: [
+              process.env.VUE_APP_WEBSITE_URL || window.location.origin,
+              row.url,
+            ].join(''),
+            text: row.url,
+          },
+        };
       },
     },
     isLangSpecific ? { id: 4, name: 'Language', field: 'language' } : null,
     {
-      id: 8,
+      id: 3,
       name: 'Posts',
       field: 'linkToPosts',
-      style: { whiteSpace: 'nowrap', textAlign: 'center', width: '130px' },
+      style: { whiteSpace: 'nowrap', width: '130px' },
     },
     {
-      id: 9,
+      id: 4,
       name: 'Actions',
       field: 'actions',
       style: { whiteSpace: 'nowrap', width: '205px' },

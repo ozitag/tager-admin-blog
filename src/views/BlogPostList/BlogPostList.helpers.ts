@@ -54,24 +54,30 @@ export function getPostTableColumnDefs(
     },
     {
       id: 2,
+      name: 'Name',
+      field: 'name',
+      type: 'name',
+      format: ({ row }) => ({
+        adminLink: {
+          text: row.title,
+          url: getBlogPostFormUrl({ postId: row.id }),
+        },
+        websiteLink: {
+          text: row.url,
+          url: [
+            process.env.VUE_APP_WEBSITE_URL || window.location.origin,
+            row.url,
+          ].join(''),
+        },
+      }),
+    },
+    {
+      id: 3,
       name: 'Image',
       field: 'image',
       type: 'image',
       style: { width: '250px' },
       headStyle: { width: '250px' },
-    },
-    {
-      id: 3,
-      name: 'Title',
-      field: 'title',
-      type: 'link',
-      format: ({ row }) => ({
-        url: getBlogPostFormUrl({ postId: row.id }),
-        text: row.title,
-      }),
-      options: {
-        shouldUseRouter: true,
-      },
     },
     isLangSpecific ? { id: 4, name: 'Language', field: 'language' } : null,
     { id: 5, name: 'Date', field: 'date', type: 'date' },
@@ -84,22 +90,6 @@ export function getPostTableColumnDefs(
     },
     {
       id: 7,
-      name: 'Website URL',
-      field: 'url',
-      type: 'link',
-      format: ({ row }) => ({
-        url: [
-          process.env.VUE_APP_WEBSITE_URL || window.location.origin,
-          row.url,
-        ].join(''),
-        text: row.url,
-      }),
-      options: {
-        shouldUseRouter: false,
-      },
-    },
-    {
-      id: 8,
       name: 'Actions',
       field: 'actions',
       style: { whiteSpace: 'nowrap', width: '120px' },
