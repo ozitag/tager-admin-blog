@@ -106,10 +106,6 @@ export default defineComponent({
       resourceName: 'Blog post list',
     });
 
-    onMounted(() => {
-      fetchPostList();
-    });
-
     const displayedPostList = computed<Array<PostShort>>(() =>
       convertPostList(
         postList.value,
