@@ -11,8 +11,10 @@ import {
 
 /** Blog Posts */
 
-export function getBlogPostList(): Promise<ResponseBody<Array<PostShort>>> {
-  return request.get({ path: '/admin/blog/posts' });
+export function getBlogPostList(params?: {
+  query?: string;
+}): Promise<ResponseBody<Array<PostShort>>> {
+  return request.get({ path: '/admin/blog/posts', params });
 }
 
 export function getBlogPostCount(): Promise<ResponseBody<{ count: number }>> {

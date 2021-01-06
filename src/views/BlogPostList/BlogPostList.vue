@@ -6,12 +6,14 @@
     ]"
   >
     <template v-slot:content>
-      <base-table
+      <data-table
         :column-defs="columnDefs"
         :row-data="rowData"
         :loading="isRowDataLoading"
         :error-message="errorMessage"
+        :search-query="searchQuery"
         data-table="blog-post"
+        @change="handleChange"
       >
         <template v-slot:cell(actions)="{ row }">
           <base-button
@@ -31,7 +33,7 @@
             <svg-icon name="delete"></svg-icon>
           </base-button>
         </template>
-      </base-table>
+      </data-table>
     </template>
   </page>
 </template>
@@ -39,12 +41,8 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted } from '@vue/composition-api';
 
-import { ColumnDefinition } from '@tager/admin-ui';
-import {
-  Nullable,
-  useResource,
-  useResourceDelete,
-} from '@tager/admin-services';
+import { ColumnDefinition, useDataTable } from '@tager/admin-ui';
+import { Nullable, useResourceDelete } from '@tager/admin-services';
 
 import { BlogCategory, PostShort } from '../../typings/model';
 import { deleteBlogPost, getBlogPostList } from '../../services/requests';
@@ -93,12 +91,16 @@ export default defineComponent({
     });
 
     /** Fetch Post list */
-
-    const [
-      fetchPostList,
-      { data: postList, loading: isPostLoading, error },
-    ] = useResource<Array<PostShort>>({
-      fetchResource: getBlogPostList,
+    const {
+      fetchEntityList: fetchPostList,
+      isLoading: isPostLoading,
+      rowData: postList,
+      errorMessage,
+      searchQuery,
+      handleChange,
+    } = useDataTable<PostShort>({
+      fetchEntityList: (params) =>
+        getBlogPostList({ query: params.searchQuery }),
       initialValue: [],
       context,
       resourceName: 'Blog post list',
@@ -141,9 +143,11 @@ export default defineComponent({
       isDeleting,
       categoryList,
       isRowDataLoading,
-      errorMessage: error,
+      errorMessage,
       getBlogPostFormUrl,
       pageTitle,
+      searchQuery,
+      handleChange,
     };
   },
 });
