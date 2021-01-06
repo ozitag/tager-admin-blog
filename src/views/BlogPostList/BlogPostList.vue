@@ -91,28 +91,28 @@ export default defineComponent({
     });
 
     /** Fetch Post list */
-
     const {
-      fetchEntityList,
+      fetchEntityList: fetchPostList,
       isLoading: isPostLoading,
-      rowData,
+      rowData: postList,
       errorMessage,
       searchQuery,
       handleChange,
     } = useDataTable<PostShort>({
-      fetchEntityList: getBlogPostList,
+      fetchEntityList: (params) =>
+        getBlogPostList({ query: params.searchQuery }),
       initialValue: [],
       context,
       resourceName: 'Blog post list',
     });
 
     onMounted(() => {
-      fetchEntityList();
+      fetchPostList();
     });
 
     const displayedPostList = computed<Array<PostShort>>(() =>
       convertPostList(
-        rowData.value,
+        postList.value,
         selectedCategory.value,
         moduleConfig.value?.languages ?? []
       )
@@ -121,7 +121,7 @@ export default defineComponent({
     const { handleResourceDelete, isDeleting } = useResourceDelete({
       deleteResource: deleteBlogPost,
       resourceName: 'Post',
-      onSuccess: fetchEntityList,
+      onSuccess: fetchPostList,
       context,
     });
 
