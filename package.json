@@ -24,7 +24,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
-    "@tager/admin-dynamic-field": "^0.1.6",
+    "@tager/admin-dynamic-field": "^0.1.7",
     "@tager/admin-layout": "^0.4.3",
     "@tager/admin-services": "^0.2.14",
     "@tager/admin-ui": "^0.8.0",
