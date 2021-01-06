@@ -1,5 +1,6 @@
 import { request, Nullable, ResponseBody } from '@tager/admin-services';
 import { FieldShortType, OutgoingValueUnion } from '@tager/admin-dynamic-field';
+import { TableDataRequestParams } from '@tager/admin-ui';
 
 import {
   BlogCategory,
@@ -11,8 +12,15 @@ import {
 
 /** Blog Posts */
 
-export function getBlogPostList(): Promise<ResponseBody<Array<PostShort>>> {
-  return request.get({ path: '/admin/blog/posts' });
+export function getBlogPostList(
+  requestParams?: TableDataRequestParams
+): Promise<ResponseBody<Array<PostShort>>> {
+  const baseUrl = '/admin/blog/posts';
+  const path = requestParams?.searchQuery
+    ? `${baseUrl}?query=${requestParams?.searchQuery}`
+    : baseUrl;
+
+  return request.get({ path });
 }
 
 export function getBlogPostCount(): Promise<ResponseBody<{ count: number }>> {

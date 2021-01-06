@@ -6,12 +6,14 @@
     ]"
   >
     <template v-slot:content>
-      <base-table
+      <data-table
         :column-defs="columnDefs"
         :row-data="rowData"
         :loading="isRowDataLoading"
         :error-message="errorMessage"
+        :search-query="searchQuery"
         data-table="blog-post"
+        @change="handleChange"
       >
         <template v-slot:cell(actions)="{ row }">
           <base-button
@@ -31,7 +33,7 @@
             <svg-icon name="delete"></svg-icon>
           </base-button>
         </template>
-      </base-table>
+      </data-table>
     </template>
   </page>
 </template>
@@ -39,12 +41,8 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted } from '@vue/composition-api';
 
-import { ColumnDefinition } from '@tager/admin-ui';
-import {
-  Nullable,
-  useResource,
-  useResourceDelete,
-} from '@tager/admin-services';
+import { ColumnDefinition, useDataTable } from '@tager/admin-ui';
+import { Nullable, useResourceDelete } from '@tager/admin-services';
 
 import { BlogCategory, PostShort } from '../../typings/model';
 import { deleteBlogPost, getBlogPostList } from '../../services/requests';
@@ -94,23 +92,27 @@ export default defineComponent({
 
     /** Fetch Post list */
 
-    const [
-      fetchPostList,
-      { data: postList, loading: isPostLoading, error },
-    ] = useResource<Array<PostShort>>({
-      fetchResource: getBlogPostList,
+    const {
+      fetchEntityList,
+      isLoading: isPostLoading,
+      rowData,
+      errorMessage,
+      searchQuery,
+      handleChange,
+    } = useDataTable<PostShort>({
+      fetchEntityList: getBlogPostList,
       initialValue: [],
       context,
       resourceName: 'Blog post list',
     });
 
     onMounted(() => {
-      fetchPostList();
+      fetchEntityList();
     });
 
     const displayedPostList = computed<Array<PostShort>>(() =>
       convertPostList(
-        postList.value,
+        rowData.value,
         selectedCategory.value,
         moduleConfig.value?.languages ?? []
       )
@@ -119,7 +121,7 @@ export default defineComponent({
     const { handleResourceDelete, isDeleting } = useResourceDelete({
       deleteResource: deleteBlogPost,
       resourceName: 'Post',
-      onSuccess: fetchPostList,
+      onSuccess: fetchEntityList,
       context,
     });
 
@@ -141,9 +143,11 @@ export default defineComponent({
       isDeleting,
       categoryList,
       isRowDataLoading,
-      errorMessage: error,
+      errorMessage,
       getBlogPostFormUrl,
       pageTitle,
+      searchQuery,
+      handleChange,
     };
   },
 });
