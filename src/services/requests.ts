@@ -13,6 +13,8 @@ import {
 
 export function getBlogPostList(params?: {
   query?: string;
+  pageNumber?: number;
+  pageSize?: number;
 }): Promise<ResponseBody<Array<PostShort>>> {
   return request.get({ path: '/admin/blog/posts', params });
 }

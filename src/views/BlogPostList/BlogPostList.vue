@@ -12,6 +12,12 @@
         :loading="isRowDataLoading"
         :error-message="errorMessage"
         :search-query="searchQuery"
+        :pagination="{
+          pageNumber,
+          pageCount,
+          pageSize,
+          disabled: isRowDataLoading,
+        }"
         data-table="blog-post"
         @change="handleChange"
       >
@@ -98,9 +104,16 @@ export default defineComponent({
       errorMessage,
       searchQuery,
       handleChange,
+      pageNumber,
+      pageCount,
+      pageSize,
     } = useDataTable<PostShort>({
       fetchEntityList: (params) =>
-        getBlogPostList({ query: params.searchQuery }),
+        getBlogPostList({
+          query: params.searchQuery,
+          pageNumber: params.pageNumber,
+          pageSize: params.pageSize,
+        }),
       initialValue: [],
       context,
       resourceName: 'Blog post list',
@@ -144,6 +157,9 @@ export default defineComponent({
       pageTitle,
       searchQuery,
       handleChange,
+      pageNumber,
+      pageCount,
+      pageSize,
     };
   },
 });
