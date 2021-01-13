@@ -1062,10 +1062,10 @@
     "@babel/runtime" "^7.11.2"
     lodash.kebabcase "^4.1.1"
 
-"@tager/admin-layout@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@tager/admin-layout/-/admin-layout-0.4.3.tgz#48d91ab936ade105e0a4a8fefe2e11dc548cdf15"
-  integrity sha512-b4earvz7s6tdenAIqLDaIpgmYt8/F+7suQzWllY7Sy6A6ELXe+C46Ayjrd2WQhbbw/ZognQTgBf2H7jxBX3RtQ==
+"@tager/admin-layout@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@tager/admin-layout/-/admin-layout-0.4.4.tgz#1726da8abd01fde2b19a93e43aa72facad95431e"
+  integrity sha512-y2K+B/rr7A1z3a3rsW7ll9cGzYhhBiK5eQgbCPQDyq2csqxFCa2LbuhXLyqJ5FUyg5NaideUF5dM202iYSghLA==
   dependencies:
     "@babel/runtime" "^7.10.4"
 
@@ -1078,10 +1078,10 @@
     nanoid "^3.1.12"
     zod "^1.11.9"
 
-"@tager/admin-ui@^0.8.4":
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/@tager/admin-ui/-/admin-ui-0.8.4.tgz#92dd1a8ca5cfc25b3923a7752c1799dafb45e969"
-  integrity sha512-8Jq7weMRTRZFCg0rN+jyPdq+3geNe6vNcFc+1lduD1x76LIIHKKmDnHVRgO2YSim9l3BupVwYZIkXv5jkzso7w==
+"@tager/admin-ui@^0.8.5":
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/@tager/admin-ui/-/admin-ui-0.8.5.tgz#5cb0c8b93423cd7526c6e186818ad14d501764c2"
+  integrity sha512-eObfg2bRR0Vm3kqsZdnfzT6X2KlKisbY6IFEsxQL9uaJigWSr6NquG9ijgqTFhZjzqAgciL9zp/ds+UIj9iEjA==
   dependencies:
     "@babel/runtime" "^7.11.2"
     "@ckeditor/ckeditor5-vue" "^1.0.2"
@@ -1091,6 +1091,7 @@
     lodash.debounce "^4.0.8"
     lodash.get "^4.4.2"
     lodash.kebabcase "^4.1.1"
+    smoothscroll-polyfill "^0.4.4"
     vue-color "^2.7.1"
 
 "@tager/admin-wysiwyg@^0.1.0":
@@ -8445,6 +8446,11 @@ slice-ansi@^2.1.0:
     ansi-styles "^3.2.0"
     astral-regex "^1.0.0"
     is-fullwidth-code-point "^2.0.0"
+
+smoothscroll-polyfill@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/smoothscroll-polyfill/-/smoothscroll-polyfill-0.4.4.tgz#3a259131dc6930e6ca80003e1cb03b603b69abf8"
+  integrity sha512-TK5ZA9U5RqCwMpfoMq/l1mrH0JAR7y7KRvOBx0n2869aLxch+gT9GhN3yUfjiw+d/DiF1mKo14+hd62JyMmoBg==
 
 snapdragon-node@^2.0.1:
   version "2.1.1"

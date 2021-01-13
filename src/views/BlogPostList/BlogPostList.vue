@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from '@vue/composition-api';
+import { computed, defineComponent } from '@vue/composition-api';
 
 import { ColumnDefinition, useDataTable } from '@tager/admin-ui';
 import { Nullable, useResourceDelete } from '@tager/admin-services';
@@ -117,6 +117,7 @@ export default defineComponent({
       initialValue: [],
       context,
       resourceName: 'Blog post list',
+      pageSize: 100,
     });
 
     const displayedPostList = computed<Array<PostShort>>(() =>
