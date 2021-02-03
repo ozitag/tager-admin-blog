@@ -156,7 +156,7 @@ export default defineComponent({
       );
     });
 
-    function submitForm() {
+    function submitForm({ shouldExit }: { shouldExit: boolean }) {
       isSubmitting.value = true;
 
       const creationBody = convertCategoryFormValuesToCreationPayload(
@@ -171,7 +171,10 @@ export default defineComponent({
       requestPromise
         .then(() => {
           errors.value = {};
-          context.root.$router.push(getBlogCategoryListUrl());
+
+          if (shouldExit) {
+            context.root.$router.push(getBlogCategoryListUrl());
+          }
 
           context.root.$toast({
             variant: 'success',
