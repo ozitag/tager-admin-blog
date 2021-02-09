@@ -120,26 +120,14 @@
         </template>
 
         <template v-if="selectedTabId === 'seo'">
-          <form-field
-            v-model="values.pageTitle"
-            name="pageTitle"
-            label="Page title"
-            :error="errors.pageTitle"
-          />
-
-          <form-field
-            v-model="values.pageDescription"
-            name="pageDescription"
-            label="Page description"
-            type="textarea"
-            :error="errors.pageDescription"
-          />
-
-          <form-field-file-input
-            v-model="values.openGraphImage"
-            label="Open graph image"
-            name="openGraphImage"
-            file-type="image"
+          <seo-field-group
+            :title="values.pageTitle"
+            :title-error-message="errors.pageTitle"
+            :description="values.pageDescription"
+            :description-error-message="errors.pageDescription"
+            :image="values.openGraphImage"
+            :image-error-message="errors.openGraphImage"
+            @change="handleSeoFieldGroupChange"
           />
         </template>
       </form>
@@ -167,6 +155,7 @@ import {
   OptionType,
   TabType,
   ShortCodeConstructor,
+  SeoChangeEvent,
 } from '@tager/admin-ui';
 import { DynamicField } from '@tager/admin-dynamic-field';
 
@@ -415,6 +404,16 @@ export default defineComponent({
       ].filter(isNotNullish)
     );
 
+    function handleSeoFieldGroupChange({
+      title,
+      description,
+      image,
+    }: SeoChangeEvent) {
+      values.value.pageTitle = title;
+      values.value.pageDescription = description;
+      values.value.openGraphImage = image;
+    }
+
     return {
       isCreation,
       pagePath: blogPagePath,
@@ -433,6 +432,7 @@ export default defineComponent({
       tabList,
       selectedTabId,
       headerButtonList,
+      handleSeoFieldGroupChange,
     };
   },
 });
