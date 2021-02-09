@@ -67,7 +67,7 @@ export default defineComponent({
 
     const errors = ref<Record<string, string>>({});
 
-    function submitForm() {
+    function submitForm({ shouldExit }: { shouldExit: boolean }) {
       isSubmitting.value = true;
 
       const body = convertSettingValuesToRequestPayload(values.value);
@@ -75,7 +75,10 @@ export default defineComponent({
       updateBlogSettingList(body)
         .then(() => {
           errors.value = {};
-          context.root.$router.push(getBlogPostListUrl());
+
+          if (shouldExit) {
+            context.root.$router.push(getBlogPostListUrl());
+          }
 
           context.root.$toast({
             variant: 'success',
