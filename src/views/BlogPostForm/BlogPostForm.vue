@@ -132,6 +132,16 @@
         </template>
       </form>
     </template>
+
+    <template v-slot:footer>
+      <FormFooter
+        :back-href="postListUrl"
+        :on-submit="submitForm"
+        :is-submitting="isSubmitting"
+        :is-creation="isCreation"
+        :can-create-another="isCreation"
+      />
+    </template>
   </page>
 </template>
 
@@ -156,6 +166,8 @@ import {
   TabType,
   ShortCodeConstructor,
   SeoChangeEvent,
+  FormFooter,
+  TagerFormSubmitEvent,
 } from '@tager/admin-ui';
 import { DynamicField } from '@tager/admin-dynamic-field';
 
@@ -165,7 +177,7 @@ import {
   updateBlogPost,
 } from '../../services/requests';
 import { PostFull } from '../../typings/model';
-import { getBlogPostListUrl } from '../../constants/paths';
+import { getBlogPostFormUrl, getBlogPostListUrl } from '../../constants/paths';
 import useModuleConfig from '../../hooks/useModuleConfig';
 import useBlogCategoryList from '../../hooks/useBlogCategoryList';
 import useBlogPostList from '../../hooks/useBlogPostList';
@@ -180,7 +192,7 @@ import {
 
 export default defineComponent({
   name: 'BlogPostForm',
-  components: { DynamicField, ShortCodeConstructor },
+  components: { DynamicField, ShortCodeConstructor, FormFooter },
   setup(props, context) {
     const postId = computed<string>(() => context.root.$route.params.postId);
     const isCreation = computed<boolean>(() => postId.value === 'create');
@@ -265,7 +277,7 @@ export default defineComponent({
       );
     });
 
-    function submitForm({ shouldExit }: { shouldExit: boolean }) {
+    function submitForm(event: TagerFormSubmitEvent) {
       isSubmitting.value = true;
 
       const creationBody = convertFormValuesToCreationPayload(values.value);
@@ -276,11 +288,30 @@ export default defineComponent({
         : updateBlogPost(postId.value, updateBody);
 
       requestPromise
-        .then(() => {
+        .then(({ data }) => {
           errors.value = {};
 
-          if (shouldExit) {
-            context.root.$router.push(getBlogPostListUrl());
+          if (event.type === 'create') {
+            context.root.$router.push(
+              getBlogPostFormUrl({ postId: String(data.id) })
+            );
+          }
+
+          if (event.type === 'create_exit' || event.type === 'save_exit') {
+            if (context.root.$previousRoute) {
+              context.root.$router.back();
+            } else {
+              context.root.$router.push(getBlogPostListUrl());
+            }
+          }
+
+          if (event.type === 'create_create-another') {
+            values.value = convertPostToFormValues(
+              null,
+              languageOptionList.value,
+              postOptionList.value,
+              moduleConfig.value?.fields ?? []
+            );
           }
 
           context.root.$toast({

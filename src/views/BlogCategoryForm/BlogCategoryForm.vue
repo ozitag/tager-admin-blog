@@ -2,11 +2,6 @@
   <page
     :title="isCreation ? 'Create Blog category' : 'Update Blog category'"
     :is-content-loading="isContentLoading"
-    :footer="{
-      backHref: categoryListUrl,
-      onSubmit: submitForm,
-      isSubmitting: isSubmitting,
-    }"
   >
     <template v-slot:content>
       <form novalidate @submit.prevent="submitForm">
@@ -59,6 +54,16 @@
         />
       </form>
     </template>
+
+    <template v-slot:footer>
+      <FormFooter
+        :back-href="categoryListUrl"
+        :on-submit="submitForm"
+        :is-submitting="isSubmitting"
+        :is-creation="isCreation"
+        :can-create-another="isCreation"
+      />
+    </template>
   </page>
 </template>
 
@@ -76,7 +81,7 @@ import {
   Nullable,
   useResource,
 } from '@tager/admin-services';
-import { OptionType } from '@tager/admin-ui';
+import { OptionType, FormFooter, TagerFormSubmitEvent } from '@tager/admin-ui';
 
 import {
   createBlogCategory,
@@ -84,7 +89,10 @@ import {
   updateBlogCategory,
 } from '../../services/requests';
 import { BlogCategory } from '../../typings/model';
-import { getBlogCategoryListUrl } from '../../constants/paths';
+import {
+  getBlogCategoryFormUrl,
+  getBlogCategoryListUrl,
+} from '../../constants/paths';
 import useModuleConfig from '../../hooks/useModuleConfig';
 
 import {
@@ -96,6 +104,7 @@ import {
 
 export default defineComponent({
   name: 'BlogCategoryForm',
+  components: { FormFooter },
   setup(props, context) {
     const categoryId = computed<string>(
       () => context.root.$route.params.categoryId
@@ -156,7 +165,7 @@ export default defineComponent({
       );
     });
 
-    function submitForm({ shouldExit }: { shouldExit: boolean }) {
+    function submitForm(event: TagerFormSubmitEvent) {
       isSubmitting.value = true;
 
       const creationBody = convertCategoryFormValuesToCreationPayload(
@@ -169,11 +178,24 @@ export default defineComponent({
         : updateBlogCategory(categoryId.value, updateBody);
 
       requestPromise
-        .then(() => {
+        .then(({ data }) => {
           errors.value = {};
 
-          if (shouldExit) {
+          if (event.type === 'create') {
+            context.root.$router.push(
+              getBlogCategoryFormUrl({ categoryId: String(data.id) })
+            );
+          }
+
+          if (event.type === 'create_exit' || event.type === 'save_exit') {
             context.root.$router.push(getBlogCategoryListUrl());
+          }
+
+          if (event.type === 'create_create-another') {
+            values.value = convertCategoryToFormValues(
+              null,
+              languageOptionList.value
+            );
           }
 
           context.root.$toast({
