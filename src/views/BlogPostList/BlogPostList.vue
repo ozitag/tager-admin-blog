@@ -2,7 +2,10 @@
   <page
     :title="pageTitle"
     :header-buttons="[
-      { text: 'New Post', href: getBlogPostFormUrl({ postId: 'create' }) },
+      {
+        text: $t('blog:newPost'),
+        href: getBlogPostFormUrl({ postId: 'create' }),
+      },
     ]"
   >
     <template v-slot:content>
@@ -24,7 +27,7 @@
         <template v-slot:cell(actions)="{ row }">
           <base-button
             variant="icon"
-            title="Edit"
+            :title="$t('blog:edit')"
             :disabled="isDeleting(row.id)"
             :href="getBlogPostFormUrl({ postId: row.id })"
           >
@@ -32,7 +35,7 @@
           </base-button>
           <base-button
             variant="icon"
-            title="Remove"
+            :title="$t('blog:remove')"
             :disabled="isDeleting(row.id)"
             @click="handleResourceDelete(row.id)"
           >
@@ -92,8 +95,10 @@ export default defineComponent({
 
     const pageTitle = computed<string>(() => {
       return selectedCategory.value
-        ? `Posts by category "${selectedCategory.value.name}"`
-        : 'Posts';
+        ? `${context.root.$t('blog:postsByCategory')} "${
+            selectedCategory.value.name
+          }"`
+        : context.root.$t('blog:posts');
     });
 
     /** Fetch Post list */
@@ -143,7 +148,7 @@ export default defineComponent({
     );
 
     const columnDefs = computed<Array<ColumnDefinition<PostShort>>>(() =>
-      getPostTableColumnDefs(moduleConfig.value)
+      getPostTableColumnDefs(moduleConfig.value, context.root.$t)
     );
 
     return {

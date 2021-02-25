@@ -8,16 +8,14 @@ import BlogSettings from '../views/BlogSettings';
 
 import { BLOG_ROUTE_PATHS, getBlogSettingsUrl } from './paths';
 
-const HOME_BREADCRUMB = { url: '/', text: 'Home' };
-
 export const BLOG_POST_LIST_ROUTE: CustomRouteConfig = {
   path: BLOG_ROUTE_PATHS.POST_LIST,
   component: BlogPostList,
   name: 'All posts',
   meta: {
-    getBreadcrumbs: () => [
-      HOME_BREADCRUMB,
-      { url: BLOG_ROUTE_PATHS.POST_LIST, text: 'All posts' },
+    getBreadcrumbs: (route, t) => [
+      { url: '/', text: t('blog:home') },
+      { url: BLOG_ROUTE_PATHS.POST_LIST, text: t('blog:allPosts') },
     ],
   },
 };
@@ -27,10 +25,10 @@ export const BLOG_POST_FORM_ROUTE: CustomRouteConfig = {
   component: BlogPostForm,
   name: 'Post Form',
   meta: {
-    getBreadcrumbs: (route: CustomRoute) => [
-      HOME_BREADCRUMB,
-      { url: BLOG_ROUTE_PATHS.POST_LIST, text: 'All posts' },
-      { url: route.path, text: 'Blog post form' },
+    getBreadcrumbs: (route: CustomRoute, t) => [
+      { url: '/', text: t('blog:home') },
+      { url: BLOG_ROUTE_PATHS.POST_LIST, text: t('blog:allPosts') },
+      { url: route.path, text: t('blog:postForm') },
     ],
   },
 };
@@ -40,9 +38,9 @@ export const BLOG_CATEGORY_LIST_ROUTE: CustomRouteConfig = {
   component: BlogCategoryList,
   name: 'All categories',
   meta: {
-    getBreadcrumbs: () => [
-      HOME_BREADCRUMB,
-      { url: BLOG_ROUTE_PATHS.CATEGORY_LIST, text: 'All categories' },
+    getBreadcrumbs: (route, t) => [
+      { url: '/', text: t('blog:home') },
+      { url: BLOG_ROUTE_PATHS.CATEGORY_LIST, text: t('blog:allCategories') },
     ],
   },
 };
@@ -52,10 +50,10 @@ export const BLOG_CATEGORY_FORM_ROUTE: CustomRouteConfig = {
   component: BlogCategoryForm,
   name: 'Category Form',
   meta: {
-    getBreadcrumbs: (route: CustomRoute) => [
-      HOME_BREADCRUMB,
-      { url: BLOG_ROUTE_PATHS.CATEGORY_LIST, text: 'All categories' },
-      { url: route.path, text: 'Blog Category form' },
+    getBreadcrumbs: (route: CustomRoute, t) => [
+      { url: '/', text: t('blog:home') },
+      { url: BLOG_ROUTE_PATHS.CATEGORY_LIST, text: t('blog:allCategories') },
+      { url: route.path, text: t('blog:categoryForm') },
     ],
   },
 };
@@ -65,9 +63,9 @@ export const BLOG_SETTINGS_ROUTE: CustomRouteConfig = {
   component: BlogSettings,
   name: 'Settings',
   meta: {
-    getBreadcrumbs: () => [
-      HOME_BREADCRUMB,
-      { url: getBlogSettingsUrl(), text: 'Blog settings' },
+    getBreadcrumbs: (route, t) => [
+      { url: '/', text: t('blog:home') },
+      { url: getBlogSettingsUrl(), text: t('blog:blogSettings') },
     ],
   },
 };

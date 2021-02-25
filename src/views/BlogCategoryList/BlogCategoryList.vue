@@ -1,9 +1,9 @@
 <template>
   <page
-    title="Blog Categories"
+    :title="$t('blog:blogCategories')"
     :header-buttons="[
       {
-        text: 'New Category',
+        text: $t('blog:newCategory'),
         href: getBlogCategoryFormUrl({ categoryId: 'create' }),
       },
     ]"
@@ -22,14 +22,14 @@
             variant="outline-secondary"
             :count="row.postsCount"
           >
-            Posts
+            {{ $t('blog:posts') }}
           </count-button>
         </template>
 
         <template v-slot:cell(actions)="{ row, rowIndex }">
           <base-button
             variant="icon"
-            title="Edit"
+            :title="$t('blog:edit')"
             :disabled="isDeleting(row.id)"
             :href="getBlogCategoryFormUrl({ categoryId: row.id })"
           >
@@ -38,7 +38,7 @@
 
           <base-button
             variant="icon"
-            title="Move up"
+            :title="$t('blog:moveUp')"
             :disabled="rowIndex === 0 || isCategoryMoving"
             @click="moveCategory(row.id, 'up')"
           >
@@ -47,7 +47,7 @@
 
           <base-button
             variant="icon"
-            title="Move down"
+            :title="$t('blog:moveDown')"
             :disabled="rowIndex === rowData.length - 1 || isCategoryMoving"
             @click="moveCategory(row.id, 'down')"
           >
@@ -56,7 +56,7 @@
 
           <base-button
             variant="icon"
-            title="Remove"
+            :title="$t('blog:remove')"
             :disabled="isDeleting(row.id) || row.postsCount > 0"
             @click="handleCategoryDelete(row.id)"
           >
@@ -172,7 +172,7 @@ export default Vue.extend({
     );
 
     const columnDefs = computed(() =>
-      getCategoryTableColumnDefs(moduleConfig.value)
+      getCategoryTableColumnDefs(moduleConfig.value, context.root.$t)
     );
 
     return {
