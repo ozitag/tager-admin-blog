@@ -1,6 +1,6 @@
 <template>
   <page
-    :title="isCreation ? 'Create Blog post' : 'Update Blog post'"
+    :title="isCreation ? $t('blog:createPost') : $t('blog:updatePost')"
     :is-content-loading="isContentLoading"
     :header-buttons="headerButtonList"
     :footer="{
@@ -21,7 +21,7 @@
           <form-field
             v-model="values.title"
             name="title"
-            label="Title"
+            :label="$t('blog:title')"
             :error="errors.title"
           />
 
@@ -29,7 +29,7 @@
             v-if="isCreation && isLangSpecific"
             v-model="values.language"
             name="language"
-            label="Language"
+            :label="$t('blog:language')"
             :options="languageOptionList"
             :error="errors.language"
           />
@@ -38,7 +38,7 @@
             id="urlAlias"
             v-model="values.urlAlias"
             name="urlAlias"
-            label="URL alias"
+            :label="$t('blog:URLAlias')"
             :url-template="pagePath"
             :error="errors.urlAlias"
           />
@@ -46,14 +46,14 @@
           <form-field
             v-model="values.excerpt"
             name="excerpt"
-            label="Excerpt"
+            :label="$t('blog:excerpt')"
             type="textarea"
             :error="errors.excerpt"
           />
           <form-field-rich-text-input
             v-model="values.body"
             name="body"
-            label="Body"
+            :label="$t('blog:body')"
             :error="errors.body"
             :get-upload-adapter-options="getUploadAdapterOptions"
           />
@@ -66,7 +66,7 @@
           <form-field
             v-model="values.date"
             name="date"
-            label="Date"
+            :label="$t('blog:date')"
             type="date"
             :error="errors.date"
           />
@@ -75,7 +75,7 @@
         <template v-if="selectedTabId === 'images'">
           <form-field-file-input
             v-model="values.coverImage"
-            label="Cover image"
+            :label="$t('blog:coverImage')"
             name="coverImage"
             file-type="image"
           />
@@ -83,7 +83,7 @@
           <form-field-file-input
             v-model="values.image"
             name="image"
-            label="Inner Image"
+            :label="$t('blog:innerImage')"
             file-type="image"
           />
         </template>
@@ -92,20 +92,20 @@
           <form-field
             v-model="values.tags"
             name="tags"
-            label="Tags"
+            :label="$t('blog:tags')"
             :error="errors.tags"
           />
           <form-field-multi-select
             v-model="values.categories"
             name="categories"
-            label="Categories"
+            :label="$t('blog:categories')"
             :options="categoryOptionList"
             :error="errors.categories"
           />
           <form-field-multi-select
             v-model="values.relatedPosts"
             name="relatedPosts"
-            label="Related posts"
+            :label="$t('blog:relatedPosts')"
             :options="postOptionList"
             :error="errors.relatedPosts"
           />
@@ -123,10 +123,13 @@
           <seo-field-group
             :title="values.pageTitle"
             :title-error-message="errors.pageTitle"
+            :title-label="$t('blog:pageTitle')"
             :description="values.pageDescription"
             :description-error-message="errors.pageDescription"
+            :description-label="$t('blog:pageDescription')"
             :image="values.openGraphImage"
             :image-error-message="errors.openGraphImage"
+            :image-label="$t('blog:openGraphImage')"
             @change="handleSeoFieldGroupChange"
           />
         </template>
@@ -316,10 +319,10 @@ export default defineComponent({
 
           context.root.$toast({
             variant: 'success',
-            title: 'Success',
-            body: `Blog post was successfully ${
-              isCreation.value ? 'created' : 'updated'
-            }`,
+            title: context.root.$t('blog:success'),
+            body: isCreation.value
+              ? context.root.$t('blog:blogPostWasSuccessfullyCreated')
+              : context.root.$t('blog:blogPostWasSuccessfullyUpdated'),
           });
         })
         .catch((error) => {
@@ -327,10 +330,10 @@ export default defineComponent({
           errors.value = convertRequestErrorToMap(error);
           context.root.$toast({
             variant: 'danger',
-            title: 'Error',
-            body: `Blog post ${
-              isCreation.value ? 'creation' : 'update'
-            } was failed`,
+            title: context.root.$t('blog:error'),
+            body: isCreation.value
+              ? context.root.$t('blog:blogPostCreationWasFailed')
+              : context.root.$t('blog:blogPostUpdateWasFailed'),
           });
         })
         .finally(() => {
@@ -383,7 +386,7 @@ export default defineComponent({
       return [
         {
           id: 'common',
-          label: 'Common',
+          label: context.root.$t('blog:common'),
           hasErrors: hasErrors([
             'title',
             'language',
@@ -395,18 +398,18 @@ export default defineComponent({
         },
         {
           id: 'images',
-          label: 'Images',
+          label: context.root.$t('blog:images'),
           hasErrors: hasErrors(['coverImage', 'image']),
         },
         {
           id: 'relations',
-          label: 'Relations',
+          label: context.root.$t('blog:relations'),
           hasErrors: hasErrors(['categories', 'relatedPosts', 'tags']),
         },
         values.value.additionalFields.length > 0
           ? {
               id: 'additional',
-              label: 'Additional Fields',
+              label: context.root.$t('blog:additionalFields'),
               hasErrors: hasErrors([]),
             }
           : null,
@@ -430,7 +433,7 @@ export default defineComponent({
       [
         post.value
           ? {
-              text: 'View Post',
+              text: context.root.$t('blog:viewPost'),
               href: process.env.VUE_APP_WEBSITE_URL + post.value.url,
               target: '_blank',
             }

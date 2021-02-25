@@ -5,14 +5,15 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, SetupContext } from '@vue/composition-api';
 
 import { getBlogMenuItem } from '../constants/menu';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'App',
-  data() {
-    const blogMenuItem = getBlogMenuItem({ t: this.$t });
+  setup(props, context: SetupContext) {
+    const blogMenuItem = getBlogMenuItem({ t: context.root.$t });
+
     return {
       sidebarMenuList: [blogMenuItem],
     };

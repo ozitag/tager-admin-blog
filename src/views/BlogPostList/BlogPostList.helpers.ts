@@ -1,3 +1,5 @@
+import { TFunction } from 'i18next';
+
 import { notEmpty, Nullable } from '@tager/admin-services';
 import { ColumnDefinition } from '@tager/admin-ui';
 
@@ -38,7 +40,8 @@ export function convertPostList(
 }
 
 export function getPostTableColumnDefs(
-  moduleConfig: Nullable<BlogModuleConfigType>
+  moduleConfig: Nullable<BlogModuleConfigType>,
+  t: TFunction
 ): Array<ColumnDefinition<PostShort>> {
   const isLangSpecific = moduleConfig
     ? moduleConfig.languages.length > 0
@@ -54,7 +57,7 @@ export function getPostTableColumnDefs(
     },
     {
       id: 2,
-      name: 'Name',
+      name: t('blog:name'),
       field: 'name',
       type: 'name',
       format: ({ row }) => ({
@@ -73,24 +76,26 @@ export function getPostTableColumnDefs(
     },
     {
       id: 3,
-      name: 'Image',
+      name: t('blog:image'),
       field: 'image',
       type: 'image',
       style: { width: '250px' },
       headStyle: { width: '250px' },
     },
-    isLangSpecific ? { id: 4, name: 'Language', field: 'language' } : null,
-    { id: 5, name: 'Date', field: 'date', type: 'date' },
+    isLangSpecific
+      ? { id: 4, name: t('blog:language'), field: 'language' }
+      : null,
+    { id: 5, name: t('blog:date'), field: 'date', type: 'date' },
     {
       id: 6,
-      name: 'Categories',
+      name: t('blog:categories'),
       field: 'categories',
       format: ({ row }) =>
         row.categories.map((category) => category.name).join(', '),
     },
     {
       id: 7,
-      name: 'Actions',
+      name: t('blog:actions'),
       field: 'actions',
       style: { whiteSpace: 'nowrap', width: '120px' },
       headStyle: { whiteSpace: 'nowrap', width: '120px' },

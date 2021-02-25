@@ -1,6 +1,8 @@
 <template>
   <page
-    :title="isCreation ? 'Create Blog category' : 'Update Blog category'"
+    :title="
+      isCreation ? $t('blog:createBlogCategory') : $t('blog:updateBlogCategory')
+    "
     :is-content-loading="isContentLoading"
   >
     <template v-slot:content>
@@ -8,7 +10,7 @@
         <form-field
           v-model="values.name"
           name="name"
-          label="Name"
+          :label="$t('blog:name')"
           :error="errors.name"
         />
 
@@ -16,7 +18,7 @@
           v-if="isCreation && isLangSpecific"
           v-model="values.language"
           name="language"
-          label="Language"
+          :label="$t('blog:language')"
           :options="languageOptionList"
           :error="errors.language"
         />
@@ -26,7 +28,7 @@
           id="urlAlias"
           v-model="values.urlAlias"
           name="urlAlias"
-          label="URL alias"
+          :label="$t('blog:URLAlias')"
           :url-template="pagePath"
           :error="errors.urlAlias"
         />
@@ -34,21 +36,21 @@
         <form-field
           v-model="values.pageTitle"
           name="pageTitle"
-          label="Page title"
+          :label="$t('blog:pageTitle')"
           :error="errors.pageTitle"
         />
 
         <form-field
           v-model="values.pageDescription"
           name="pageDescription"
-          label="Page description"
+          :label="$t('blog:pageDescription')"
           type="textarea"
           :error="errors.pageDescription"
         />
 
         <form-field-file-input
           v-model="values.openGraphImage"
-          label="Open graph image"
+          :label="$t('blog:openGraphImage')"
           name="openGraphImage"
           file-type="image"
         />
@@ -200,10 +202,10 @@ export default defineComponent({
 
           context.root.$toast({
             variant: 'success',
-            title: 'Success',
-            body: `Blog category was successfully ${
-              isCreation.value ? 'created' : 'updated'
-            }`,
+            title: context.root.$t('blog:success'),
+            body: isCreation.value
+              ? context.root.$t('blog:blogCategoryWasSuccessfullyCreated')
+              : context.root.$t('blog:blogCategoryWasSuccessfullyUpdated'),
           });
         })
         .catch((error) => {
@@ -211,10 +213,10 @@ export default defineComponent({
           errors.value = convertRequestErrorToMap(error);
           context.root.$toast({
             variant: 'danger',
-            title: 'Error',
-            body: `Blog category ${
-              isCreation.value ? 'creation' : 'update'
-            } was failed`,
+            title: context.root.$t('blog:error'),
+            body: isCreation.value
+              ? context.root.$t('blog:blogCategoryCreationWasFailed')
+              : context.root.$t('blog:blogCategoryUpdateWasFailed'),
           });
         })
         .finally(() => {

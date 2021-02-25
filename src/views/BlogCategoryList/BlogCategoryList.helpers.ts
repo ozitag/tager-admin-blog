@@ -1,3 +1,5 @@
+import { TFunction } from 'i18next';
+
 import { notEmpty, Nullable } from '@tager/admin-services';
 import { ColumnDefinition } from '@tager/admin-ui';
 
@@ -25,7 +27,8 @@ export function convertCategoryList(
 }
 
 export function getCategoryTableColumnDefs(
-  moduleConfig: Nullable<BlogModuleConfigType>
+  moduleConfig: Nullable<BlogModuleConfigType>,
+  t: TFunction
 ): Array<ColumnDefinition<BlogCategory>> {
   const isLangSpecific = moduleConfig
     ? moduleConfig.languages.length > 0
@@ -34,7 +37,7 @@ export function getCategoryTableColumnDefs(
   const COLUMN_DEFS: Array<ColumnDefinition<BlogCategory> | null> = [
     {
       id: 2,
-      name: 'Name',
+      name: t('blog:name'),
       field: 'name',
       type: 'name',
       format: ({ row }) => {
@@ -53,16 +56,18 @@ export function getCategoryTableColumnDefs(
         };
       },
     },
-    isLangSpecific ? { id: 4, name: 'Language', field: 'language' } : null,
+    isLangSpecific
+      ? { id: 4, name: t('blog:language'), field: 'language' }
+      : null,
     {
       id: 3,
-      name: 'Posts',
+      name: t('blog:posts'),
       field: 'linkToPosts',
       style: { whiteSpace: 'nowrap', width: '130px' },
     },
     {
       id: 4,
-      name: 'Actions',
+      name: t('blog:actions'),
       field: 'actions',
       style: { whiteSpace: 'nowrap', width: '205px' },
       headStyle: { whiteSpace: 'nowrap', width: '205px' },

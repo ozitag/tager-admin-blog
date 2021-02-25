@@ -1,6 +1,6 @@
 <template>
   <page
-    title="Blog settings"
+    :title="$t('blog:blogSettings')"
     :is-content-loading="isContentLoading"
     :footer="{
       backHref: '/',
@@ -82,8 +82,10 @@ export default defineComponent({
 
           context.root.$toast({
             variant: 'success',
-            title: 'Success',
-            body: `Blog settings have been successfully updated`,
+            title: context.root.$t('blog:success'),
+            body: context.root.$t(
+              'blog:blogSettingsHaveBeenSuccessfullyUpdated'
+            ),
           });
         })
         .catch((error) => {
@@ -91,8 +93,8 @@ export default defineComponent({
           errors.value = convertRequestErrorToMap(error);
           context.root.$toast({
             variant: 'danger',
-            title: 'Error',
-            body: `Blog settings update has been failed`,
+            title: context.root.$t('blog:error'),
+            body: context.root.$t('blog:blogSettingsUpdateHasBeenFailed'),
           });
         })
         .finally(() => {
