@@ -9,7 +9,7 @@ export function useBlogPostList(params: {
   context: SetupContext;
 }): ResourceRef<Array<PostShort>> {
   const [fetchBlogPostList, resource] = useResource<Array<PostShort>>({
-    fetchResource: getBlogPostList,
+    fetchResource: () => getBlogPostList({ pageNumber: 1, pageSize: 99999 }),
     initialValue: [],
     context: params.context,
     resourceName: 'Blog post list',

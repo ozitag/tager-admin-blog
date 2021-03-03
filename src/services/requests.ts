@@ -34,12 +34,12 @@ export type PostCreationPayload = {
   excerpt: string;
   body: string;
   date: string;
-  image: Nullable<number>;
-  coverImage: Nullable<number>;
+  image: Nullable<string>;
+  coverImage: Nullable<string>;
   status: string;
   pageTitle: string;
   pageDescription: string;
-  openGraphImage: Nullable<number>;
+  openGraphImage: Nullable<string>;
   categories: Array<number>;
   language: Nullable<string>;
   relatedPosts: Array<number>;
@@ -89,7 +89,7 @@ export type BlogCategoryCreationPayload = {
   pageTitle: Nullable<string>;
   language: Nullable<string>;
   pageDescription: Nullable<string>;
-  openGraphImage: Nullable<number>;
+  openGraphImage: Nullable<string>;
 };
 
 export function createBlogCategory(
