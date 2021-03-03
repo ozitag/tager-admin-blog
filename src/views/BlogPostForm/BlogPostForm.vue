@@ -95,6 +95,7 @@
             :label="$t('blog:tags')"
             :error="errors.tags"
           />
+
           <form-field-multi-select
             v-model="values.categories"
             name="categories"
@@ -102,12 +103,14 @@
             :options="categoryOptionList"
             :error="errors.categories"
           />
+
           <form-field-multi-select
             v-model="values.relatedPosts"
             name="relatedPosts"
             :label="$t('blog:relatedPosts')"
             :options="postOptionList"
             :error="errors.relatedPosts"
+            :searchable="true"
           />
         </template>
 
