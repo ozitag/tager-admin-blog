@@ -62,8 +62,3 @@ export type BlogModuleConfigType = {
   readonly fields: Array<FieldConfigUnion>;
   readonly shortcodes: Array<ShortCodeItemType>;
 };
-
-export type SettingItemType = {
-  field: FieldConfigUnion;
-  value: IncomingValueUnion;
-};

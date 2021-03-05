@@ -6,7 +6,6 @@ import {
   BlogModuleConfigType,
   PostShort,
   PostFull,
-  SettingItemType,
 } from '../typings/model';
 
 /** Blog Posts */
@@ -17,10 +16,6 @@ export function getBlogPostList(params?: {
   pageSize?: number;
 }): Promise<ResponseBody<Array<PostShort>>> {
   return request.get({ path: '/admin/blog/posts', params });
-}
-
-export function getBlogPostCount(): Promise<ResponseBody<{ count: number }>> {
-  return request.get({ path: '/admin/blog/posts/count' });
 }
 
 export function getBlogPost(
@@ -134,25 +129,5 @@ export function getBlogModuleConfig(): Promise<
 > {
   return request.get({
     path: `/admin/blog/module-info`,
-  });
-}
-
-export function getBlogSettingList(): Promise<
-  ResponseBody<Array<SettingItemType>>
-> {
-  return request.get({
-    path: `/admin/blog/settings`,
-  });
-}
-
-export type SettingsUpdatePayload = {
-  values: Array<FieldShortType<OutgoingValueUnion>>;
-};
-export function updateBlogSettingList(
-  payload: SettingsUpdatePayload
-): Promise<ResponseBody<Array<SettingItemType>>> {
-  return request.post({
-    path: `/admin/blog/settings`,
-    body: payload,
   });
 }
