@@ -27,7 +27,7 @@
     "@tager/admin-dynamic-field": "^0.1.14",
     "@tager/admin-layout": "^0.4.13",
     "@tager/admin-services": "^0.2.22",
-    "@tager/admin-ui": "^0.8.49",
+    "@tager/admin-ui": "^0.8.50",
     "@types/node": "12.x",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",

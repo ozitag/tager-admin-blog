@@ -7,11 +7,7 @@ import { defineComponent, ref } from '@vue/composition-api';
 
 import { NavigationGridItem } from '@tager/admin-ui';
 
-import {
-  getBlogCategoryListUrl,
-  getBlogPostListUrl,
-  getBlogSettingsUrl,
-} from '../constants/paths';
+import { getBlogCategoryListUrl, getBlogPostListUrl } from '../constants/paths';
 
 export default defineComponent({
   name: 'Home',
@@ -25,7 +21,6 @@ export default defineComponent({
             url: getBlogCategoryListUrl(),
             text: context.root.$t('blog:categories'),
           },
-          { url: getBlogSettingsUrl(), text: context.root.$t('blog:settings') },
         ],
       },
     ]);

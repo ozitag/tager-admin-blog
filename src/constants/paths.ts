@@ -5,7 +5,6 @@ export const BLOG_ROUTE_PATHS = {
   POST_FORM: '/blog/posts/:postId',
   CATEGORY_LIST: '/blog/categories',
   CATEGORY_FORM: '/blog/categories/:categoryId',
-  SETTINGS: '/blog/settings',
 } as const;
 
 export function getBlogPostListUrl() {
@@ -26,8 +25,4 @@ export function getBlogCategoryFormUrl(params: {
   return compile(BLOG_ROUTE_PATHS.CATEGORY_FORM)({
     categoryId: params.categoryId,
   });
-}
-
-export function getBlogSettingsUrl() {
-  return BLOG_ROUTE_PATHS.SETTINGS;
 }
