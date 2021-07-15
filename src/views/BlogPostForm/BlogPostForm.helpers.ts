@@ -103,6 +103,7 @@ export function convertFormValuesToCreationPayload(
   return {
     title: values.title,
     excerpt: values.excerpt,
+    urlAlias: values.urlAlias,
     body: values.body,
     date: values.date,
     image: values.image?.file.id ?? null,

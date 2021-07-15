@@ -54,6 +54,8 @@ export type PostFull = {
 } & SeoInfo;
 
 export type BlogModuleConfigType = {
+  readonly urlPostTemplate: Nullable<string>;
+  readonly urlCategoryTemplate: Nullable<string>;
   readonly postContentImageScenario: string;
   readonly languages: Array<{
     id: string;

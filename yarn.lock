@@ -1074,10 +1074,10 @@
   dependencies:
     "@babel/runtime" "^7.10.4"
 
-"@tager/admin-services@^0.2.22":
-  version "0.2.22"
-  resolved "https://registry.yarnpkg.com/@tager/admin-services/-/admin-services-0.2.22.tgz#4a286fd2befa0a0503055ea4da3eb36ecb77a70b"
-  integrity sha512-cOS5Kz7yajN54e/g7OWqcxk4BYlBxXzjq6rTkO9JtuPXllQxiHUOaifM4ExlhV1tqhmPGzz7bpxpjGswTbCtPQ==
+"@tager/admin-services@^0.2.24":
+  version "0.2.24"
+  resolved "https://registry.yarnpkg.com/@tager/admin-services/-/admin-services-0.2.24.tgz#6c252b71fce2b501de0df9371411bccadd01b62b"
+  integrity sha512-ZVdX329hTM5F7PUeOt/yavOA9oDCYWm1nZLPWagmnFGNRbDWzPBI/Cp5XJQaSAgnwFGkFONJ9440Hbs0p92iWA==
   dependencies:
     i18next "^19.7.0"
     nanoid "^3.1.12"

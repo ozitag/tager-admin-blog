@@ -31,6 +31,7 @@ export function getBlogPost(
 
 export type PostCreationPayload = {
   title: string;
+  urlAlias: string;
   excerpt: string;
   body: string;
   date: string;

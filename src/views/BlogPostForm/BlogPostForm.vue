@@ -1,9 +1,9 @@
 <template>
   <page
-    :title="isCreation ? $t('blog:createPost') : $t('blog:updatePost')"
-    :is-content-loading="isContentLoading"
-    :header-buttons="headerButtonList"
-    :footer="{
+      :title="isCreation ? $t('blog:createPost') : $t('blog:updatePost')"
+      :is-content-loading="isContentLoading"
+      :header-buttons="headerButtonList"
+      :footer="{
       backHref: postListUrl,
       onSubmit: submitForm,
       isSubmitting: isSubmitting,
@@ -12,128 +12,130 @@
     <template v-slot:content>
       <form novalidate @submit.prevent="submitForm">
         <tab-list
-          :tab-list="tabList"
-          :selected-tab-id="selectedTabId"
-          @tab:update="selectedTabId = $event.tabId"
+            :tab-list="tabList"
+            :selected-tab-id="selectedTabId"
+            @tab:update="selectedTabId = $event.tabId"
         />
 
         <template v-if="selectedTabId === 'common'">
-          <form-field
-            v-model="values.title"
-            name="title"
-            :label="$t('blog:title')"
-            :error="errors.title"
-          />
-
           <form-field-select
-            v-if="isCreation && isLangSpecific"
-            v-model="values.language"
-            name="language"
-            :label="$t('blog:language')"
-            :options="languageOptionList"
-            :error="errors.language"
-          />
-          <form-field-url-alias-input
-            v-if="!isCreation"
-            id="urlAlias"
-            v-model="values.urlAlias"
-            name="urlAlias"
-            :label="$t('blog:URLAlias')"
-            :url-template="pagePath"
-            :error="errors.urlAlias"
+              v-if="isCreation && isLangSpecific"
+              v-model="values.language"
+              name="language"
+              :label="$t('blog:language')"
+              :options="languageOptionList"
+              :error="errors.language"
           />
 
           <form-field
-            v-model="values.excerpt"
-            name="excerpt"
-            :label="$t('blog:excerpt')"
-            type="textarea"
-            :error="errors.excerpt"
+              v-model="values.title"
+              name="title"
+              :label="$t('blog:title')"
+              :error="errors.title"
+              @input="handleTitleChange"
+          />
+
+          <form-field-url-alias-input
+              id="urlAlias"
+              v-model="values.urlAlias"
+              name="urlAlias"
+              :label="$t('blog:URLAlias')"
+              :url-template="urlAliasTemplate"
+              :error="errors.urlAlias"
+              @change="handleAliasChange"
+          />
+
+          <form-field
+              v-model="values.excerpt"
+              name="excerpt"
+              :label="$t('blog:excerpt')"
+              type="textarea"
+              :error="errors.excerpt"
           />
           <form-field-rich-text-input
-            v-model="values.body"
-            name="body"
-            :label="$t('blog:body')"
-            :error="errors.body"
-            :get-upload-adapter-options="getUploadAdapterOptions"
+              v-model="values.body"
+              name="body"
+              :label="$t('blog:body')"
+              :error="errors.body"
+              :get-upload-adapter-options="getUploadAdapterOptions"
           />
           <ShortCodeConstructor
-            :short-code-config-list="
+              :short-code-config-list="
               moduleConfig ? moduleConfig.shortcodes : []
             "
           />
 
           <form-field
-            v-model="values.date"
-            name="date"
-            :label="$t('blog:date')"
-            type="date"
-            :error="errors.date"
+              v-model="values.date"
+              name="date"
+              :label="$t('blog:date')"
+              type="date"
+              :error="errors.date"
           />
         </template>
 
         <template v-if="selectedTabId === 'images'">
           <form-field-file-input
-            v-model="values.coverImage"
-            :label="$t('blog:coverImage')"
-            name="coverImage"
-            file-type="image"
+              v-model="values.coverImage"
+              :label="$t('blog:coverImage')"
+              name="coverImage"
+              file-type="image"
           />
 
           <form-field-file-input
-            v-model="values.image"
-            name="image"
-            :label="$t('blog:innerImage')"
-            file-type="image"
+              v-model="values.image"
+              name="image"
+              :label="$t('blog:innerImage')"
+              file-type="image"
           />
         </template>
 
         <template v-if="selectedTabId === 'relations'">
           <form-field
-            v-model="values.tags"
-            name="tags"
-            :label="$t('blog:tags')"
-            :error="errors.tags"
+              v-model="values.tags"
+              name="tags"
+              :label="$t('blog:tags')"
+              :error="errors.tags"
           />
 
           <form-field-multi-select
-            v-model="values.categories"
-            name="categories"
-            :label="$t('blog:categories')"
-            :options="categoryOptionList"
-            :error="errors.categories"
+              v-model="values.categories"
+              name="categories"
+              :label="$t('blog:categories')"
+              :options="categoryOptionList"
+              :error="errors.categories"
           />
 
           <form-field-multi-select
-            v-model="values.relatedPosts"
-            name="relatedPosts"
-            :label="$t('blog:relatedPosts')"
-            :options="postOptionList"
-            :error="errors.relatedPosts"
-            :searchable="true"
+              v-model="values.relatedPosts"
+              name="relatedPosts"
+              :label="$t('blog:relatedPosts')"
+              :options="postOptionList"
+              :error="errors.relatedPosts"
+              :searchable="true"
           />
         </template>
 
         <template v-if="selectedTabId === 'additional'">
           <DynamicField
-            v-for="field of values.additionalFields"
-            :key="field.name"
-            :field="field"
+              v-for="field of values.additionalFields"
+              :key="field.name"
+              :field="field"
           />
         </template>
 
         <template v-if="selectedTabId === 'seo'">
           <seo-field-group
-            :title="values.pageTitle"
-            :title-error-message="errors.pageTitle"
-            :title-label="$t('blog:pageTitle')"
-            :description="values.pageDescription"
-            :description-error-message="errors.pageDescription"
-            :description-label="$t('blog:pageDescription')"
-            :image="values.openGraphImage"
-            :image-error-message="errors.openGraphImage"
-            :image-label="$t('blog:openGraphImage')"
-            @change="handleSeoFieldGroupChange"
+              :title="values.pageTitle"
+              :title-error-message="errors.pageTitle"
+              :title-label="$t('blog:pageTitle')"
+              :description="values.pageDescription"
+              :description-error-message="errors.pageDescription"
+              :description-label="$t('blog:pageDescription')"
+              :image="values.openGraphImage"
+              :image-error-message="errors.openGraphImage"
+              :image-label="$t('blog:openGraphImage')"
+              @change="handleSeoFieldGroupChange"
           />
         </template>
       </form>
@@ -141,11 +143,11 @@
 
     <template v-slot:footer>
       <FormFooter
-        :back-href="postListUrl"
-        :on-submit="submitForm"
-        :is-submitting="isSubmitting"
-        :is-creation="isCreation"
-        :can-create-another="isCreation"
+          :back-href="postListUrl"
+          :on-submit="submitForm"
+          :is-submitting="isSubmitting"
+          :is-creation="isCreation"
+          :can-create-another="isCreation"
       />
     </template>
   </page>
@@ -165,6 +167,7 @@ import {
   isNotNullish,
   Nullable,
   useResource,
+  urlTranslit,
 } from '@tager/admin-services';
 import {
   createTabErrorFinder,
@@ -175,15 +178,15 @@ import {
   FormFooter,
   TagerFormSubmitEvent,
 } from '@tager/admin-ui';
-import { DynamicField } from '@tager/admin-dynamic-field';
+import {DynamicField} from '@tager/admin-dynamic-field';
 
 import {
   createBlogPost,
   getBlogPost,
   updateBlogPost,
 } from '../../services/requests';
-import { PostFull } from '../../typings/model';
-import { getBlogPostFormUrl, getBlogPostListUrl } from '../../constants/paths';
+import {PostFull} from '../../typings/model';
+import {getBlogPostFormUrl, getBlogPostListUrl} from '../../constants/paths';
 import useModuleConfig from '../../hooks/useModuleConfig';
 import useBlogCategoryList from '../../hooks/useBlogCategoryList';
 import useBlogPostList from '../../hooks/useBlogPostList';
@@ -198,23 +201,25 @@ import {
 
 export default defineComponent({
   name: 'BlogPostForm',
-  components: { DynamicField, ShortCodeConstructor, FormFooter },
+  components: {DynamicField, ShortCodeConstructor, FormFooter},
   setup(props, context) {
     const postId = computed<string>(() => context.root.$route.params.postId);
     const isCreation = computed<boolean>(() => postId.value === 'create');
+
+    const urlAliasChanged = ref<boolean>(false);
 
     /** Fetch module config */
     const {
       data: moduleConfig,
       loading: isModuleConfigLoading,
-    } = useModuleConfig({ context });
+    } = useModuleConfig({context});
 
     const languageOptionList = computed<Array<OptionType>>(
-      () =>
-        moduleConfig.value?.languages.map((lang) => ({
-          value: lang.id,
-          label: lang.name,
-        })) ?? []
+        () =>
+            moduleConfig.value?.languages.map((lang) => ({
+              value: lang.id,
+              label: lang.name,
+            })) ?? []
     );
 
     const isLangSpecific = computed(() => languageOptionList.value.length > 0);
@@ -223,13 +228,11 @@ export default defineComponent({
     const {
       data: categoryList,
       loading: isCategoryListLoading,
-    } = useBlogCategoryList({ context });
+    } = useBlogCategoryList({context});
 
     /** Fetch Post */
 
-    const [fetchPost, { data: post, loading: isPostLoading }] = useResource<
-      Nullable<PostFull>
-    >({
+    const [fetchPost, {data: post, loading: isPostLoading}] = useResource<Nullable<PostFull>>({
       fetchResource: () => getBlogPost(postId.value),
       initialValue: null,
       context,
@@ -249,37 +252,37 @@ export default defineComponent({
     });
 
     /** Fetch post list */
-    const { data: postList, loading: isPostListLoading } = useBlogPostList({
+    const {data: postList, loading: isPostListLoading} = useBlogPostList({
       context,
     });
 
     const postOptionList = computed<Array<OptionType<number>>>(() =>
-      postList.value
-        .filter((relatedPost) => relatedPost.id !== post.value?.id)
-        .map((post) => ({
-          value: post.id,
-          label: post.title,
-        }))
+        postList.value
+            .filter((relatedPost) => relatedPost.id !== post.value?.id)
+            .map((post) => ({
+              value: post.id,
+              label: post.title,
+            }))
     );
 
     /** Form State */
     const values = ref<FormValues>(
-      convertPostToFormValues(
-        post.value,
-        languageOptionList.value,
-        postOptionList.value,
-        moduleConfig.value?.fields ?? []
-      )
+        convertPostToFormValues(
+            post.value,
+            languageOptionList.value,
+            postOptionList.value,
+            moduleConfig.value?.fields ?? []
+        )
     );
     const errors = ref<Record<string, string>>({});
     const isSubmitting = ref<boolean>(false);
 
     watch([post, languageOptionList, postOptionList, moduleConfig], () => {
       values.value = convertPostToFormValues(
-        post.value,
-        languageOptionList.value,
-        postOptionList.value,
-        moduleConfig.value?.fields ?? []
+          post.value,
+          languageOptionList.value,
+          postOptionList.value,
+          moduleConfig.value?.fields ?? []
       );
     });
 
@@ -290,75 +293,75 @@ export default defineComponent({
       const updateBody = convertFormValuesToUpdatePayload(values.value);
 
       const requestPromise = isCreation.value
-        ? createBlogPost(creationBody)
-        : updateBlogPost(postId.value, updateBody);
+          ? createBlogPost(creationBody)
+          : updateBlogPost(postId.value, updateBody);
 
       requestPromise
-        .then(({ data }) => {
-          errors.value = {};
+          .then(({data}) => {
+            errors.value = {};
 
-          if (event.type === 'create') {
-            context.root.$router.push(
-              getBlogPostFormUrl({ postId: String(data.id) })
-            );
-          }
-
-          if (event.type === 'create_exit' || event.type === 'save_exit') {
-            if (context.root.$previousRoute) {
-              context.root.$router.back();
-            } else {
-              context.root.$router.push(getBlogPostListUrl());
+            if (event.type === 'create') {
+              context.root.$router.push(
+                  getBlogPostFormUrl({postId: String(data.id)})
+              );
             }
-          }
 
-          if (event.type === 'create_create-another') {
-            values.value = convertPostToFormValues(
-              null,
-              languageOptionList.value,
-              postOptionList.value,
-              moduleConfig.value?.fields ?? []
-            );
-          }
+            if (event.type === 'create_exit' || event.type === 'save_exit') {
+              if (context.root.$previousRoute) {
+                context.root.$router.back();
+              } else {
+                context.root.$router.push(getBlogPostListUrl());
+              }
+            }
 
-          context.root.$toast({
-            variant: 'success',
-            title: context.root.$t('blog:success'),
-            body: isCreation.value
-              ? context.root.$t('blog:blogPostWasSuccessfullyCreated')
-              : context.root.$t('blog:blogPostWasSuccessfullyUpdated'),
+            if (event.type === 'create_create-another') {
+              values.value = convertPostToFormValues(
+                  null,
+                  languageOptionList.value,
+                  postOptionList.value,
+                  moduleConfig.value?.fields ?? []
+              );
+            }
+
+            context.root.$toast({
+              variant: 'success',
+              title: context.root.$t('blog:success'),
+              body: isCreation.value
+                  ? context.root.$t('blog:blogPostWasSuccessfullyCreated')
+                  : context.root.$t('blog:blogPostWasSuccessfullyUpdated'),
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+            errors.value = convertRequestErrorToMap(error);
+            context.root.$toast({
+              variant: 'danger',
+              title: context.root.$t('blog:error'),
+              body: isCreation.value
+                  ? context.root.$t('blog:blogPostCreationWasFailed')
+                  : context.root.$t('blog:blogPostUpdateWasFailed'),
+            });
+          })
+          .finally(() => {
+            isSubmitting.value = false;
           });
-        })
-        .catch((error) => {
-          console.error(error);
-          errors.value = convertRequestErrorToMap(error);
-          context.root.$toast({
-            variant: 'danger',
-            title: context.root.$t('blog:error'),
-            body: isCreation.value
-              ? context.root.$t('blog:blogPostCreationWasFailed')
-              : context.root.$t('blog:blogPostUpdateWasFailed'),
-          });
-        })
-        .finally(() => {
-          isSubmitting.value = false;
-        });
     }
 
     /** Category Options */
 
     const categoryOptionList = computed<Array<OptionType<number>>>(() =>
-      convertCategoryListToOptions(
-        categoryList.value,
-        values.value.language?.value ?? null
-      )
+        convertCategoryListToOptions(
+            categoryList.value,
+            values.value.language?.value ?? null
+        )
     );
 
     watch([categoryOptionList], () => {
       function isOptionExist(
-        selectedCategoryOption: OptionType<number>
+          selectedCategoryOption: OptionType<number>
       ): boolean {
         return categoryOptionList.value.some(
-          (option) => option.value === selectedCategoryOption.value
+            (option) => option.value === selectedCategoryOption.value
         );
       }
 
@@ -368,15 +371,15 @@ export default defineComponent({
     /** Misc */
 
     const isContentLoading = computed<boolean>(
-      () =>
-        isPostLoading.value ||
-        isCategoryListLoading.value ||
-        isPostListLoading.value ||
-        isModuleConfigLoading.value
+        () =>
+            isPostLoading.value ||
+            isCategoryListLoading.value ||
+            isPostListLoading.value ||
+            isModuleConfigLoading.value
     );
 
     function getUploadAdapterOptions() {
-      return { uploadScenario: moduleConfig.value?.postContentImageScenario };
+      return {uploadScenario: moduleConfig.value?.postContentImageScenario};
     }
 
     const blogPagePath = computed<string>(() => {
@@ -410,12 +413,12 @@ export default defineComponent({
           hasErrors: hasErrors(['categories', 'relatedPosts', 'tags']),
         },
         values.value.additionalFields.length > 0
-          ? {
+            ? {
               id: 'additional',
               label: context.root.$t('blog:additionalFields'),
               hasErrors: hasErrors([]),
             }
-          : null,
+            : null,
         {
           id: 'seo',
           label: 'SEO',
@@ -430,32 +433,58 @@ export default defineComponent({
 
     const selectedTabId = ref<string>(tabList.value[0].id);
 
-    const headerButtonList = computed<
-      Array<{ text: string; href: string; target?: string }>
-    >(() =>
-      [
-        post.value
-          ? {
-              text: context.root.$t('blog:viewPost'),
-              href: process.env.VUE_APP_WEBSITE_URL + post.value.url,
-              target: '_blank',
-            }
-          : null,
-      ].filter(isNotNullish)
+    const headerButtonList = computed<Array<{ text: string; href: string; target?: string }>>(() =>
+        [
+          post.value
+              ? {
+                text: context.root.$t('blog:viewPost'),
+                href: process.env.VUE_APP_WEBSITE_URL + post.value.url,
+                target: '_blank',
+              }
+              : null,
+        ].filter(isNotNullish)
     );
 
     function handleSeoFieldGroupChange({
-      title,
-      description,
-      image,
-    }: SeoChangeEvent) {
+                                         title,
+                                         description,
+                                         image,
+                                       }: SeoChangeEvent) {
       values.value.pageTitle = title;
       values.value.pageDescription = description;
       values.value.openGraphImage = image;
     }
 
+    function handleTitleChange(value: string) {
+      if (urlAliasChanged.value === false) {
+        values.value.urlAlias = urlTranslit(value);
+      }
+    }
+
+    function handleAliasChange() {
+      urlAliasChanged.value = true;
+    }
+
+    const urlAliasTemplate = computed<string>(() => {
+      if (!moduleConfig.value || !moduleConfig.value.urlPostTemplate) {
+        return '';
+      }
+
+      let result = moduleConfig.value.urlPostTemplate;
+
+      if (values.value.language) {
+        result = result.replace('{language}', values.value.language.value);
+      }
+
+      if (postId.value !== 'create') {
+        result = result.replace('{id}', postId.value);
+      }
+
+      return result;
+    });
     return {
       isCreation,
+      postId,
       pagePath: blogPagePath,
       categoryOptionList,
       values,
@@ -473,6 +502,9 @@ export default defineComponent({
       selectedTabId,
       headerButtonList,
       handleSeoFieldGroupChange,
+      handleTitleChange,
+      handleAliasChange,
+      urlAliasTemplate
     };
   },
 });
