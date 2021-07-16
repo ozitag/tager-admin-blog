@@ -80,6 +80,7 @@
               :label="$t('blog:coverImage')"
               name="coverImage"
               file-type="image"
+              :scenario="moduleConfig ? moduleConfig.fileScenarios.cover : null"
           />
 
           <form-field-file-input
@@ -87,6 +88,7 @@
               name="image"
               :label="$t('blog:innerImage')"
               file-type="image"
+              :scenario="moduleConfig ? moduleConfig.fileScenarios.image : null"
           />
         </template>
 
@@ -135,6 +137,7 @@
               :image="values.openGraphImage"
               :image-error-message="errors.openGraphImage"
               :image-label="$t('blog:openGraphImage')"
+              :image-scenario="moduleConfig ? moduleConfig.fileScenarios.openGraph : null"
               @change="handleSeoFieldGroupChange"
           />
         </template>
@@ -185,7 +188,7 @@ import {
   getBlogPost,
   updateBlogPost,
 } from '../../services/requests';
-import {PostFull} from '../../typings/model';
+import { PostFull } from '../../typings/model';
 import {getBlogPostFormUrl, getBlogPostListUrl} from '../../constants/paths';
 import useModuleConfig from '../../hooks/useModuleConfig';
 import useBlogCategoryList from '../../hooks/useBlogCategoryList';
@@ -379,7 +382,7 @@ export default defineComponent({
     );
 
     function getUploadAdapterOptions() {
-      return {uploadScenario: moduleConfig.value?.postContentImageScenario};
+      return {uploadScenario: moduleConfig.value?.fileScenarios.content};
     }
 
     const blogPagePath = computed<string>(() => {

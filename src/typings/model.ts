@@ -56,13 +56,18 @@ export type PostFull = {
 export type BlogModuleConfigType = {
   readonly urlPostTemplate: Nullable<string>;
   readonly urlCategoryTemplate: Nullable<string>;
-  readonly postContentImageScenario: string;
   readonly languages: Array<{
     id: string;
     name: string;
   }>;
   readonly fields: Array<FieldConfigUnion>;
   readonly shortcodes: Array<ShortCodeItemType>;
+  readonly fileScenarios: {
+    cover: Nullable<string>;
+    image: Nullable<string>;
+    content: Nullable<string>;
+    openGraph: Nullable<string>;
+  };
 };
 
 export type SettingItemType = {

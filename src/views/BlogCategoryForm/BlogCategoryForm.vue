@@ -53,6 +53,7 @@
           :label="$t('blog:openGraphImage')"
           name="openGraphImage"
           file-type="image"
+          :image-scenario="moduleConfig ? moduleConfig.fileScenarios.openGraph : null"
         />
       </form>
     </template>
@@ -246,6 +247,7 @@ export default defineComponent({
       categoryListUrl: getBlogCategoryListUrl(),
       submitForm,
       isSubmitting,
+      moduleConfig
     };
   },
 });
