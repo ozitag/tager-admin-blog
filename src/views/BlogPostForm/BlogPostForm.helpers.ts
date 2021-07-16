@@ -17,8 +17,9 @@ export type FormValues = {
   excerpt: string;
   body: string;
   date: string;
-  image: Nullable<SingleFileInputValueType>;
   coverImage: Nullable<SingleFileInputValueType>;
+  image: Nullable<SingleFileInputValueType>;
+  imageMobile: Nullable<SingleFileInputValueType>;
   pageTitle: string;
   pageDescription: string;
   openGraphImage: Nullable<SingleFileInputValueType>;
@@ -42,8 +43,9 @@ export function convertPostToFormValues(
       excerpt: '',
       body: '',
       date: '',
-      image: null,
       coverImage: null,
+      image: null,
+      imageMobile: null,
       pageTitle: '',
       pageDescription: '',
       openGraphImage: null,
@@ -71,10 +73,9 @@ export function convertPostToFormValues(
     excerpt: post.excerpt,
     body: post.body,
     date: post.date,
+    coverImage: post.coverImage ? { id: createId(), file: post.coverImage } : null,
     image: post.image ? { id: createId(), file: post.image } : null,
-    coverImage: post.coverImage
-      ? { id: createId(), file: post.coverImage }
-      : null,
+    imageMobile: post.imageMobile ? { id: createId(), file: post.imageMobile } : null,
     pageTitle: post.pageTitle ?? '',
     pageDescription: post.pageDescription ?? '',
     openGraphImage: post.openGraphImage
@@ -106,8 +107,9 @@ export function convertFormValuesToCreationPayload(
     urlAlias: values.urlAlias,
     body: values.body,
     date: values.date,
-    image: values.image?.file.id ?? null,
     coverImage: values.coverImage?.file.id ?? null,
+    image: values.image?.file.id ?? null,
+    imageMobile: values.imageMobile?.file.id ?? null,
     pageTitle: values.pageTitle,
     pageDescription: values.pageDescription,
     openGraphImage: values.openGraphImage?.file.id ?? null,

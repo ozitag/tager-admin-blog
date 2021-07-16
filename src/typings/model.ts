@@ -45,6 +45,7 @@ export type PostFull = {
   readonly status: string;
   readonly excerpt: string;
   readonly image: Nullable<FileType>;
+  readonly imageMobile: Nullable<FileType>;
   readonly categories: Array<BlogCategory>;
   readonly body: string;
   readonly coverImage: Nullable<FileType>;
@@ -65,6 +66,7 @@ export type BlogModuleConfigType = {
   readonly fileScenarios: {
     cover: Nullable<string>;
     image: Nullable<string>;
+    imageMobile: Nullable<string>;
     content: Nullable<string>;
     openGraph: Nullable<string>;
   };

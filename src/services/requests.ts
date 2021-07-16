@@ -35,8 +35,9 @@ export type PostCreationPayload = {
   excerpt: string;
   body: string;
   date: string;
-  image: Nullable<string>;
   coverImage: Nullable<string>;
+  image: Nullable<string>;
+  imageMobile: Nullable<string>;
   status: string;
   pageTitle: string;
   pageDescription: string;

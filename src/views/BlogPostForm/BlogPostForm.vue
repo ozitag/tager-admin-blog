@@ -90,6 +90,14 @@
               file-type="image"
               :scenario="moduleConfig ? moduleConfig.fileScenarios.image : null"
           />
+
+          <form-field-file-input
+              v-model="values.imageMobile"
+              name="imageMobile"
+              :label="$t('blog:innerImageMobile')"
+              file-type="image"
+              :scenario="moduleConfig ? moduleConfig.fileScenarios.imageMobile : null"
+          />
         </template>
 
         <template v-if="selectedTabId === 'relations'">
