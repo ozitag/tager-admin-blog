@@ -1,6 +1,8 @@
 import EN from './en';
 
 const RU: typeof EN = {
+  yes: 'Да',
+  no: 'Нет',
   blog: 'Блог',
   posts: 'Посты',
   categories: 'Категории',
@@ -30,6 +32,7 @@ const RU: typeof EN = {
   title: 'Заголовок',
   URLAlias: 'URL',
   excerpt: 'Краткое описание',
+  defaultCategory: 'Категория по-умолчанию',
   body: 'Содержание',
   coverImage: 'Обложка',
   innerImage: 'Картинка поста',

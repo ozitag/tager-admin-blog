@@ -15,6 +15,7 @@ export type SeoInfo = {
 export type BlogCategory = {
   readonly id: number;
   readonly name: string;
+  readonly isDefault: boolean;
   readonly language: string;
   readonly url: string;
   readonly urlTemplate: string;
@@ -60,6 +61,11 @@ export type BlogModuleConfigType = {
   readonly languages: Array<{
     id: string;
     name: string;
+  }>;
+  defaultCategories: Array<{
+    id: number;
+    name: string;
+    language: string;
   }>;
   readonly fields: Array<FieldConfigUnion>;
   readonly shortcodes: Array<ShortCodeItemType>;

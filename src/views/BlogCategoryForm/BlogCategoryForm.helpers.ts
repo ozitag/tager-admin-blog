@@ -9,6 +9,7 @@ import {
 
 export type CategoryFormValues = {
   name: string;
+  isDefault: boolean;
   pageTitle: string;
   pageDescription: string;
   openGraphImage: Nullable<SingleFileInputValueType>;
@@ -27,6 +28,7 @@ export function convertCategoryToFormValues(
   if (!category) {
     return {
       name: '',
+      isDefault: false,
       pageTitle: '',
       pageDescription: '',
       openGraphImage: null,
@@ -36,6 +38,7 @@ export function convertCategoryToFormValues(
   }
   return {
     name: category.name,
+    isDefault: category.isDefault,
     pageTitle: category.pageTitle ?? '',
     pageDescription: category.pageDescription ?? '',
     openGraphImage: category.openGraphImage
@@ -51,6 +54,7 @@ export function convertCategoryFormValuesToCreationPayload(
 ): BlogCategoryCreationPayload {
   return {
     name: values.name,
+    isDefault: values.isDefault,
     pageTitle: values.pageTitle,
     pageDescription: values.pageDescription,
     openGraphImage: values.openGraphImage?.file.id ?? null,

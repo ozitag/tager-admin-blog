@@ -88,6 +88,7 @@ export function getBlogCategory(
 
 export type BlogCategoryCreationPayload = {
   name: string;
+  isDefault: boolean;
   pageTitle: Nullable<string>;
   language: Nullable<string>;
   pageDescription: Nullable<string>;

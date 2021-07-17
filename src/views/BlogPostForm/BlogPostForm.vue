@@ -196,7 +196,7 @@ import {
   getBlogPost,
   updateBlogPost,
 } from '../../services/requests';
-import { PostFull } from '../../typings/model';
+import {PostFull} from '../../typings/model';
 import {getBlogPostFormUrl, getBlogPostListUrl} from '../../constants/paths';
 import useModuleConfig from '../../hooks/useModuleConfig';
 import useBlogCategoryList from '../../hooks/useBlogCategoryList';
@@ -367,13 +367,22 @@ export default defineComponent({
         )
     );
 
-    watch([categoryOptionList], () => {
+    watch([categoryOptionList, moduleConfig], () => {
       function isOptionExist(
           selectedCategoryOption: OptionType<number>
       ): boolean {
         return categoryOptionList.value.some(
             (option) => option.value === selectedCategoryOption.value
         );
+      }
+
+      if (isCreation.value) {
+        if (moduleConfig?.value?.defaultCategories) {
+          const defaultIds = moduleConfig.value.defaultCategories.map((item: { id: number }) => item.id);
+          values.value.categories = categoryOptionList.value.filter((item: OptionType<number>) => {
+            return defaultIds.indexOf(item.value) !== -1;
+          });
+        }
       }
 
       values.value.categories = values.value.categories.filter(isOptionExist);
@@ -493,6 +502,7 @@ export default defineComponent({
 
       return result;
     });
+
     return {
       isCreation,
       postId,

@@ -7,20 +7,27 @@
   >
     <template v-slot:content>
       <form novalidate @submit.prevent="submitForm">
-        <form-field
-          v-model="values.name"
-          name="name"
-          :label="$t('blog:name')"
-          :error="errors.name"
+        <form-field-select
+            v-if="isCreation && isLangSpecific"
+            v-model="values.language"
+            name="language"
+            :label="$t('blog:language')"
+            :options="languageOptionList"
+            :error="errors.language"
         />
 
-        <form-field-select
-          v-if="isCreation && isLangSpecific"
-          v-model="values.language"
-          name="language"
-          :label="$t('blog:language')"
-          :options="languageOptionList"
-          :error="errors.language"
+        <form-field
+            v-model="values.name"
+            name="name"
+            :label="$t('blog:name')"
+            :error="errors.name"
+        />
+
+        <form-field-checkbox
+            v-model="values.isDefault"
+            name="isDefault"
+            :label="$t('blog:defaultCategory')"
+            :error="errors.isDefault"
         />
 
         <form-field-url-alias-input
@@ -175,6 +182,9 @@ export default defineComponent({
         values.value
       );
       const updateBody = convertCategoryFormValuesToUpdatePayload(values.value);
+      if(!isCreation.value){
+        updateBody.language = category.value?.language ? category.value?.language : null;
+      }
 
       const requestPromise = isCreation.value
         ? createBlogCategory(creationBody)

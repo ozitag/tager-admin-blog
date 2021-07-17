@@ -1,4 +1,6 @@
 const EN = {
+  yes: 'Yes',
+  no: 'no',
   blog: 'Blog',
   posts: 'Posts',
   categories: 'Categories',
@@ -30,6 +32,7 @@ const EN = {
   URLAlias: 'URL alias',
   excerpt: 'Excerpt',
   body: 'Body',
+  defaultCategory: 'Default Category',
   coverImage: 'Cover Image',
   innerImage: 'Post Image',
   innerImageMobile: 'Post Image (Mobile)',
