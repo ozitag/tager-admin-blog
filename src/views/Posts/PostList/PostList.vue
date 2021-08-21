@@ -196,6 +196,10 @@ export default defineComponent({
     });
 
     watch(filterParams, () => {
+      if (isModuleConfigLoading.value || isCategoryListLoading.value) {
+        return;
+      }
+
       const newQuery = {
         ...filterParams.value,
         query: (context.root.$route.query.query ?? '') as string,
