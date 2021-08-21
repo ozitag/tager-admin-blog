@@ -2,15 +2,13 @@ import { onMounted, SetupContext } from '@vue/composition-api';
 
 import { Nullable, ResourceRef, useResource } from '@tager/admin-services';
 
-import { BlogModuleConfigType } from '../typings/model';
+import { ModuleConfig } from '../typings/model';
 import { getBlogModuleConfig } from '../services/requests';
 
 export function useModuleConfig(params: {
   context: SetupContext;
-}): ResourceRef<Nullable<BlogModuleConfigType>> {
-  const [fetchModuleConfig, resource] = useResource<
-    Nullable<BlogModuleConfigType>
-  >({
+}): ResourceRef<Nullable<ModuleConfig>> {
+  const [fetchModuleConfig, resource] = useResource<Nullable<ModuleConfig>>({
     fetchResource: getBlogModuleConfig,
     initialValue: null,
     context: params.context,
@@ -23,5 +21,3 @@ export function useModuleConfig(params: {
 
   return resource;
 }
-
-export default useModuleConfig;

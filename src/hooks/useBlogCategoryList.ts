@@ -2,13 +2,13 @@ import { onMounted, SetupContext } from '@vue/composition-api';
 
 import { ResourceRef, useResource } from '@tager/admin-services';
 
-import { BlogCategory } from '../typings/model';
+import { Category } from '../typings/model';
 import { getBlogCategoryList } from '../services/requests';
 
 export function useBlogCategoryList(params: {
   context: SetupContext;
-}): ResourceRef<Array<BlogCategory>> {
-  const [fetchBlogCategoryList, resource] = useResource<Array<BlogCategory>>({
+}): ResourceRef<Category[]> {
+  const [fetchBlogCategoryList, resource] = useResource<Category[]>({
     fetchResource: getBlogCategoryList,
     initialValue: [],
     context: params.context,
@@ -21,5 +21,3 @@ export function useBlogCategoryList(params: {
 
   return resource;
 }
-
-export default useBlogCategoryList;

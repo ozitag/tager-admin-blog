@@ -7,8 +7,8 @@ import { getBlogPostList } from '../services/requests';
 
 export function useBlogPostList(params: {
   context: SetupContext;
-}): ResourceRef<Array<PostShort>> {
-  const [fetchBlogPostList, resource] = useResource<Array<PostShort>>({
+}): ResourceRef<PostShort[]> {
+  const [fetchBlogPostList, resource] = useResource<PostShort[]>({
     fetchResource: () => getBlogPostList({ pageNumber: 1, pageSize: 99999 }),
     initialValue: [],
     context: params.context,
@@ -21,5 +21,3 @@ export function useBlogPostList(params: {
 
   return resource;
 }
-
-export default useBlogPostList;

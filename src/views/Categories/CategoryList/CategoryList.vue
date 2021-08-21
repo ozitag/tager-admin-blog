@@ -69,30 +69,34 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { computed, onMounted, ref } from '@vue/composition-api';
+import {
+  computed,
+  onMounted,
+  ref,
+  defineComponent,
+} from '@vue/composition-api';
 
 import { useResource, useResourceDelete } from '@tager/admin-services';
 import { OptionType } from '@tager/admin-ui';
 
-import { BlogCategory } from '../../typings/model';
+import { Category, Language } from '../../../typings/model';
 import {
   deleteBlogCategory,
   getBlogCategoryList,
   moveBlogCategory,
-} from '../../services/requests';
+} from '../../../services/requests';
 import {
   getBlogCategoryFormUrl,
   getBlogPostListUrl,
-} from '../../constants/paths';
-import useModuleConfig from '../../hooks/useModuleConfig';
+} from '../../../constants/paths';
+import { useModuleConfig } from '../../../hooks';
 
 import {
   convertCategoryList,
   getCategoryTableColumnDefs,
-} from './BlogCategoryList.helpers';
+} from './CategoryList.helpers';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'BlogCategoryList',
   setup(props, context) {
     /** Fetch module config */
@@ -101,22 +105,24 @@ export default Vue.extend({
       loading: isModuleConfigLoading,
     } = useModuleConfig({ context });
 
-    const languageOptionList = computed<Array<OptionType>>(
-      () =>
-        moduleConfig.value?.languages.map((lang) => ({
-          value: lang.id,
-          label: lang.name,
-        })) ?? []
+    const languageList = computed<Language[]>(
+      () => moduleConfig.value?.languages ?? []
     );
 
-    const isLangSpecific = computed(() => languageOptionList.value.length > 0);
+    const languageOptionList = computed<OptionType[]>(() =>
+      languageList.value.map(({ id, name }) => ({ value: id, label: name }))
+    );
+
+    const isLangSpecific = computed<boolean>(
+      () => languageOptionList.value.length > 0
+    );
 
     /** Fetch category list */
 
     const [
       fetchBlogCategoryList,
       { data: categoryList, loading: isCategoryListLoading, error },
-    ] = useResource<Array<BlogCategory>>({
+    ] = useResource<Category[]>({
       fetchResource: getBlogCategoryList,
       initialValue: [],
       context,
@@ -164,11 +170,8 @@ export default Vue.extend({
       return `${getBlogPostListUrl()}?category=${categoryId}`;
     }
 
-    const displayedCategoryList = computed<Array<BlogCategory>>(() =>
-      convertCategoryList(
-        categoryList.value,
-        moduleConfig.value?.languages ?? []
-      )
+    const displayedCategoryList = computed<Category[]>(() =>
+      convertCategoryList(categoryList.value, languageList.value)
     );
 
     const columnDefs = computed(() =>
@@ -192,5 +195,3 @@ export default Vue.extend({
   },
 });
 </script>
-
-<style scoped lang="scss"></style>

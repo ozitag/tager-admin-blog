@@ -24,6 +24,55 @@
         data-table="blog-post"
         @change="handleChange"
       >
+        <template v-slot:filters>
+          <advanced-search :tags="tags" @click:tag="tagRemovalHandler">
+            <div class="filters">
+              <form-field-multi-select
+                v-model="categoryFilter"
+                :options="categoryOptionList"
+                name="categoryFilter"
+                :searchable="true"
+                :label="$t('blog:category')"
+                class="filter"
+              />
+
+              <form-field-multi-select
+                v-if="languageOptionList.length >= 2"
+                v-model="languageFilter"
+                :options="languageOptionList"
+                name="languageFilter"
+                :searchable="true"
+                :label="$t('blog:language')"
+                class="filter"
+              />
+
+              <div class="filter">
+                <div class="date-label">
+                  {{ $t('blog:dateOfPublication') }}
+                </div>
+
+                <div class="date-content">
+                  <form-field
+                    v-model="fromDateFilter"
+                    :label="$t('blog:From')"
+                    name="fromDateFilter"
+                    type="date"
+                    :max="toDateFilter"
+                  />
+
+                  <form-field
+                    v-model="toDateFilter"
+                    :label="$t('blog:To')"
+                    name="toDateFilter"
+                    type="date"
+                    :min="fromDateFilter"
+                  />
+                </div>
+              </div>
+            </div>
+          </advanced-search>
+        </template>
+
         <template v-slot:cell(actions)="{ row }">
           <base-button
             variant="icon"
@@ -48,21 +97,19 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from '@vue/composition-api';
+import { computed, defineComponent, watch } from '@vue/composition-api';
+import isEqual from 'lodash.isequal';
 
 import { ColumnDefinition, useDataTable } from '@tager/admin-ui';
 import { Nullable, useResourceDelete } from '@tager/admin-services';
 
-import { BlogCategory, PostShort } from '../../typings/model';
-import { deleteBlogPost, getBlogPostList } from '../../services/requests';
-import { getBlogPostFormUrl } from '../../constants/paths';
-import useModuleConfig from '../../hooks/useModuleConfig';
-import useBlogCategoryList from '../../hooks/useBlogCategoryList';
+import { Category, Language, PostShort } from '../../../typings/model';
+import { deleteBlogPost, getBlogPostList } from '../../../services/requests';
+import { getBlogPostFormUrl } from '../../../constants/paths';
+import { useModuleConfig, useBlogCategoryList } from '../../../hooks';
 
-import {
-  convertPostList,
-  getPostTableColumnDefs,
-} from './BlogPostList.helpers';
+import { convertPostList, getPostTableColumnDefs } from './PostList.helpers';
+import { useAdvancedSearch } from './hooks';
 
 export default defineComponent({
   name: 'BlogPostList',
@@ -79,16 +126,20 @@ export default defineComponent({
       loading: isModuleConfigLoading,
     } = useModuleConfig({ context });
 
+    const languageList = computed<Language[]>(
+      () => moduleConfig.value?.languages ?? []
+    );
+
     /** Fetch category list */
     const {
       data: categoryList,
       loading: isCategoryListLoading,
     } = useBlogCategoryList({ context });
 
-    const selectedCategory = computed<Nullable<BlogCategory>>(() =>
+    const selectedCategory = computed<Nullable<Category>>(() =>
       categoryId.value
         ? categoryList.value.find(
-            (category) => String(category.id) === String(categoryId.value)
+            ({ id }) => String(id) === String(categoryId.value)
           ) ?? null
         : null
     );
@@ -99,6 +150,24 @@ export default defineComponent({
             selectedCategory.value.name
           }"`
         : context.root.$t('blog:posts');
+    });
+
+    /** Advanced search **/
+
+    const {
+      categoryFilter,
+      categoryOptionList,
+      languageFilter,
+      languageOptionList,
+      fromDateFilter,
+      toDateFilter,
+      filterParams,
+      tags,
+      tagRemovalHandler,
+    } = useAdvancedSearch({
+      context,
+      categoryList,
+      languageList,
     });
 
     /** Fetch Post list */
@@ -118,6 +187,7 @@ export default defineComponent({
           query: params.searchQuery,
           pageNumber: params.pageNumber,
           pageSize: params.pageSize,
+          ...filterParams.value,
         }),
       initialValue: [],
       context,
@@ -125,7 +195,19 @@ export default defineComponent({
       pageSize: 100,
     });
 
-    const displayedPostList = computed<Array<PostShort>>(() =>
+    watch(filterParams, () => {
+      const newQuery = {
+        ...filterParams.value,
+        query: (context.root.$route.query.query ?? '') as string,
+      };
+
+      if (!isEqual(context.root.$route.query, newQuery)) {
+        context.root.$router.replace({ query: newQuery });
+        fetchPostList();
+      }
+    });
+
+    const displayedPostList = computed<PostShort[]>(() =>
       convertPostList(
         postList.value,
         selectedCategory.value,
@@ -147,7 +229,7 @@ export default defineComponent({
         isModuleConfigLoading.value
     );
 
-    const columnDefs = computed<Array<ColumnDefinition<PostShort>>>(() =>
+    const columnDefs = computed<ColumnDefinition<PostShort>[]>(() =>
       getPostTableColumnDefs(moduleConfig.value, context.root.$t)
     );
 
@@ -166,9 +248,44 @@ export default defineComponent({
       pageNumber,
       pageCount,
       pageSize,
+
+      // Advanced search
+      categoryFilter,
+      categoryOptionList,
+      languageFilter,
+      languageOptionList,
+      fromDateFilter,
+      toDateFilter,
+      tags,
+      tagRemovalHandler,
     };
   },
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.filters {
+  display: flex;
+  margin: 0 -10px;
+
+  &:not(:first-child) {
+    margin-top: 10px;
+  }
+
+  .filter {
+    padding: 10px 10px 0;
+    width: 50%;
+    margin: 0;
+  }
+}
+
+.date-label {
+  margin-bottom: 0.5rem;
+}
+
+.date-content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 10px;
+}
+</style>

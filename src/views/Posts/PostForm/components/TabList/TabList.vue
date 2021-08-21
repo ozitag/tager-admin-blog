@@ -24,7 +24,7 @@ export default Vue.extend({
   name: 'TabList',
   props: {
     tabList: {
-      type: Array as () => Array<TabType>,
+      type: Array as () => TabType[],
       required: true,
     },
     selectedTabId: {

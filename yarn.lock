@@ -1059,18 +1059,17 @@
   resolved "https://registry.yarnpkg.com/@soda/get-current-script/-/get-current-script-1.0.2.tgz#a53515db25d8038374381b73af20bb4f2e508d87"
   integrity sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==
 
-"@tager/admin-dynamic-field@^0.1.14":
-  version "0.1.14"
-  resolved "https://registry.yarnpkg.com/@tager/admin-dynamic-field/-/admin-dynamic-field-0.1.14.tgz#a1a2c36bf253bd8473c5636ed131420ce2fda307"
-  integrity sha512-wuPkN9Pj9velkkM5Lof9L8A+bX6xA6be1m2gZjxf0hq7wz6C/inirpSVgu/4/hh6Iwi0T87gLkgXqUPGeO9ojA==
+"@tager/admin-dynamic-field@^0.1.18":
+  version "0.1.18"
+  resolved "https://registry.yarnpkg.com/@tager/admin-dynamic-field/-/admin-dynamic-field-0.1.18.tgz#97bbb96c2613c206c3f5bb663640b2e7010e4a7c"
+  integrity sha512-vifxOzcYBPlRJqsCN8Cbrf06zhgK+K13e2dmyOyewyluyf5ytpkzbPni8EHCUQbzLDC0zCm090u0EPKkQuMpMA==
   dependencies:
     "@babel/runtime" "^7.11.2"
-    lodash.kebabcase "^4.1.1"
 
-"@tager/admin-layout@^0.4.13":
-  version "0.4.13"
-  resolved "https://registry.yarnpkg.com/@tager/admin-layout/-/admin-layout-0.4.13.tgz#7659d76f83a475dc5423aaf96d646318f1a7bb46"
-  integrity sha512-uURPhsU4RmeMNJQopEnVzH4iSKMKi4CpKiwrF17pztBPcRZ4t95sfSov1ZZ9qQdQBo5SP3/j4IrfC33Wh/JAKA==
+"@tager/admin-layout@^0.5.3":
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/@tager/admin-layout/-/admin-layout-0.5.3.tgz#cef3f490f750803d5bbe292b826c67a4a813ea36"
+  integrity sha512-88SUJ4ky6x/yX8ZnH/f67mBfJdOeLn2DQTiyMjD9ajkiwnJ8JNwu3lpSN+F8xCwW4PzybRoudhR8cpMjxsHzZg==
   dependencies:
     "@babel/runtime" "^7.10.4"
 
@@ -1083,15 +1082,15 @@
     nanoid "^3.1.12"
     zod "^1.11.9"
 
-"@tager/admin-ui@^0.8.49":
-  version "0.8.49"
-  resolved "https://registry.yarnpkg.com/@tager/admin-ui/-/admin-ui-0.8.49.tgz#72731a7ceb0823c390946c9e6c79655b469d8038"
-  integrity sha512-dVAphiEwXSBTZt+DN2LiKg2/j3/3bseC3l5RbXwEzZRgSTsYtQ5S4X4D7XYzf5+5ZedVISN5Fr0jAZFakT5qJQ==
+"@tager/admin-ui@^0.8.84":
+  version "0.8.84"
+  resolved "https://registry.yarnpkg.com/@tager/admin-ui/-/admin-ui-0.8.84.tgz#9180fd5cfa9bae74252b6b6aac2de92026ce7852"
+  integrity sha512-OP+YISIM7IbUZgQAXHNlef8irX09mRxOiDxd+kOFI2IUlIebEF5hcb1As/o1b4HH3F543DTZm+5aYC0DRjam4Q==
   dependencies:
     "@babel/runtime" "^7.11.2"
     "@ckeditor/ckeditor5-vue" "^1.0.2"
     "@popperjs/core" "^2.6.0"
-    "@tager/admin-wysiwyg" "^0.1.0"
+    "@tager/admin-wysiwyg" "^0.1.2"
     autosize "^4.0.2"
     leaflet "^1.7.1"
     lodash.debounce "^4.0.8"
@@ -1104,10 +1103,10 @@
     vue-color "^2.7.1"
     vuedraggable "^2.24.3"
 
-"@tager/admin-wysiwyg@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@tager/admin-wysiwyg/-/admin-wysiwyg-0.1.0.tgz#eb37a8aae1459b2eee8f00720b833b76b65727c0"
-  integrity sha512-9+95nymxi1BNXPAlOXS4wE2tLVnVrrDjWjRk3Uo6TRtqweFlIoLCnwRhLsKlxWC53C8A+hFs0LkGa0aHHrw2mQ==
+"@tager/admin-wysiwyg@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@tager/admin-wysiwyg/-/admin-wysiwyg-0.1.2.tgz#5355d3b9c0aa140696743e2e68e58904a67af7db"
+  integrity sha512-w+Ker+vXQ9JHi7Z+jLqSsD7vWfyyccqSfSDMjgGrSGm80FP3LT1vRkWajqyasxKiw2P6P9woqqqDi/+MEjaY/w==
 
 "@types/anymatch@*":
   version "1.3.1"
@@ -1226,6 +1225,18 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
+
+"@types/lodash.isequal@^4.5.5":
+  version "4.5.5"
+  resolved "https://registry.yarnpkg.com/@types/lodash.isequal/-/lodash.isequal-4.5.5.tgz#4fed1b1b00bef79e305de0352d797e9bb816c8ff"
+  integrity sha512-4IKbinG7MGP131wRfceK6W4E/Qt3qssEFLF30LnJbjYiSfHGGRU/Io8YxXrZX109ir+iDETC8hw8QsDijukUVg==
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
+  version "4.14.172"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.172.tgz#aad774c28e7bfd7a67de25408e03ee5a8c3d028a"
+  integrity sha512-/BHF5HAx3em7/KkzVKm3LrsD6HZAXuXO1AJZQ3cRRBZj4oHZDviWPYu0aEplAqDFNHZPW6d3G7KN+ONcCCC7pw==
 
 "@types/mime@*":
   version "2.0.3"
@@ -6024,6 +6035,11 @@ lodash.get@^4.4.2:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
   integrity sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=
+
+lodash.isequal@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+  integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
 
 lodash.kebabcase@^4.1.1:
   version "4.1.1"

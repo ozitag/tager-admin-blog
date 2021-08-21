@@ -7,16 +7,12 @@ import { defineComponent, ref } from '@vue/composition-api';
 
 import { NavigationGridItem } from '@tager/admin-ui';
 
-import {
-  getBlogCategoryListUrl,
-  getBlogPostListUrl,
-  getBlogSettingsUrl,
-} from '../constants/paths';
+import { getBlogCategoryListUrl, getBlogPostListUrl } from '../constants/paths';
 
 export default defineComponent({
   name: 'Home',
   setup(props, context) {
-    const navItemList = ref<Array<NavigationGridItem>>([
+    const navItemList = ref<NavigationGridItem[]>([
       {
         name: context.root.$t('blog:blog'),
         linkList: [
@@ -25,7 +21,6 @@ export default defineComponent({
             url: getBlogCategoryListUrl(),
             text: context.root.$t('blog:categories'),
           },
-          { url: getBlogSettingsUrl(), text: context.root.$t('blog:settings') },
         ],
       },
     ]);
@@ -34,5 +29,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped lang="scss"></style>

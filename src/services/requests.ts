@@ -1,13 +1,7 @@
 import { request, Nullable, ResponseBody } from '@tager/admin-services';
 import { FieldShortType, OutgoingValueUnion } from '@tager/admin-dynamic-field';
 
-import {
-  BlogCategory,
-  BlogModuleConfigType,
-  PostShort,
-  PostFull,
-  SettingItemType,
-} from '../typings/model';
+import { Category, ModuleConfig, PostShort, PostFull } from '../typings/model';
 
 /** Blog Posts */
 
@@ -15,7 +9,7 @@ export function getBlogPostList(params?: {
   query?: string;
   pageNumber?: number;
   pageSize?: number;
-}): Promise<ResponseBody<Array<PostShort>>> {
+}): Promise<ResponseBody<PostShort[]>> {
   return request.get({ path: '/admin/blog/posts', params });
 }
 
@@ -29,7 +23,7 @@ export function getBlogPost(
   return request.get({ path: `/admin/blog/posts/${postId}` });
 }
 
-export type PostCreationPayload = {
+export interface PostCreationPayload {
   title: string;
   urlAlias: string;
   excerpt: string;
@@ -42,12 +36,12 @@ export type PostCreationPayload = {
   pageTitle: string;
   pageDescription: string;
   openGraphImage: Nullable<string>;
-  categories: Array<number>;
+  categories: number[];
   language: Nullable<string>;
-  relatedPosts: Array<number>;
-  tags: Array<string>;
-  additionalFields: Array<FieldShortType<OutgoingValueUnion>>;
-};
+  relatedPosts: number[];
+  tags: string[];
+  additionalFields: FieldShortType<OutgoingValueUnion>[];
+}
 
 export function createBlogPost(
   payload: PostCreationPayload
@@ -74,30 +68,28 @@ export function deleteBlogPost(
 
 /** Blog Categories */
 
-export function getBlogCategoryList(): Promise<
-  ResponseBody<Array<BlogCategory>>
-> {
+export function getBlogCategoryList(): Promise<ResponseBody<Category[]>> {
   return request.get({ path: '/admin/blog/categories' });
 }
 
 export function getBlogCategory(
   categoryId: number | string
-): Promise<ResponseBody<BlogCategory>> {
+): Promise<ResponseBody<Category>> {
   return request.get({ path: `/admin/blog/categories/${categoryId}` });
 }
 
-export type BlogCategoryCreationPayload = {
+export interface BlogCategoryCreationPayload {
   name: string;
   isDefault: boolean;
   pageTitle: Nullable<string>;
   language: Nullable<string>;
   pageDescription: Nullable<string>;
   openGraphImage: Nullable<string>;
-};
+}
 
 export function createBlogCategory(
   payload: BlogCategoryCreationPayload
-): Promise<ResponseBody<BlogCategory>> {
+): Promise<ResponseBody<Category>> {
   return request.post({ path: '/admin/blog/categories', body: payload });
 }
 
@@ -108,7 +100,7 @@ export type BlogCategoryUpdatePayload = BlogCategoryCreationPayload & {
 export function updateBlogCategory(
   categoryId: number | string,
   payload: BlogCategoryUpdatePayload
-): Promise<ResponseBody<BlogCategory>> {
+): Promise<ResponseBody<Category>> {
   return request.put({
     path: `/admin/blog/categories/${categoryId}`,
     body: payload,
@@ -132,30 +124,8 @@ export function moveBlogCategory(
   });
 }
 
-export function getBlogModuleConfig(): Promise<
-  ResponseBody<BlogModuleConfigType>
-> {
+export function getBlogModuleConfig(): Promise<ResponseBody<ModuleConfig>> {
   return request.get({
     path: `/admin/blog/module-info`,
-  });
-}
-
-export function getBlogSettingList(): Promise<
-  ResponseBody<Array<SettingItemType>>
-> {
-  return request.get({
-    path: `/admin/blog/settings`,
-  });
-}
-
-export type SettingsUpdatePayload = {
-  values: Array<FieldShortType<OutgoingValueUnion>>;
-};
-export function updateBlogSettingList(
-  payload: SettingsUpdatePayload
-): Promise<ResponseBody<Array<SettingItemType>>> {
-  return request.post({
-    path: `/admin/blog/settings`,
-    body: payload,
   });
 }

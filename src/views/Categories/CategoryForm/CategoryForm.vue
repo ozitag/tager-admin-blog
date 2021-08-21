@@ -8,26 +8,26 @@
     <template v-slot:content>
       <form novalidate @submit.prevent="submitForm">
         <form-field-select
-            v-if="isCreation && isLangSpecific"
-            v-model="values.language"
-            name="language"
-            :label="$t('blog:language')"
-            :options="languageOptionList"
-            :error="errors.language"
+          v-if="isCreation && isLangSpecific"
+          v-model="values.language"
+          name="language"
+          :label="$t('blog:language')"
+          :options="languageOptionList"
+          :error="errors.language"
         />
 
         <form-field
-            v-model="values.name"
-            name="name"
-            :label="$t('blog:name')"
-            :error="errors.name"
+          v-model="values.name"
+          name="name"
+          :label="$t('blog:name')"
+          :error="errors.name"
         />
 
         <form-field-checkbox
-            v-model="values.isDefault"
-            name="isDefault"
-            :label="$t('blog:defaultCategory')"
-            :error="errors.isDefault"
+          v-model="values.isDefault"
+          name="isDefault"
+          :label="$t('blog:defaultCategory')"
+          :error="errors.isDefault"
         />
 
         <form-field-url-alias-input
@@ -60,7 +60,9 @@
           :label="$t('blog:openGraphImage')"
           name="openGraphImage"
           file-type="image"
-          :image-scenario="moduleConfig ? moduleConfig.fileScenarios.openGraph : null"
+          :image-scenario="
+            moduleConfig ? moduleConfig.fileScenarios.openGraph : null
+          "
         />
       </form>
     </template>
@@ -97,20 +99,20 @@ import {
   createBlogCategory,
   getBlogCategory,
   updateBlogCategory,
-} from '../../services/requests';
-import { BlogCategory } from '../../typings/model';
+} from '../../../services/requests';
+import { Category, Language } from '../../../typings/model';
 import {
   getBlogCategoryFormUrl,
   getBlogCategoryListUrl,
-} from '../../constants/paths';
-import useModuleConfig from '../../hooks/useModuleConfig';
+} from '../../../constants/paths';
+import { useModuleConfig } from '../../../hooks';
 
 import {
   CategoryFormValues,
   convertCategoryFormValuesToCreationPayload,
   convertCategoryFormValuesToUpdatePayload,
   convertCategoryToFormValues,
-} from './BlogCategoryForm.helpers';
+} from './CategoryForm.helpers';
 
 export default defineComponent({
   name: 'BlogCategoryForm',
@@ -127,22 +129,24 @@ export default defineComponent({
       loading: isModuleConfigLoading,
     } = useModuleConfig({ context });
 
-    const languageOptionList = computed<Array<OptionType>>(
-      () =>
-        moduleConfig.value?.languages.map((lang) => ({
-          value: lang.id,
-          label: lang.name,
-        })) ?? []
+    const languageList = computed<Language[]>(
+      () => moduleConfig.value?.languages ?? []
     );
 
-    const isLangSpecific = computed(() => languageOptionList.value.length > 0);
+    const languageOptionList = computed<OptionType[]>(() =>
+      languageList.value.map(({ id, name }) => ({ value: id, label: name }))
+    );
+
+    const isLangSpecific = computed<boolean>(
+      () => languageOptionList.value.length > 0
+    );
 
     /** Fetch Category */
 
     const [
       fetchCategory,
       { data: category, loading: isCategoryLoading },
-    ] = useResource<Nullable<BlogCategory>>({
+    ] = useResource<Nullable<Category>>({
       fetchResource: () => getBlogCategory(categoryId.value),
       initialValue: null,
       context,
@@ -182,8 +186,10 @@ export default defineComponent({
         values.value
       );
       const updateBody = convertCategoryFormValuesToUpdatePayload(values.value);
-      if(!isCreation.value){
-        updateBody.language = category.value?.language ? category.value?.language : null;
+      if (!isCreation.value) {
+        updateBody.language = category.value?.language
+          ? category.value?.language
+          : null;
       }
 
       const requestPromise = isCreation.value
@@ -257,10 +263,8 @@ export default defineComponent({
       categoryListUrl: getBlogCategoryListUrl(),
       submitForm,
       isSubmitting,
-      moduleConfig
+      moduleConfig,
     };
   },
 });
 </script>
-
-<style scoped lang="scss"></style>
