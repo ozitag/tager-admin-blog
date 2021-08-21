@@ -1,12 +1,11 @@
 import { CustomRoute, CustomRouteConfig } from '@tager/admin-layout';
 
-import BlogPostList from '../views/BlogPostList';
-import BlogPostForm from '../views/BlogPostForm';
-import BlogCategoryList from '../views/BlogCategoryList';
-import BlogCategoryForm from '../views/BlogCategoryForm';
-import BlogSettings from '../views/BlogSettings';
+import BlogPostList from '../views/Posts/PostList';
+import BlogPostForm from '../views/Posts/PostForm';
+import BlogCategoryList from '../views/Categories/CategoryList';
+import BlogCategoryForm from '../views/Categories/CategoryForm';
 
-import { BLOG_ROUTE_PATHS, getBlogSettingsUrl } from './paths';
+import { BLOG_ROUTE_PATHS } from './paths';
 
 export const BLOG_POST_LIST_ROUTE: CustomRouteConfig = {
   path: BLOG_ROUTE_PATHS.POST_LIST,
@@ -54,18 +53,6 @@ export const BLOG_CATEGORY_FORM_ROUTE: CustomRouteConfig = {
       { url: '/', text: t('blog:home') },
       { url: BLOG_ROUTE_PATHS.CATEGORY_LIST, text: t('blog:allCategories') },
       { url: route.path, text: t('blog:categoryForm') },
-    ],
-  },
-};
-
-export const BLOG_SETTINGS_ROUTE: CustomRouteConfig = {
-  path: BLOG_ROUTE_PATHS.SETTINGS,
-  component: BlogSettings,
-  name: 'Settings',
-  meta: {
-    getBreadcrumbs: (route, t) => [
-      { url: '/', text: t('blog:home') },
-      { url: getBlogSettingsUrl(), text: t('blog:blogSettings') },
     ],
   },
 };

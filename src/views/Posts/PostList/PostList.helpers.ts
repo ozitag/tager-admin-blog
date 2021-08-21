@@ -4,30 +4,27 @@ import { notEmpty, Nullable } from '@tager/admin-services';
 import { ColumnDefinition } from '@tager/admin-ui';
 
 import {
-  BlogCategory,
-  BlogModuleConfigType,
+  Category,
+  ModuleConfig,
+  Language,
   PostShort,
-} from '../../typings/model';
-import { getBlogPostFormUrl } from '../../constants/paths';
+} from '../../../typings/model';
+import { getBlogPostFormUrl } from '../../../constants/paths';
 
 export function convertPostList(
-  postList: Array<PostShort>,
-  selectedCategory: Nullable<BlogCategory>,
-  languages: BlogModuleConfigType['languages']
-): Array<PostShort> {
+  postList: PostShort[],
+  selectedCategory: Nullable<Category>,
+  languages: Language[]
+): PostShort[] {
   return postList
     .filter((post) =>
       selectedCategory
-        ? post.categories.some(
-            (category) => category.id === selectedCategory.id
-          )
+        ? post.categories.some(({ id }) => id === selectedCategory.id)
         : true
     )
     .map((post) => {
       if (languages.length > 0) {
-        const foundLanguage = languages.find(
-          (lang) => post.language === lang.id
-        );
+        const foundLanguage = languages.find(({ id }) => id === post.language);
 
         return {
           ...post,
@@ -40,9 +37,9 @@ export function convertPostList(
 }
 
 export function getPostTableColumnDefs(
-  moduleConfig: Nullable<BlogModuleConfigType>,
+  moduleConfig: Nullable<ModuleConfig>,
   t: TFunction
-): Array<ColumnDefinition<PostShort>> {
+): ColumnDefinition<PostShort>[] {
   const isLangSpecific = moduleConfig
     ? moduleConfig.languages.length > 0
     : false;

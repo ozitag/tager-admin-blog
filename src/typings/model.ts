@@ -6,13 +6,13 @@ import {
 } from '@tager/admin-dynamic-field';
 import { ShortCodeItemType } from '@tager/admin-ui';
 
-export type SeoInfo = {
+export interface SeoInfo {
   readonly pageTitle: Nullable<string>;
   readonly pageDescription: Nullable<string>;
   readonly openGraphImage: Nullable<FileType>;
-};
+}
 
-export type BlogCategory = {
+export interface Category extends SeoInfo {
   readonly id: number;
   readonly name: string;
   readonly isDefault: boolean;
@@ -21,21 +21,21 @@ export type BlogCategory = {
   readonly urlTemplate: string;
   readonly urlAlias: string;
   readonly postsCount: string;
-} & SeoInfo;
+}
 
-export type PostShort = {
+export interface PostShort {
   readonly id: number;
   readonly title: string;
   readonly url: string;
   readonly excerpt: string;
   readonly status: string;
   readonly language: string;
-  readonly categories: Array<BlogCategory>;
+  readonly categories: Category[];
   readonly date: string;
   readonly image: Nullable<FileType>;
-};
+}
 
-export type PostFull = {
+export interface PostFull extends SeoInfo {
   readonly id: number;
   readonly language: string;
   readonly title: string;
@@ -47,38 +47,39 @@ export type PostFull = {
   readonly excerpt: string;
   readonly image: Nullable<FileType>;
   readonly imageMobile: Nullable<FileType>;
-  readonly categories: Array<BlogCategory>;
+  readonly categories: Category[];
   readonly body: string;
   readonly coverImage: Nullable<FileType>;
-  readonly relatedPosts: Array<Pick<PostShort, 'id' | 'title'>>;
-  readonly tags: Array<string>;
-  readonly additionalFields: Array<FieldShortType<IncomingValueUnion>>;
-} & SeoInfo;
+  readonly relatedPosts: Pick<PostShort, 'id' | 'title'>[];
+  readonly tags: string[];
+  readonly additionalFields: FieldShortType<IncomingValueUnion>[];
+}
 
-export type BlogModuleConfigType = {
+export interface Language {
+  readonly id: string;
+  readonly name: string;
+}
+
+export interface DefaultCategory {
+  readonly id: number;
+  readonly name: string;
+  readonly language: string;
+}
+
+export interface FileScenarios {
+  readonly cover: Nullable<string>;
+  readonly image: Nullable<string>;
+  readonly imageMobile: Nullable<string>;
+  readonly content: Nullable<string>;
+  readonly openGraph: Nullable<string>;
+}
+
+export interface ModuleConfig {
   readonly urlPostTemplate: Nullable<string>;
   readonly urlCategoryTemplate: Nullable<string>;
-  readonly languages: Array<{
-    id: string;
-    name: string;
-  }>;
-  defaultCategories: Array<{
-    id: number;
-    name: string;
-    language: string;
-  }>;
-  readonly fields: Array<FieldConfigUnion>;
-  readonly shortcodes: Array<ShortCodeItemType>;
-  readonly fileScenarios: {
-    cover: Nullable<string>;
-    image: Nullable<string>;
-    imageMobile: Nullable<string>;
-    content: Nullable<string>;
-    openGraph: Nullable<string>;
-  };
-};
-
-export type SettingItemType = {
-  field: FieldConfigUnion;
-  value: IncomingValueUnion;
-};
+  readonly languages: Language[];
+  readonly defaultCategories: DefaultCategory[];
+  readonly fields: FieldConfigUnion[];
+  readonly shortcodes: ShortCodeItemType[];
+  readonly fileScenarios: FileScenarios;
+}

@@ -1,11 +1,11 @@
 import { createId, Nullable } from '@tager/admin-services';
 import { OptionType, SingleFileInputValueType } from '@tager/admin-ui';
 
-import { BlogCategory } from '../../typings/model';
+import { Category } from '../../../typings/model';
 import {
   BlogCategoryCreationPayload,
   BlogCategoryUpdatePayload,
-} from '../../services/requests';
+} from '../../../services/requests';
 
 export type CategoryFormValues = {
   name: string;
@@ -18,11 +18,11 @@ export type CategoryFormValues = {
 };
 
 export function convertCategoryToFormValues(
-  category: Nullable<BlogCategory>,
-  languageOptionList: Array<OptionType>
+  category: Nullable<Category>,
+  languageOptionList: OptionType[]
 ): CategoryFormValues {
   const currentLangOption = languageOptionList.find(
-    (option) => option.value === category?.language
+    ({ value }) => value === category?.language
   );
 
   if (!category) {
