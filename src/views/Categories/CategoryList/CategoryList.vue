@@ -9,13 +9,36 @@
     ]"
   >
     <template v-slot:content>
-      <base-table
+      <data-table
         :column-defs="columnDefs"
         :row-data="rowData"
         :loading="isRowDataLoading"
         :error-message="errorMessage"
+        :search-query="searchQuery"
+        :pagination="{
+          pageNumber,
+          pageCount,
+          pageSize,
+          disabled: isRowDataLoading,
+        }"
         data-table="blog-category"
+        @change="handleChange"
       >
+        <template v-if="isLangSpecific" v-slot:filters>
+          <advanced-search :tags="tags" @click:tag="tagRemovalHandler">
+            <div class="filters">
+              <form-field-multi-select
+                v-model="languageFilter"
+                :options="languageOptionList"
+                name="languageFilter"
+                :searchable="true"
+                :label="$t('blog:language')"
+                class="filter"
+              />
+            </div>
+          </advanced-search>
+        </template>
+
         <template v-slot:cell(link-to-posts)="{ row }">
           <count-button
             :href="getLinkToPostsByCategory(row.id)"
@@ -33,7 +56,7 @@
             :disabled="isDeleting(row.id)"
             :href="getBlogCategoryFormUrl({ categoryId: row.id })"
           >
-            <svg-icon name="edit"></svg-icon>
+            <svg-icon name="edit" />
           </base-button>
 
           <base-button
@@ -42,7 +65,7 @@
             :disabled="rowIndex === 0 || isCategoryMoving"
             @click="moveCategory(row.id, 'up')"
           >
-            <svg-icon name="north"></svg-icon>
+            <svg-icon name="north" />
           </base-button>
 
           <base-button
@@ -51,7 +74,7 @@
             :disabled="rowIndex === rowData.length - 1 || isCategoryMoving"
             @click="moveCategory(row.id, 'down')"
           >
-            <svg-icon name="south"></svg-icon>
+            <svg-icon name="south" />
           </base-button>
 
           <base-button
@@ -60,24 +83,20 @@
             :disabled="isDeleting(row.id) || row.postsCount > 0"
             @click="handleCategoryDelete(row.id)"
           >
-            <svg-icon name="delete"></svg-icon>
+            <svg-icon name="delete" />
           </base-button>
         </template>
-      </base-table>
+      </data-table>
     </template>
   </page>
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  onMounted,
-  ref,
-  defineComponent,
-} from '@vue/composition-api';
+import { computed, ref, defineComponent, watch } from '@vue/composition-api';
+import isEqual from 'lodash.isequal';
 
-import { useResource, useResourceDelete } from '@tager/admin-services';
-import { OptionType } from '@tager/admin-ui';
+import { useResourceDelete } from '@tager/admin-services';
+import { useDataTable } from '@tager/admin-ui';
 
 import { Category, Language } from '../../../typings/model';
 import {
@@ -85,21 +104,21 @@ import {
   getBlogCategoryList,
   moveBlogCategory,
 } from '../../../services/requests';
-import {
-  getBlogCategoryFormUrl,
-  getBlogPostListUrl,
-} from '../../../constants/paths';
+import { getBlogCategoryFormUrl } from '../../../constants/paths';
 import { useModuleConfig } from '../../../hooks';
 
 import {
   convertCategoryList,
   getCategoryTableColumnDefs,
+  getLinkToPostsByCategory,
 } from './CategoryList.helpers';
+import { useAdvancedSearch } from './hooks';
 
 export default defineComponent({
   name: 'BlogCategoryList',
   setup(props, context) {
     /** Fetch module config */
+
     const {
       data: moduleConfig,
       loading: isModuleConfigLoading,
@@ -109,28 +128,60 @@ export default defineComponent({
       () => moduleConfig.value?.languages ?? []
     );
 
-    const languageOptionList = computed<OptionType[]>(() =>
-      languageList.value.map(({ id, name }) => ({ value: id, label: name }))
-    );
+    /** Advanced search **/
+
+    const {
+      languageFilter,
+      languageOptionList,
+      filterParams,
+      tags,
+      tagRemovalHandler,
+    } = useAdvancedSearch({ context, languageList });
 
     const isLangSpecific = computed<boolean>(
-      () => languageOptionList.value.length > 0
+      () => languageOptionList.value.length > 1
     );
 
     /** Fetch category list */
 
-    const [
-      fetchBlogCategoryList,
-      { data: categoryList, loading: isCategoryListLoading, error },
-    ] = useResource<Category[]>({
-      fetchResource: getBlogCategoryList,
+    const {
+      fetchEntityList: fetchCategoryList,
+      isLoading: isCategoryListLoading,
+      rowData: categoryList,
+      errorMessage,
+      searchQuery,
+      handleChange,
+      pageNumber,
+      pageCount,
+      pageSize,
+    } = useDataTable<Category>({
+      fetchEntityList: (params) =>
+        getBlogCategoryList({
+          query: params.searchQuery,
+          pageNumber: params.pageNumber,
+          pageSize: params.pageSize,
+          ...filterParams.value,
+        }),
       initialValue: [],
       context,
       resourceName: 'Blog category list',
+      pageSize: 100,
     });
 
-    onMounted(() => {
-      fetchBlogCategoryList();
+    watch(filterParams, () => {
+      if (isModuleConfigLoading.value || isCategoryListLoading.value) {
+        return;
+      }
+
+      const newQuery = {
+        ...filterParams.value,
+        query: (context.root.$route.query.query ?? '') as string,
+      };
+
+      if (!isEqual(context.root.$route.query, newQuery)) {
+        context.root.$router.replace({ query: newQuery });
+        fetchCategoryList();
+      }
     });
 
     const {
@@ -139,7 +190,7 @@ export default defineComponent({
     } = useResourceDelete({
       deleteResource: deleteBlogCategory,
       resourceName: 'Post',
-      onSuccess: fetchBlogCategoryList,
+      onSuccess: fetchCategoryList,
       context,
     });
 
@@ -151,7 +202,7 @@ export default defineComponent({
       moveBlogCategory(categoryId, direction)
         .then((response) => {
           if (response.success) {
-            return fetchBlogCategoryList();
+            return fetchCategoryList();
           }
         })
         .catch(console.error)
@@ -166,10 +217,6 @@ export default defineComponent({
       () => isCategoryListLoading.value || isModuleConfigLoading.value
     );
 
-    function getLinkToPostsByCategory(categoryId: number): string {
-      return `${getBlogPostListUrl()}?category=${categoryId}`;
-    }
-
     const displayedCategoryList = computed<Category[]>(() =>
       convertCategoryList(categoryList.value, languageList.value)
     );
@@ -182,15 +229,25 @@ export default defineComponent({
       columnDefs,
       rowData: displayedCategoryList,
       isRowDataLoading,
-      errorMessage: error,
+      errorMessage,
       isLangSpecific,
-      languageOptionList,
       handleCategoryDelete,
       isDeleting,
       getBlogCategoryFormUrl,
       getLinkToPostsByCategory,
       moveCategory,
       isCategoryMoving,
+
+      searchQuery,
+      handleChange,
+      pageNumber,
+      pageCount,
+      pageSize,
+
+      languageFilter,
+      languageOptionList,
+      tags,
+      tagRemovalHandler,
     };
   },
 });

@@ -18,13 +18,13 @@ import { isNotNullish } from '@tager/admin-services';
 
 import { Category, Language } from '../../../../typings/model';
 
-interface UseAdvancedSearchParams {
+interface Params {
   context: SetupContext;
   categoryList: ComputedRef<Category[]>;
   languageList: ComputedRef<Language[]>;
 }
 
-interface UseAdvancedSearchState {
+interface State {
   categoryFilter: Ref<OptionType[]>;
   categoryOptionList: ComputedRef<OptionType[]>;
   languageFilter: Ref<OptionType[]>;
@@ -39,7 +39,6 @@ interface UseAdvancedSearchState {
 enum FilterTypes {
   CATEGORY = 'category',
   LANGUAGE = 'language',
-  DATE = 'date',
   FROM_DATE = 'from-date',
   TO_DATE = 'to-date',
 }
@@ -50,7 +49,7 @@ export function useAdvancedSearch({
   context,
   categoryList,
   languageList,
-}: UseAdvancedSearchParams): UseAdvancedSearchState {
+}: Params): State {
   /** Category **/
 
   const categoryOptionList = computed<OptionType[]>(() =>
@@ -156,7 +155,7 @@ export function useAdvancedSearch({
     return {
       value: '',
       label,
-      name: FilterTypes.DATE,
+      name: FilterTypes.FROM_DATE,
       title: context.root.$t('blog:dateOfPublication'),
     };
   });
@@ -193,7 +192,7 @@ export function useAdvancedSearch({
         ({ value }) => value !== event.value
       );
     }
-    if (event.name === FilterTypes.DATE) {
+    if (event.name === FilterTypes.FROM_DATE) {
       fromDateFilter.value = '';
       toDateFilter.value = '';
     }

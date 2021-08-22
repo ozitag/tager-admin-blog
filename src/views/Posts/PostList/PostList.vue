@@ -37,7 +37,7 @@
               />
 
               <form-field-multi-select
-                v-if="languageOptionList.length >= 2"
+                v-if="isLangSpecific"
                 v-model="languageFilter"
                 :options="languageOptionList"
                 name="languageFilter"
@@ -170,6 +170,10 @@ export default defineComponent({
       languageList,
     });
 
+    const isLangSpecific = computed<boolean>(
+      () => languageOptionList.value.length > 1
+    );
+
     /** Fetch Post list */
     const {
       fetchEntityList: fetchPostList,
@@ -256,6 +260,7 @@ export default defineComponent({
       // Advanced search
       categoryFilter,
       categoryOptionList,
+      isLangSpecific,
       languageFilter,
       languageOptionList,
       fromDateFilter,

@@ -4,7 +4,10 @@ import { notEmpty, Nullable } from '@tager/admin-services';
 import { ColumnDefinition } from '@tager/admin-ui';
 
 import { Category, Language, ModuleConfig } from '../../../typings/model';
-import { getBlogCategoryFormUrl } from '../../../constants/paths';
+import {
+  getBlogCategoryFormUrl,
+  getBlogPostListUrl,
+} from '../../../constants/paths';
 
 export function convertCategoryList(
   categoryList: Category[],
@@ -79,4 +82,8 @@ export function getCategoryTableColumnDefs(
   ];
 
   return COLUMN_DEFS.filter(notEmpty);
+}
+
+export function getLinkToPostsByCategory(categoryId: number): string {
+  return `${getBlogPostListUrl()}?filter[category]=${categoryId}`;
 }
