@@ -68,8 +68,12 @@ export function deleteBlogPost(
 
 /** Blog Categories */
 
-export function getBlogCategoryList(): Promise<ResponseBody<Category[]>> {
-  return request.get({ path: '/admin/blog/categories' });
+export function getBlogCategoryList(params?: {
+  query?: string;
+  pageNumber?: number;
+  pageSize?: number;
+}): Promise<ResponseBody<Category[]>> {
+  return request.get({ path: '/admin/blog/categories', params });
 }
 
 export function getBlogCategory(
