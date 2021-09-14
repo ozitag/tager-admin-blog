@@ -99,6 +99,7 @@
 <script lang="ts">
 import { computed, defineComponent, watch } from '@vue/composition-api';
 import isEqual from 'lodash.isequal';
+import pick from 'lodash.pick';
 
 import { ColumnDefinition, useDataTable } from '@tager/admin-ui';
 import { Nullable, useResourceDelete } from '@tager/admin-services';
@@ -205,8 +206,8 @@ export default defineComponent({
       }
 
       const newQuery = {
+        ...pick(context.root.$route.query, ['query', 'pageNumber']),
         ...filterParams.value,
-        query: (context.root.$route.query.query ?? '') as string,
       };
 
       if (!isEqual(context.root.$route.query, newQuery)) {
