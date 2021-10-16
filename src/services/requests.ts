@@ -33,6 +33,12 @@ export function getBlogPost(
   return request.get({ path: `/admin/blog/posts/${postId}` });
 }
 
+export function clonePost(
+  postId: number | string
+): Promise<ResponseBody<PostFull>> {
+  return request.post({ path: `/admin/blog/posts/${postId}/clone` });
+}
+
 export interface PostCreationPayload {
   title: string;
   urlAlias: string;

@@ -81,7 +81,7 @@
           <base-button
             variant="icon"
             :title="$t('blog:edit')"
-            :disabled="isDeleting(row.id)"
+            :disabled="isBusy(row.id)"
             :href="getBlogPostFormUrl({ postId: row.id })"
           >
             <svg-icon name="edit" />
@@ -89,8 +89,17 @@
 
           <base-button
             variant="icon"
+            :title="$t('blog:clone')"
+            :disabled="isBusy(row.id)"
+            @click="handleResourceClone(row.id)"
+          >
+            <svg-icon name="contentCopy" />
+          </base-button>
+
+          <base-button
+            variant="icon"
             :title="$t('blog:remove')"
-            :disabled="isDeleting(row.id)"
+            :disabled="isBusy(row.id)"
             @click="handleResourceDelete(row.id)"
           >
             <svg-icon name="delete" />
@@ -106,11 +115,23 @@ import { computed, defineComponent, watch } from '@vue/composition-api';
 import isEqual from 'lodash.isequal';
 import pick from 'lodash.pick';
 
-import { ColumnDefinition, useDataTable } from '@tager/admin-ui';
-import { Nullable, useResourceDelete } from '@tager/admin-services';
+import {
+  ColumnDefinition,
+  useDataTable,
+  useTranslation,
+} from '@tager/admin-ui';
+import {
+  Nullable,
+  useResourceClone,
+  useResourceDelete,
+} from '@tager/admin-services';
 
-import { Category, Language, PostShort } from '@/typings/model';
-import { deleteBlogPost, getBlogPostList } from '@/services/requests';
+import { Category, Language, PostFull, PostShort } from '@/typings/model';
+import {
+  clonePost,
+  deleteBlogPost,
+  getBlogPostList,
+} from '@/services/requests';
 import { getBlogPostFormUrl } from '@/constants/paths';
 import {
   useModuleConfig,
@@ -125,6 +146,8 @@ import { useAdvancedSearch } from './hooks';
 export default defineComponent({
   name: 'BlogPostList',
   setup(props, context) {
+    const { t } = useTranslation(context);
+
     const canViewAdministrators = useUserPermission(
       context,
       Scope.AdministratorsView
@@ -239,19 +262,32 @@ export default defineComponent({
       )
     );
 
-    const { handleResourceDelete, isDeleting } = useResourceDelete({
-      deleteResource: deleteBlogPost,
-      resourceName: 'Post',
-      onSuccess: fetchPostList,
-      context,
-    });
-
     const isRowDataLoading = computed<boolean>(
       () =>
         isCategoryListLoading.value ||
         isPostLoading.value ||
         isModuleConfigLoading.value
     );
+
+    const { isDeleting, handleResourceDelete } = useResourceDelete({
+      deleteResource: deleteBlogPost,
+      resourceName: 'Post',
+      onSuccess: fetchPostList,
+      context,
+    });
+
+    const { isCloning, handleResourceClone } = useResourceClone({
+      cloneResource: clonePost,
+      confirmMessage: t('blog:cloneConfirm'),
+      successMessage: t('blog:cloneSuccess'),
+      failureMessage: t('blog:cloneFailure'),
+      onSuccessRedirectTo: (data: PostFull) => `/posts/${data.id}`,
+      context,
+    });
+
+    function isBusy(postId: number): boolean {
+      return isDeleting(postId) || isCloning(postId) || isRowDataLoading.value;
+    }
 
     const columnDefs = computed<ColumnDefinition<PostShort>[]>(() =>
       getPostTableColumnDefs(moduleConfig.value, context.root.$t)
@@ -286,6 +322,10 @@ export default defineComponent({
 
       // Permissions
       canViewAdministrators,
+
+      // Clone
+      handleResourceClone,
+      isBusy,
     };
   },
 });

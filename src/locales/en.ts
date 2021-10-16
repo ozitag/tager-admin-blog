@@ -62,6 +62,11 @@ const EN = {
   blogCategoryWasSuccessfullyUpdated: 'Blog category was successfully updated',
   blogCategoryCreationWasFailed: 'Blog category creation was failed',
   blogCategoryUpdateWasFailed: 'Blog category update was failed',
+
+  clone: 'Clone',
+  cloneConfirm: 'Are you sure you want to clone the page?',
+  cloneSuccess: 'Page have copied successfully',
+  cloneFailure: 'Page copy failure',
 };
 
 export default EN;

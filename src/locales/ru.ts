@@ -64,6 +64,11 @@ const RU: typeof EN = {
   blogCategoryWasSuccessfullyUpdated: 'Категория блога успешно обновлена',
   blogCategoryCreationWasFailed: 'Не удалось создать категорию блога',
   blogCategoryUpdateWasFailed: 'Не удалось обновить категорию блога',
+
+  clone: 'Клонировать',
+  cloneConfirm: 'Вы уверены, что хотите создать копию страницы?',
+  cloneSuccess: 'Копия страницы успешно создана',
+  cloneFailure: 'Ошибка копирования страницы',
 };
 
 export default RU;
