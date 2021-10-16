@@ -197,8 +197,8 @@ export default defineComponent({
     });
 
     const {
-      handleResourceDelete: handleCategoryDelete,
       isDeleting,
+      handleResourceDelete: handleCategoryDelete,
     } = useResourceDelete({
       deleteResource: deleteBlogCategory,
       resourceName: 'Post',

@@ -69,6 +69,11 @@ const RU: typeof EN = {
   cloneConfirm: 'Вы уверены, что хотите создать копию страницы?',
   cloneSuccess: 'Копия страницы успешно создана',
   cloneFailure: 'Ошибка копирования страницы',
+
+  tabs: {
+    common: 'Общие',
+    seo: 'SEO',
+  },
 };
 
 export default RU;

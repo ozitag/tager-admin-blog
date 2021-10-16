@@ -7,63 +7,88 @@
   >
     <template v-slot:content>
       <form novalidate @submit.prevent="submitForm">
-        <form-field-select
-          v-if="isCreation && isLangSpecific"
-          v-model="values.language"
-          name="language"
-          :label="$t('blog:language')"
-          :options="languageOptionList"
-          :error="errors.language"
-        />
+        <template v-if="isCreation">
+          <form-field-select
+            v-if="isLangSpecific"
+            v-model="values.language"
+            name="language"
+            :label="$t('blog:language')"
+            :options="languageOptionList"
+            :error="errors.language"
+          />
 
-        <form-field
-          v-model="values.name"
-          name="name"
-          :label="$t('blog:name')"
-          :error="errors.name"
-        />
+          <form-field
+            v-model="values.name"
+            name="name"
+            :label="$t('blog:name')"
+            :error="errors.name"
+          />
 
-        <form-field-checkbox
-          v-model="values.isDefault"
-          name="isDefault"
-          :label="$t('blog:defaultCategory')"
-          :error="errors.isDefault"
-        />
+          <form-field-checkbox
+            v-model="values.isDefault"
+            name="isDefault"
+            :label="$t('blog:defaultCategory')"
+            :error="errors.isDefault"
+          />
 
-        <form-field-url-alias-input
-          v-if="!isCreation"
-          id="urlAlias"
-          v-model="values.urlAlias"
-          name="urlAlias"
-          :label="$t('blog:URLAlias')"
-          :url-template="pagePath"
-          :error="errors.urlAlias"
-        />
+          <form-field-url-alias-input
+            id="urlAlias"
+            v-model="values.urlAlias"
+            name="urlAlias"
+            :label="$t('blog:URLAlias')"
+            :url-template="pagePath"
+            :error="errors.urlAlias"
+          />
+        </template>
 
-        <form-field
-          v-model="values.pageTitle"
-          name="pageTitle"
-          :label="$t('blog:pageTitle')"
-          :error="errors.pageTitle"
-        />
+        <template v-else>
+          <tab-list
+            :tab-list="tabList"
+            :selected-tab-id="selectedTabId"
+            @tab:update="selectedTabId = $event.tabId"
+          />
 
-        <form-field
-          v-model="values.pageDescription"
-          name="pageDescription"
-          :label="$t('blog:pageDescription')"
-          type="textarea"
-          :error="errors.pageDescription"
-        />
+          <template v-if="selectedTabId === 'common'">
+            <form-field
+              v-model="values.name"
+              name="name"
+              :label="$t('blog:name')"
+              :error="errors.name"
+            />
 
-        <form-field-file-input
-          v-model="values.openGraphImage"
-          :label="$t('blog:openGraphImage')"
-          name="openGraphImage"
-          file-type="image"
-          :image-scenario="
-            moduleConfig ? moduleConfig.fileScenarios.openGraph : null
-          "
-        />
+            <form-field-checkbox
+              v-model="values.isDefault"
+              name="isDefault"
+              :label="$t('blog:defaultCategory')"
+              :error="errors.isDefault"
+            />
+
+            <form-field-url-alias-input
+              id="urlAlias"
+              v-model="values.urlAlias"
+              name="urlAlias"
+              :label="$t('blog:URLAlias')"
+              :url-template="pagePath"
+              :error="errors.urlAlias"
+            />
+          </template>
+
+          <template v-if="selectedTabId === 'seo'">
+            <seo-field-group
+              :title="values.pageTitle"
+              :title-error-message="errors.pageTitle"
+              :description="values.pageDescription"
+              :description-error-message="errors.pageDescription"
+              :should-display-keywords="false"
+              :keywords="values.pageKeywords"
+              :keywords-error-message="errors.pageKeywords"
+              :image="values.openGraphImage"
+              :image-scenario="imageScenario"
+              :image-error-message="errors.openGraphImage"
+              @change="handleSeoFieldGroupChange"
+            />
+          </template>
+        </template>
       </form>
     </template>
 
@@ -90,17 +115,26 @@ import {
 
 import {
   convertRequestErrorToMap,
+  getWebsiteOrigin,
+  notEmpty,
   Nullable,
   useResource,
 } from '@tager/admin-services';
-import { OptionType, FormFooter, TagerFormSubmitEvent } from '@tager/admin-ui';
+import {
+  OptionType,
+  FormFooter,
+  TagerFormSubmitEvent,
+  SeoChangeEvent,
+  TabType,
+  useTranslation,
+} from '@tager/admin-ui';
 
 import {
   createBlogCategory,
   getBlogCategory,
   updateBlogCategory,
 } from '@/services/requests';
-import { Category, Language } from '@/typings/model';
+import { Category, FileScenarios, Language } from '@/typings/model';
 import {
   getBlogCategoryFormUrl,
   getBlogCategoryListUrl,
@@ -118,6 +152,7 @@ export default defineComponent({
   name: 'BlogCategoryForm',
   components: { FormFooter },
   setup(props, context) {
+    const { t } = useTranslation(context);
     const categoryId = computed<string>(
       () => context.root.$route.params.categoryId
     );
@@ -141,6 +176,10 @@ export default defineComponent({
       () => languageOptionList.value.length > 0
     );
 
+    const imageScenario = computed<string | null>(
+      () => moduleConfig.value?.fileScenarios?.openGraph ?? null
+    );
+
     /** Fetch Category */
 
     const [
@@ -154,13 +193,17 @@ export default defineComponent({
     });
 
     onMounted(() => {
-      if (isCreation.value) return;
+      if (isCreation.value) {
+        return;
+      }
 
       fetchCategory();
     });
 
     watch(categoryId, () => {
-      if (isCreation.value) return;
+      if (isCreation.value) {
+        return;
+      }
 
       fetchCategory();
     });
@@ -248,9 +291,31 @@ export default defineComponent({
     );
 
     const categoryPagePath = computed<string>(() => {
-      const origin = process.env.VUE_APP_WEBSITE_URL || window.location.origin;
-      return origin + (category.value?.urlTemplate ?? '');
+      return `${getWebsiteOrigin()}${category.value?.urlTemplate ?? ''}`;
     });
+
+    // SEO
+
+    function handleSeoFieldGroupChange({
+      title,
+      description,
+      keywords,
+      image,
+    }: SeoChangeEvent) {
+      values.value.pageTitle = title;
+      values.value.pageDescription = description;
+      values.value.pageKeywords = keywords;
+      values.value.openGraphImage = image;
+    }
+
+    /** Tabs */
+
+    const tabList = computed<TabType[]>(() => [
+      { id: 'common', label: t('blog:tabs.common') },
+      { id: 'seo', label: t('blog:tabs.seo') },
+    ]);
+
+    const selectedTabId = ref<string>(tabList.value[0].id);
 
     return {
       isCreation,
@@ -264,6 +329,14 @@ export default defineComponent({
       submitForm,
       isSubmitting,
       moduleConfig,
+
+      // SEO
+      imageScenario,
+      handleSeoFieldGroupChange,
+
+      // Tabs
+      tabList,
+      selectedTabId,
     };
   },
 });

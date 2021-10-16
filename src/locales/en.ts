@@ -67,6 +67,11 @@ const EN = {
   cloneConfirm: 'Are you sure you want to clone the page?',
   cloneSuccess: 'Page have copied successfully',
   cloneFailure: 'Page copy failure',
+
+  tabs: {
+    common: 'Common',
+    seo: 'SEO',
+  },
 };
 
 export default EN;

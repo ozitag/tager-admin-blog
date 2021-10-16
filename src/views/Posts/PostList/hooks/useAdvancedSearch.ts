@@ -17,6 +17,7 @@ import {
 import { isNotNullish } from '@tager/admin-services';
 
 import { Category, Language } from '@/typings/model';
+import { getNameWithDepth } from '@/utils/common';
 
 interface Params {
   context: SetupContext;
@@ -53,9 +54,9 @@ export function useAdvancedSearch({
   /** Category **/
 
   const categoryOptionList = computed<OptionType[]>(() =>
-    categoryList.value.map(({ id, name }) => ({
+    categoryList.value.map(({ id, name, depth }) => ({
       value: String(id),
-      label: name,
+      label: getNameWithDepth(name, depth),
     }))
   );
 
@@ -229,9 +230,9 @@ export function useAdvancedSearch({
       languageFilter.value.some(({ value }) => value === language)
     );
 
-    return selectedList.map(({ id, name }) => ({
+    return selectedList.map(({ id, name, depth }) => ({
       value: String(id),
-      label: name,
+      label: getNameWithDepth(name, depth),
     }));
   });
 

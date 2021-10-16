@@ -77,8 +77,9 @@
           </advanced-search>
         </template>
 
-        <template v-if="canViewAdministrators" v-slot:cell(actions)="{ row }">
+        <template v-slot:cell(actions)="{ row }">
           <base-button
+            v-if="canViewAdministrators"
             variant="icon"
             :title="$t('blog:edit')"
             :disabled="isBusy(row.id)"
@@ -97,6 +98,7 @@
           </base-button>
 
           <base-button
+            v-if="canViewAdministrators"
             variant="icon"
             :title="$t('blog:remove')"
             :disabled="isBusy(row.id)"

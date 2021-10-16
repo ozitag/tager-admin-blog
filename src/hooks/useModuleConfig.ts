@@ -2,8 +2,8 @@ import { onMounted, SetupContext } from '@vue/composition-api';
 
 import { Nullable, ResourceRef, useResource } from '@tager/admin-services';
 
-import { ModuleConfig } from '../typings/model';
-import { getBlogModuleConfig } from '../services/requests';
+import { ModuleConfig } from '@/typings/model';
+import { getBlogModuleConfig } from '@/services/requests';
 
 export function useModuleConfig(params: {
   context: SetupContext;

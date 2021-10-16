@@ -27,6 +27,9 @@ export interface UserModel {
 export interface SeoInfo {
   readonly pageTitle: Nullable<string>;
   readonly pageDescription: Nullable<string>;
+  readonly pageKeywords: Nullable<string>;
+  readonly openGraphTitle: Nullable<string>;
+  readonly openGraphDescription: Nullable<string>;
   readonly openGraphImage: Nullable<FileType>;
 }
 
@@ -39,6 +42,8 @@ export interface Category extends SeoInfo {
   readonly urlTemplate: string;
   readonly urlAlias: string;
   readonly postsCount: string;
+  readonly parent: Nullable<Pick<Category, 'id' | 'name'>>;
+  readonly depth: number;
 }
 
 export interface PostShort {

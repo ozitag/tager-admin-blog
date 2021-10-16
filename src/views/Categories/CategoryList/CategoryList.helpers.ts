@@ -1,10 +1,11 @@
 import { TFunction } from 'i18next';
 
-import { notEmpty, Nullable } from '@tager/admin-services';
+import { getWebsiteOrigin, notEmpty, Nullable } from '@tager/admin-services';
 import { ColumnDefinition } from '@tager/admin-ui';
 
 import { Category, Language, ModuleConfig } from '@/typings/model';
 import { getBlogCategoryFormUrl, getBlogPostListUrl } from '@/constants/paths';
+import { getNameWithDepth } from '@/utils/common';
 
 export function convertCategoryList(
   categoryList: Category[],
@@ -34,42 +35,46 @@ export function getCategoryTableColumnDefs(
     ? moduleConfig.languages.length > 0
     : false;
 
-  const COLUMN_DEFS: Array<ColumnDefinition<Category> | null> = [
+  const COLUMN_DEFS: (ColumnDefinition<Category> | null)[] = [
     {
-      id: 2,
+      id: 1,
       name: t('blog:name'),
       field: 'name',
       type: 'name',
-      format: ({ row }) => {
-        return {
-          adminLink: {
-            url: getBlogCategoryFormUrl({ categoryId: row.id }),
-            text: row.name,
-          },
-          websiteLink: {
-            url: [
-              process.env.VUE_APP_WEBSITE_URL || window.location.origin,
-              row.url,
-            ].join(''),
-            text: row.url,
-          },
-          paramList: row.isDefault
-            ? [{ name: t('blog:defaultCategory'), value: t('blog:yes') }]
-            : [],
-        };
+      format: ({ row }) => ({
+        adminLink: {
+          url: getBlogCategoryFormUrl({ categoryId: row.id }),
+          text: getNameWithDepth(row.name, row.depth),
+        },
+        paramList: row.isDefault
+          ? [{ name: t('blog:defaultCategory'), value: t('blog:yes') }]
+          : [],
+      }),
+    },
+    {
+      id: 2,
+      name: t('pages:path'),
+      field: 'path',
+      type: 'link',
+      format: ({ row }) => ({
+        url: `${getWebsiteOrigin()}${row.url}`,
+        text: row.url,
+      }),
+      options: {
+        shouldOpenNewTab: true,
       },
     },
     isLangSpecific
-      ? { id: 4, name: t('blog:language'), field: 'language' }
+      ? { id: 3, name: t('blog:language'), field: 'language' }
       : null,
     {
-      id: 3,
+      id: 4,
       name: t('blog:posts'),
       field: 'linkToPosts',
       style: { whiteSpace: 'nowrap', width: '130px' },
     },
     {
-      id: 4,
+      id: 5,
       name: t('blog:actions'),
       field: 'actions',
       style: { whiteSpace: 'nowrap', width: '205px' },

@@ -10,9 +10,14 @@ import {
 export type CategoryFormValues = {
   name: string;
   isDefault: boolean;
-  pageTitle: string;
-  pageDescription: string;
+
+  pageTitle: Nullable<string>;
+  pageDescription: Nullable<string>;
+  pageKeywords: Nullable<string>;
+  openGraphTitle: Nullable<string>;
+  openGraphDescription: Nullable<string>;
   openGraphImage: Nullable<SingleFileInputValueType>;
+
   urlAlias: string;
   language: Nullable<OptionType>;
 };
@@ -29,9 +34,14 @@ export function convertCategoryToFormValues(
     return {
       name: '',
       isDefault: false,
+
       pageTitle: '',
       pageDescription: '',
+      openGraphTitle: '',
+      openGraphDescription: '',
+      pageKeywords: '',
       openGraphImage: null,
+
       urlAlias: '',
       language: currentLangOption ?? null,
     };
@@ -39,11 +49,16 @@ export function convertCategoryToFormValues(
   return {
     name: category.name,
     isDefault: category.isDefault,
+
     pageTitle: category.pageTitle ?? '',
     pageDescription: category.pageDescription ?? '',
+    pageKeywords: category.pageKeywords ?? '',
+    openGraphTitle: category.openGraphTitle ?? '',
+    openGraphDescription: category.openGraphDescription ?? '',
     openGraphImage: category.openGraphImage
       ? { id: createId(), file: category.openGraphImage }
       : null,
+
     urlAlias: category.urlAlias,
     language: currentLangOption ?? null,
   };
