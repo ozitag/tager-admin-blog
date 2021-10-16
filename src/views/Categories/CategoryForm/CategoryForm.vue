@@ -99,13 +99,13 @@ import {
   createBlogCategory,
   getBlogCategory,
   updateBlogCategory,
-} from '../../../services/requests';
-import { Category, Language } from '../../../typings/model';
+} from '@/services/requests';
+import { Category, Language } from '@/typings/model';
 import {
   getBlogCategoryFormUrl,
   getBlogCategoryListUrl,
-} from '../../../constants/paths';
-import { useModuleConfig } from '../../../hooks';
+} from '@/constants/paths';
+import { useModuleConfig } from '@/hooks';
 
 import {
   CategoryFormValues,

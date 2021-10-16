@@ -1,11 +1,11 @@
 import { createId, Nullable } from '@tager/admin-services';
 import { OptionType, SingleFileInputValueType } from '@tager/admin-ui';
 
-import { Category } from '../../../typings/model';
+import { Category } from '@/typings/model';
 import {
   BlogCategoryCreationPayload,
   BlogCategoryUpdatePayload,
-} from '../../../services/requests';
+} from '@/services/requests';
 
 export type CategoryFormValues = {
   name: string;

@@ -3,11 +3,8 @@ import { TFunction } from 'i18next';
 import { notEmpty, Nullable } from '@tager/admin-services';
 import { ColumnDefinition } from '@tager/admin-ui';
 
-import { Category, Language, ModuleConfig } from '../../../typings/model';
-import {
-  getBlogCategoryFormUrl,
-  getBlogPostListUrl,
-} from '../../../constants/paths';
+import { Category, Language, ModuleConfig } from '@/typings/model';
+import { getBlogCategoryFormUrl, getBlogPostListUrl } from '@/constants/paths';
 
 export function convertCategoryList(
   categoryList: Category[],

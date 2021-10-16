@@ -1,7 +1,17 @@
 import { request, Nullable, ResponseBody } from '@tager/admin-services';
 import { FieldShortType, OutgoingValueUnion } from '@tager/admin-dynamic-field';
 
-import { Category, ModuleConfig, PostShort, PostFull } from '../typings/model';
+import {
+  Category,
+  ModuleConfig,
+  PostShort,
+  PostFull,
+  UserModel,
+} from '@/typings/model';
+
+export function getUserProfile(): Promise<ResponseBody<UserModel>> {
+  return request.get({ path: '/admin/self' });
+}
 
 /** Blog Posts */
 

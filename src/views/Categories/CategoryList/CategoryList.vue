@@ -1,12 +1,16 @@
 <template>
   <page
     :title="$t('blog:blogCategories')"
-    :header-buttons="[
-      {
-        text: $t('blog:newCategory'),
-        href: getBlogCategoryFormUrl({ categoryId: 'create' }),
-      },
-    ]"
+    :header-buttons="
+      [
+        canViewAdministrators
+          ? {
+              text: $t('blog:newCategory'),
+              href: getBlogCategoryFormUrl({ categoryId: 'create' }),
+            }
+          : null,
+      ].filter(Boolean)
+    "
   >
     <template v-slot:content>
       <data-table
@@ -51,6 +55,7 @@
 
         <template v-slot:cell(actions)="{ row, rowIndex }">
           <base-button
+            v-if="canViewAdministrators"
             variant="icon"
             :title="$t('blog:edit')"
             :disabled="isDeleting(row.id)"
@@ -78,6 +83,7 @@
           </base-button>
 
           <base-button
+            v-if="canViewAdministrators"
             variant="icon"
             :title="$t('blog:remove')"
             :disabled="isDeleting(row.id) || row.postsCount > 0"
@@ -98,14 +104,15 @@ import isEqual from 'lodash.isequal';
 import { useResourceDelete } from '@tager/admin-services';
 import { useDataTable } from '@tager/admin-ui';
 
-import { Category, Language } from '../../../typings/model';
+import { Scope } from '@/constants/scopes';
+import { Category, Language } from '@/typings/model';
 import {
   deleteBlogCategory,
   getBlogCategoryList,
   moveBlogCategory,
-} from '../../../services/requests';
-import { getBlogCategoryFormUrl } from '../../../constants/paths';
-import { useModuleConfig } from '../../../hooks';
+} from '@/services/requests';
+import { getBlogCategoryFormUrl } from '@/constants/paths';
+import { useModuleConfig, useUserPermission } from '@/hooks';
 
 import {
   convertCategoryList,
@@ -117,6 +124,11 @@ import { useAdvancedSearch } from './hooks';
 export default defineComponent({
   name: 'BlogCategoryList',
   setup(props, context) {
+    const canViewAdministrators = useUserPermission(
+      context,
+      Scope.AdministratorsView
+    );
+
     /** Fetch module config */
 
     const {
@@ -248,6 +260,9 @@ export default defineComponent({
       languageOptionList,
       tags,
       tagRemovalHandler,
+
+      // Permissions
+      canViewAdministrators,
     };
   },
 });

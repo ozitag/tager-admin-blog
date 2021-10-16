@@ -6,6 +6,24 @@ import {
 } from '@tager/admin-dynamic-field';
 import { ShortCodeItemType } from '@tager/admin-ui';
 
+import { Values } from '@/typings/common';
+import { Scope } from '@/constants/scopes';
+
+export type ScopeType = Values<typeof Scope>;
+
+export interface RoleModel {
+  readonly id: number;
+  readonly name: string;
+  readonly scopes: Array<ScopeType>;
+}
+
+export interface UserModel {
+  readonly id: number;
+  readonly name: string;
+  readonly email: string;
+  readonly roles: Array<RoleModel>;
+}
+
 export interface SeoInfo {
   readonly pageTitle: Nullable<string>;
   readonly pageDescription: Nullable<string>;

@@ -1,12 +1,16 @@
 <template>
   <page
     :title="pageTitle"
-    :header-buttons="[
-      {
-        text: $t('blog:newPost'),
-        href: getBlogPostFormUrl({ postId: 'create' }),
-      },
-    ]"
+    :header-buttons="
+      [
+        canViewAdministrators
+          ? {
+              text: $t('blog:newPost'),
+              href: getBlogPostFormUrl({ postId: 'create' }),
+            }
+          : null,
+      ].filter(Boolean)
+    "
   >
     <template v-slot:content>
       <data-table
@@ -73,22 +77,23 @@
           </advanced-search>
         </template>
 
-        <template v-slot:cell(actions)="{ row }">
+        <template v-if="canViewAdministrators" v-slot:cell(actions)="{ row }">
           <base-button
             variant="icon"
             :title="$t('blog:edit')"
             :disabled="isDeleting(row.id)"
             :href="getBlogPostFormUrl({ postId: row.id })"
           >
-            <svg-icon name="edit"></svg-icon>
+            <svg-icon name="edit" />
           </base-button>
+
           <base-button
             variant="icon"
             :title="$t('blog:remove')"
             :disabled="isDeleting(row.id)"
             @click="handleResourceDelete(row.id)"
           >
-            <svg-icon name="delete"></svg-icon>
+            <svg-icon name="delete" />
           </base-button>
         </template>
       </data-table>
@@ -104,10 +109,15 @@ import pick from 'lodash.pick';
 import { ColumnDefinition, useDataTable } from '@tager/admin-ui';
 import { Nullable, useResourceDelete } from '@tager/admin-services';
 
-import { Category, Language, PostShort } from '../../../typings/model';
-import { deleteBlogPost, getBlogPostList } from '../../../services/requests';
-import { getBlogPostFormUrl } from '../../../constants/paths';
-import { useModuleConfig, useBlogCategoryList } from '../../../hooks';
+import { Category, Language, PostShort } from '@/typings/model';
+import { deleteBlogPost, getBlogPostList } from '@/services/requests';
+import { getBlogPostFormUrl } from '@/constants/paths';
+import {
+  useModuleConfig,
+  useBlogCategoryList,
+  useUserPermission,
+} from '@/hooks';
+import { Scope } from '@/constants/scopes';
 
 import { convertPostList, getPostTableColumnDefs } from './PostList.helpers';
 import { useAdvancedSearch } from './hooks';
@@ -115,6 +125,11 @@ import { useAdvancedSearch } from './hooks';
 export default defineComponent({
   name: 'BlogPostList',
   setup(props, context) {
+    const canViewAdministrators = useUserPermission(
+      context,
+      Scope.AdministratorsView
+    );
+
     const categoryId = computed<string>(() => {
       return Array.isArray(context.root.$route.query.category)
         ? context.root.$route.query.category[0] ?? ''
@@ -268,6 +283,9 @@ export default defineComponent({
       toDateFilter,
       tags,
       tagRemovalHandler,
+
+      // Permissions
+      canViewAdministrators,
     };
   },
 });

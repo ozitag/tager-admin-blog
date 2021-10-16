@@ -3,13 +3,8 @@ import { TFunction } from 'i18next';
 import { notEmpty, Nullable } from '@tager/admin-services';
 import { ColumnDefinition } from '@tager/admin-ui';
 
-import {
-  Category,
-  ModuleConfig,
-  Language,
-  PostShort,
-} from '../../../typings/model';
-import { getBlogPostFormUrl } from '../../../constants/paths';
+import { Category, ModuleConfig, Language, PostShort } from '@/typings/model';
+import { getBlogPostFormUrl } from '@/constants/paths';
 
 export function convertPostList(
   postList: PostShort[],

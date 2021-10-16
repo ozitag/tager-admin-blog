@@ -199,12 +199,10 @@ import {
   createBlogPost,
   getBlogPost,
   updateBlogPost,
-} from '../../../services/requests';
-import { Language, PostFull } from '../../../typings/model';
-import {
-  getBlogPostFormUrl,
-  getBlogPostListUrl,
-} from '../../../constants/paths';
+} from '@/services/requests';
+import { Language, PostFull } from '@/typings/model';
+import { getBlogPostFormUrl, getBlogPostListUrl } from '@/constants/paths';
+
 import {
   useModuleConfig,
   useBlogCategoryList,
