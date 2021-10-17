@@ -55,7 +55,6 @@
 
         <template v-slot:cell(actions)="{ row, rowIndex }">
           <base-button
-            v-if="canViewAdministrators"
             variant="icon"
             :title="$t('blog:edit')"
             :disabled="isDeleting(row.id)"
@@ -68,7 +67,7 @@
             variant="icon"
             :title="$t('blog:moveUp')"
             :disabled="rowIndex === 0 || isCategoryMoving"
-            @click="moveCategory(row.id, 'up')"
+            @click="startMoveCategory(row.id, 'up')"
           >
             <svg-icon name="north" />
           </base-button>
@@ -77,13 +76,12 @@
             variant="icon"
             :title="$t('blog:moveDown')"
             :disabled="rowIndex === rowData.length - 1 || isCategoryMoving"
-            @click="moveCategory(row.id, 'down')"
+            @click="startMoveCategory(row.id, 'down')"
           >
             <svg-icon name="south" />
           </base-button>
 
           <base-button
-            v-if="canViewAdministrators"
             variant="icon"
             :title="$t('blog:remove')"
             :disabled="isDeleting(row.id) || row.postsCount > 0"
@@ -107,12 +105,12 @@ import { useDataTable } from '@tager/admin-ui';
 import { Scope } from '@/constants/scopes';
 import { Category, Language } from '@/typings/model';
 import {
-  deleteBlogCategory,
-  getBlogCategoryList,
-  moveBlogCategory,
+  deleteCategory,
+  getCategories,
+  moveCategory,
 } from '@/services/requests';
 import { getBlogCategoryFormUrl } from '@/constants/paths';
-import { useModuleConfig, useUserPermission } from '@/hooks';
+import { useFetchModuleConfig, useUserPermission } from '@/hooks';
 
 import {
   convertCategoryList,
@@ -129,12 +127,12 @@ export default defineComponent({
       Scope.AdministratorsView
     );
 
-    /** Fetch module config */
+    /** Fetch module config **/
 
     const {
       data: moduleConfig,
       loading: isModuleConfigLoading,
-    } = useModuleConfig({ context });
+    } = useFetchModuleConfig({ context });
 
     const languageList = computed<Language[]>(
       () => moduleConfig.value?.languages ?? []
@@ -168,7 +166,7 @@ export default defineComponent({
       pageSize,
     } = useDataTable<Category>({
       fetchEntityList: (params) =>
-        getBlogCategoryList({
+        getCategories({
           query: params.searchQuery,
           pageNumber: params.pageNumber,
           pageSize: params.pageSize,
@@ -176,7 +174,7 @@ export default defineComponent({
         }),
       initialValue: [],
       context,
-      resourceName: 'Blog category list',
+      resourceName: 'Blog categories',
       pageSize: 100,
     });
 
@@ -200,7 +198,7 @@ export default defineComponent({
       isDeleting,
       handleResourceDelete: handleCategoryDelete,
     } = useResourceDelete({
-      deleteResource: deleteBlogCategory,
+      deleteResource: deleteCategory,
       resourceName: 'Post',
       onSuccess: fetchCategoryList,
       context,
@@ -208,10 +206,10 @@ export default defineComponent({
 
     const isCategoryMoving = ref<boolean>(false);
 
-    function moveCategory(categoryId: number, direction: 'up' | 'down') {
+    function startMoveCategory(categoryId: number, direction: 'up' | 'down') {
       isCategoryMoving.value = true;
 
-      moveBlogCategory(categoryId, direction)
+      moveCategory(categoryId, direction)
         .then((response) => {
           if (response.success) {
             return fetchCategoryList();
@@ -234,7 +232,11 @@ export default defineComponent({
     );
 
     const columnDefs = computed(() =>
-      getCategoryTableColumnDefs(moduleConfig.value, context.root.$t)
+      getCategoryTableColumnDefs(
+        moduleConfig.value,
+        context.root.$t,
+        canViewAdministrators.value
+      )
     );
 
     return {
@@ -247,7 +249,7 @@ export default defineComponent({
       isDeleting,
       getBlogCategoryFormUrl,
       getLinkToPostsByCategory,
-      moveCategory,
+      startMoveCategory,
       isCategoryMoving,
 
       searchQuery,

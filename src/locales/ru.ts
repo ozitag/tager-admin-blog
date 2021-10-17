@@ -19,7 +19,7 @@ const RU: typeof EN = {
   edit: 'Редактировать',
   remove: 'Удалить',
   postsByCategory: 'Посты по категориям',
-  name: 'Имя',
+  name: 'Название',
   image: 'Изображение',
   language: 'Язык',
   languages: 'Языки',
@@ -33,7 +33,7 @@ const RU: typeof EN = {
   actions: 'Действия',
   updatePost: 'Обновить пост',
   title: 'Заголовок',
-  URLAlias: 'URL',
+  link: 'Ссылка',
   excerpt: 'Краткое описание',
   defaultCategory: 'Категория по-умолчанию',
   body: 'Содержание',
@@ -74,6 +74,8 @@ const RU: typeof EN = {
     common: 'Общие',
     seo: 'SEO',
   },
+
+  parentCategory: 'Родительская категория',
 };
 
 export default RU;

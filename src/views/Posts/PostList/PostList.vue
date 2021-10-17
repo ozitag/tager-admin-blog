@@ -79,7 +79,6 @@
 
         <template v-slot:cell(actions)="{ row }">
           <base-button
-            v-if="canViewAdministrators"
             variant="icon"
             :title="$t('blog:edit')"
             :disabled="isBusy(row.id)"
@@ -98,7 +97,6 @@
           </base-button>
 
           <base-button
-            v-if="canViewAdministrators"
             variant="icon"
             :title="$t('blog:remove')"
             :disabled="isBusy(row.id)"
@@ -129,15 +127,11 @@ import {
 } from '@tager/admin-services';
 
 import { Category, Language, PostFull, PostShort } from '@/typings/model';
-import {
-  clonePost,
-  deleteBlogPost,
-  getBlogPostList,
-} from '@/services/requests';
+import { clonePost, deleteBlogPost, getPosts } from '@/services/requests';
 import { getBlogPostFormUrl } from '@/constants/paths';
 import {
-  useModuleConfig,
-  useBlogCategoryList,
+  useFetchModuleConfig,
+  useFetchCategories,
   useUserPermission,
 } from '@/hooks';
 import { Scope } from '@/constants/scopes';
@@ -146,7 +140,7 @@ import { convertPostList, getPostTableColumnDefs } from './PostList.helpers';
 import { useAdvancedSearch } from './hooks';
 
 export default defineComponent({
-  name: 'BlogPostList',
+  name: 'Posts',
   setup(props, context) {
     const { t } = useTranslation(context);
 
@@ -161,21 +155,23 @@ export default defineComponent({
         : context.root.$route.query.category;
     });
 
-    /** Fetch module config */
+    /** Fetch module config **/
+
     const {
       data: moduleConfig,
       loading: isModuleConfigLoading,
-    } = useModuleConfig({ context });
+    } = useFetchModuleConfig({ context });
 
     const languageList = computed<Language[]>(
       () => moduleConfig.value?.languages ?? []
     );
 
-    /** Fetch category list */
+    /** Fetch category list **/
+
     const {
       data: categoryList,
       loading: isCategoryListLoading,
-    } = useBlogCategoryList({ context });
+    } = useFetchCategories({ context });
 
     const selectedCategory = computed<Nullable<Category>>(() =>
       categoryId.value
@@ -215,7 +211,8 @@ export default defineComponent({
       () => languageOptionList.value.length > 1
     );
 
-    /** Fetch Post list */
+    /** Fetch Post list **/
+
     const {
       fetchEntityList: fetchPostList,
       isLoading: isPostLoading,
@@ -228,7 +225,7 @@ export default defineComponent({
       pageSize,
     } = useDataTable<PostShort>({
       fetchEntityList: (params) =>
-        getBlogPostList({
+        getPosts({
           query: params.searchQuery,
           pageNumber: params.pageNumber,
           pageSize: params.pageSize,
@@ -292,7 +289,11 @@ export default defineComponent({
     }
 
     const columnDefs = computed<ColumnDefinition<PostShort>[]>(() =>
-      getPostTableColumnDefs(moduleConfig.value, context.root.$t)
+      getPostTableColumnDefs(
+        moduleConfig.value,
+        context.root.$t,
+        canViewAdministrators.value
+      )
     );
 
     return {

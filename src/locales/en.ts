@@ -31,7 +31,7 @@ const EN = {
   actions: 'Actions',
   updatePost: 'Update post',
   title: 'Title',
-  URLAlias: 'URL alias',
+  link: 'Link',
   excerpt: 'Excerpt',
   body: 'Body',
   defaultCategory: 'Default Category',
@@ -72,6 +72,8 @@ const EN = {
     common: 'Common',
     seo: 'SEO',
   },
+
+  parentCategory: 'Parent category',
 };
 
 export default EN;

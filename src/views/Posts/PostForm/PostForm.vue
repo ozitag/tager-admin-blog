@@ -39,7 +39,7 @@
             id="urlAlias"
             v-model="values.urlAlias"
             name="urlAlias"
-            :label="$t('blog:URLAlias')"
+            :label="$t('blog:link')"
             :url-template="urlAliasTemplate"
             :error="errors.urlAlias"
             @change="handleAliasChange"
@@ -195,18 +195,14 @@ import {
 } from '@tager/admin-ui';
 import { DynamicField } from '@tager/admin-dynamic-field';
 
-import {
-  createBlogPost,
-  getBlogPost,
-  updateBlogPost,
-} from '@/services/requests';
+import { createBlogPost, getPost, updateBlogPost } from '@/services/requests';
 import { Language, PostFull } from '@/typings/model';
 import { getBlogPostFormUrl, getBlogPostListUrl } from '@/constants/paths';
 
 import {
-  useModuleConfig,
-  useBlogCategoryList,
-  useBlogPostList,
+  useFetchModuleConfig,
+  useFetchCategories,
+  useFetchPosts,
 } from '../../../hooks';
 
 import {
@@ -226,11 +222,12 @@ export default defineComponent({
 
     const urlAliasChanged = ref<boolean>(false);
 
-    /** Fetch module config */
+    /** Fetch module config **/
+
     const {
       data: moduleConfig,
       loading: isModuleConfigLoading,
-    } = useModuleConfig({ context });
+    } = useFetchModuleConfig({ context });
 
     const languageList = computed<Language[]>(
       () => moduleConfig.value?.languages ?? []
@@ -246,17 +243,18 @@ export default defineComponent({
     const isLangSpecific = computed(() => languageOptionList.value.length > 0);
 
     /** Fetch category list */
+
     const {
       data: categoryList,
       loading: isCategoryListLoading,
-    } = useBlogCategoryList({ context });
+    } = useFetchCategories({ context });
 
     /** Fetch Post */
 
     const [fetchPost, { data: post, loading: isPostLoading }] = useResource<
       Nullable<PostFull>
     >({
-      fetchResource: () => getBlogPost(postId.value),
+      fetchResource: () => getPost(postId.value),
       initialValue: null,
       context,
       resourceName: 'Post',
@@ -275,7 +273,7 @@ export default defineComponent({
     });
 
     /** Fetch post list */
-    const { data: postList, loading: isPostListLoading } = useBlogPostList({
+    const { data: postList, loading: isPostListLoading } = useFetchPosts({
       context,
     });
 
@@ -288,7 +286,8 @@ export default defineComponent({
         }))
     );
 
-    /** Form State */
+    /** Form State **/
+    const isSubmitting = ref<boolean>(false);
     const values = ref<FormValues>(
       convertPostToFormValues(
         post.value,
@@ -298,7 +297,6 @@ export default defineComponent({
       )
     );
     const errors = ref<Record<string, string>>({});
-    const isSubmitting = ref<boolean>(false);
 
     watch([post, languageOptionList, postOptionList, moduleConfig], () => {
       values.value = convertPostToFormValues(

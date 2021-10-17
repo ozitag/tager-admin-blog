@@ -24,18 +24,19 @@
             :error="errors.name"
           />
 
-          <form-field-checkbox
-            v-model="values.isDefault"
-            name="isDefault"
-            :label="$t('blog:defaultCategory')"
-            :error="errors.isDefault"
+          <form-field-select
+            v-model="values.parent"
+            name="parentCategory"
+            :label="$t('blog:parentCategory')"
+            :options="categoryOptionList"
+            :error="errors.parent"
           />
 
           <form-field-url-alias-input
             id="urlAlias"
             v-model="values.urlAlias"
             name="urlAlias"
-            :label="$t('blog:URLAlias')"
+            :label="$t('blog:link')"
             :url-template="pagePath"
             :error="errors.urlAlias"
           />
@@ -49,6 +50,15 @@
           />
 
           <template v-if="selectedTabId === 'common'">
+            <form-field-select
+              v-if="isLangSpecific"
+              v-model="values.language"
+              name="language"
+              :label="$t('blog:language')"
+              :options="languageOptionList"
+              :error="errors.language"
+            />
+
             <form-field
               v-model="values.name"
               name="name"
@@ -56,18 +66,19 @@
               :error="errors.name"
             />
 
-            <form-field-checkbox
-              v-model="values.isDefault"
-              name="isDefault"
-              :label="$t('blog:defaultCategory')"
-              :error="errors.isDefault"
+            <form-field-select
+              v-model="values.parent"
+              name="parentCategory"
+              :label="$t('blog:parentCategory')"
+              :options="categoryOptionList"
+              :error="errors.parent"
             />
 
             <form-field-url-alias-input
               id="urlAlias"
               v-model="values.urlAlias"
               name="urlAlias"
-              :label="$t('blog:URLAlias')"
+              :label="$t('blog:link')"
               :url-template="pagePath"
               :error="errors.urlAlias"
             />
@@ -105,20 +116,11 @@
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  ref,
-  watch,
-} from '@vue/composition-api';
+import { computed, defineComponent, ref, watch } from '@vue/composition-api';
 
 import {
   convertRequestErrorToMap,
   getWebsiteOrigin,
-  notEmpty,
-  Nullable,
-  useResource,
 } from '@tager/admin-services';
 import {
   OptionType,
@@ -129,27 +131,26 @@ import {
   useTranslation,
 } from '@tager/admin-ui';
 
-import {
-  createBlogCategory,
-  getBlogCategory,
-  updateBlogCategory,
-} from '@/services/requests';
-import { Category, FileScenarios, Language } from '@/typings/model';
+import { createCategory, updateCategory } from '@/services/requests';
+import { CategoryFormValues, Language } from '@/typings/model';
 import {
   getBlogCategoryFormUrl,
   getBlogCategoryListUrl,
 } from '@/constants/paths';
-import { useModuleConfig } from '@/hooks';
+import {
+  useFetchCategories,
+  useFetchCategory,
+  useFetchModuleConfig,
+} from '@/hooks';
+import { convertCategoryListToOptions } from '@/views/Posts/PostForm/PostForm.helpers';
 
 import {
-  CategoryFormValues,
-  convertCategoryFormValuesToCreationPayload,
-  convertCategoryFormValuesToUpdatePayload,
+  convertCategoryFormValuesToPayload,
   convertCategoryToFormValues,
 } from './CategoryForm.helpers';
 
 export default defineComponent({
-  name: 'BlogCategoryForm',
+  name: 'CategoryForm',
   components: { FormFooter },
   setup(props, context) {
     const { t } = useTranslation(context);
@@ -159,10 +160,11 @@ export default defineComponent({
     const isCreation = computed<boolean>(() => categoryId.value === 'create');
 
     /** Fetch module config */
+
     const {
       data: moduleConfig,
       loading: isModuleConfigLoading,
-    } = useModuleConfig({ context });
+    } = useFetchModuleConfig({ context });
 
     const languageList = computed<Language[]>(
       () => moduleConfig.value?.languages ?? []
@@ -180,40 +182,27 @@ export default defineComponent({
       () => moduleConfig.value?.fileScenarios?.openGraph ?? null
     );
 
+    /** Fetch Categories */
+
+    const {
+      data: categories,
+      loading: isCategoriesLoading,
+    } = useFetchCategories({ context });
+
     /** Fetch Category */
 
-    const [
-      fetchCategory,
-      { data: category, loading: isCategoryLoading },
-    ] = useResource<Nullable<Category>>({
-      fetchResource: () => getBlogCategory(categoryId.value),
-      initialValue: null,
+    const { data: category, loading: isCategoryLoading } = useFetchCategory({
       context,
-      resourceName: 'Category',
-    });
-
-    onMounted(() => {
-      if (isCreation.value) {
-        return;
-      }
-
-      fetchCategory();
-    });
-
-    watch(categoryId, () => {
-      if (isCreation.value) {
-        return;
-      }
-
-      fetchCategory();
+      categoryId,
+      isCreation,
     });
 
     /** Form State */
+    const isSubmitting = ref<boolean>(false);
     const values = ref<CategoryFormValues>(
       convertCategoryToFormValues(category.value, languageOptionList.value)
     );
     const errors = ref<Record<string, string>>({});
-    const isSubmitting = ref<boolean>(false);
 
     watch(category, () => {
       values.value = convertCategoryToFormValues(
@@ -225,19 +214,11 @@ export default defineComponent({
     function submitForm(event: TagerFormSubmitEvent) {
       isSubmitting.value = true;
 
-      const creationBody = convertCategoryFormValuesToCreationPayload(
-        values.value
-      );
-      const updateBody = convertCategoryFormValuesToUpdatePayload(values.value);
-      if (!isCreation.value) {
-        updateBody.language = category.value?.language
-          ? category.value?.language
-          : null;
-      }
+      const body = convertCategoryFormValuesToPayload(values.value);
 
       const requestPromise = isCreation.value
-        ? createBlogCategory(creationBody)
-        : updateBlogCategory(categoryId.value, updateBody);
+        ? createCategory(body)
+        : updateCategory(categoryId.value, body);
 
       requestPromise
         .then(({ data }) => {
@@ -284,17 +265,29 @@ export default defineComponent({
         });
     }
 
+    /** Category Options */
+
+    const categoryOptionList = computed<OptionType<number>[]>(() =>
+      convertCategoryListToOptions(
+        categories.value,
+        values.value.language?.value ?? null
+      )
+    );
+
     /** Misc */
 
     const isContentLoading = computed<boolean>(
-      () => isCategoryLoading.value || isModuleConfigLoading.value
+      () =>
+        isCategoryLoading.value ||
+        isModuleConfigLoading.value ||
+        isCategoriesLoading.value
     );
 
     const categoryPagePath = computed<string>(() => {
       return `${getWebsiteOrigin()}${category.value?.urlTemplate ?? ''}`;
     });
 
-    // SEO
+    /** SEO **/
 
     function handleSeoFieldGroupChange({
       title,
@@ -329,6 +322,7 @@ export default defineComponent({
       submitForm,
       isSubmitting,
       moduleConfig,
+      categoryOptionList,
 
       // SEO
       imageScenario,

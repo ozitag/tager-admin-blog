@@ -4,7 +4,11 @@ import {
   FieldShortType,
   IncomingValueUnion,
 } from '@tager/admin-dynamic-field';
-import { ShortCodeItemType } from '@tager/admin-ui';
+import {
+  OptionType,
+  ShortCodeItemType,
+  SingleFileInputValueType,
+} from '@tager/admin-ui';
 
 import { Values } from '@/typings/common';
 import { Scope } from '@/constants/scopes';
@@ -42,7 +46,7 @@ export interface Category extends SeoInfo {
   readonly urlTemplate: string;
   readonly urlAlias: string;
   readonly postsCount: string;
-  readonly parent: Nullable<Pick<Category, 'id' | 'name'>>;
+  readonly parent: Nullable<{ id: number; name: string }>;
   readonly depth: number;
 }
 
@@ -105,4 +109,30 @@ export interface ModuleConfig {
   readonly fields: FieldConfigUnion[];
   readonly shortcodes: ShortCodeItemType[];
   readonly fileScenarios: FileScenarios;
+}
+
+export interface CategoryFormValues {
+  language: Nullable<OptionType>;
+  name: string;
+  parent: Nullable<OptionType<number>>;
+  urlAlias: string;
+
+  pageTitle: Nullable<string>;
+  pageDescription: Nullable<string>;
+  pageKeywords: Nullable<string>;
+  openGraphTitle: Nullable<string>;
+  openGraphDescription: Nullable<string>;
+  openGraphImage: Nullable<SingleFileInputValueType>;
+}
+
+export interface CategoryPayload {
+  language: Nullable<string>;
+  name: string;
+  parent: Nullable<number>;
+  urlAlias: Nullable<string>;
+  isDefault: boolean;
+
+  pageTitle: Nullable<string>;
+  pageDescription: Nullable<string>;
+  openGraphImage: Nullable<string>;
 }

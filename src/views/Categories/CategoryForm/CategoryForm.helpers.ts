@@ -1,26 +1,7 @@
 import { createId, Nullable } from '@tager/admin-services';
-import { OptionType, SingleFileInputValueType } from '@tager/admin-ui';
+import { OptionType } from '@tager/admin-ui';
 
-import { Category } from '@/typings/model';
-import {
-  BlogCategoryCreationPayload,
-  BlogCategoryUpdatePayload,
-} from '@/services/requests';
-
-export type CategoryFormValues = {
-  name: string;
-  isDefault: boolean;
-
-  pageTitle: Nullable<string>;
-  pageDescription: Nullable<string>;
-  pageKeywords: Nullable<string>;
-  openGraphTitle: Nullable<string>;
-  openGraphDescription: Nullable<string>;
-  openGraphImage: Nullable<SingleFileInputValueType>;
-
-  urlAlias: string;
-  language: Nullable<OptionType>;
-};
+import { Category, CategoryFormValues, CategoryPayload } from '@/typings/model';
 
 export function convertCategoryToFormValues(
   category: Nullable<Category>,
@@ -32,23 +13,27 @@ export function convertCategoryToFormValues(
 
   if (!category) {
     return {
+      language: currentLangOption ?? null,
       name: '',
-      isDefault: false,
+      parent: null,
+      urlAlias: '',
 
       pageTitle: '',
       pageDescription: '',
+      pageKeywords: '',
       openGraphTitle: '',
       openGraphDescription: '',
-      pageKeywords: '',
       openGraphImage: null,
-
-      urlAlias: '',
-      language: currentLangOption ?? null,
     };
   }
+
   return {
+    language: currentLangOption ?? null,
     name: category.name,
-    isDefault: category.isDefault,
+    parent: category.parent
+      ? { value: category.parent.id, label: category.parent.name }
+      : null,
+    urlAlias: category.urlAlias,
 
     pageTitle: category.pageTitle ?? '',
     pageDescription: category.pageDescription ?? '',
@@ -58,30 +43,21 @@ export function convertCategoryToFormValues(
     openGraphImage: category.openGraphImage
       ? { id: createId(), file: category.openGraphImage }
       : null,
-
-    urlAlias: category.urlAlias,
-    language: currentLangOption ?? null,
   };
 }
 
-export function convertCategoryFormValuesToCreationPayload(
+export function convertCategoryFormValuesToPayload(
   values: CategoryFormValues
-): BlogCategoryCreationPayload {
+): CategoryPayload {
   return {
+    language: values.language?.value ?? null,
     name: values.name,
-    isDefault: values.isDefault,
+    parent: values.parent?.value ?? null,
+    urlAlias: values.urlAlias,
+    isDefault: false,
+
     pageTitle: values.pageTitle,
     pageDescription: values.pageDescription,
     openGraphImage: values.openGraphImage?.file.id ?? null,
-    language: values.language?.value ?? null,
-  };
-}
-
-export function convertCategoryFormValuesToUpdatePayload(
-  values: CategoryFormValues
-): BlogCategoryUpdatePayload {
-  return {
-    ...convertCategoryFormValuesToCreationPayload(values),
-    urlAlias: values.urlAlias,
   };
 }

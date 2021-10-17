@@ -3,15 +3,17 @@ import { onMounted, SetupContext } from '@vue/composition-api';
 import { Nullable, ResourceRef, useResource } from '@tager/admin-services';
 
 import { ModuleConfig } from '@/typings/model';
-import { getBlogModuleConfig } from '@/services/requests';
+import { getModuleConfig } from '@/services/requests';
 
-export function useModuleConfig(params: {
+export function useFetchModuleConfig({
+  context,
+}: {
   context: SetupContext;
 }): ResourceRef<Nullable<ModuleConfig>> {
   const [fetchModuleConfig, resource] = useResource<Nullable<ModuleConfig>>({
-    fetchResource: getBlogModuleConfig,
+    fetchResource: getModuleConfig,
     initialValue: null,
-    context: params.context,
+    context: context,
     resourceName: 'Module configuration',
   });
 

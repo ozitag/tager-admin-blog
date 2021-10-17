@@ -29,7 +29,8 @@ export function convertCategoryList(
 
 export function getCategoryTableColumnDefs(
   moduleConfig: Nullable<ModuleConfig>,
-  t: TFunction
+  t: TFunction,
+  canViewAdministrators: boolean
 ): ColumnDefinition<Category>[] {
   const isLangSpecific = moduleConfig
     ? moduleConfig.languages.length > 0
@@ -53,7 +54,7 @@ export function getCategoryTableColumnDefs(
     },
     {
       id: 2,
-      name: t('pages:path'),
+      name: t('blog:link'),
       field: 'path',
       type: 'link',
       format: ({ row }) => ({
@@ -73,14 +74,16 @@ export function getCategoryTableColumnDefs(
       field: 'linkToPosts',
       style: { whiteSpace: 'nowrap', width: '130px' },
     },
-    {
-      id: 5,
-      name: t('blog:actions'),
-      field: 'actions',
-      style: { whiteSpace: 'nowrap', width: '205px' },
-      headStyle: { whiteSpace: 'nowrap', width: '205px' },
-      class: 'actions-cell',
-    },
+    canViewAdministrators
+      ? {
+          id: 5,
+          name: t('blog:actions'),
+          field: 'actions',
+          style: { whiteSpace: 'nowrap', width: '170px' },
+          headStyle: { whiteSpace: 'nowrap', width: '170px' },
+          class: 'actions-cell',
+        }
+      : null,
   ];
 
   return COLUMN_DEFS.filter(notEmpty);

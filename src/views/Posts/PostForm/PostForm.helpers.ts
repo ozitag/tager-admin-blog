@@ -8,6 +8,7 @@ import {
 
 import { Category, PostFull } from '@/typings/model';
 import { PostCreationPayload, PostUpdatePayload } from '@/services/requests';
+import { getNameWithDepth } from '@/utils/common';
 
 export interface FormValues {
   title: string;
@@ -146,5 +147,8 @@ export function convertCategoryListToOptions(
 ): OptionType<number>[] {
   return categoryList
     .filter(({ language }) => (languageId ? language === languageId : true))
-    .map(({ id, name }) => ({ value: id, label: name }));
+    .map(({ id, name, depth }) => ({
+      value: id,
+      label: getNameWithDepth(name, depth),
+    }));
 }

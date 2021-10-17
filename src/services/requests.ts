@@ -7,6 +7,7 @@ import {
   PostShort,
   PostFull,
   UserModel,
+  CategoryPayload,
 } from '@/typings/model';
 
 export function getUserProfile(): Promise<ResponseBody<UserModel>> {
@@ -15,7 +16,7 @@ export function getUserProfile(): Promise<ResponseBody<UserModel>> {
 
 /** Blog Posts */
 
-export function getBlogPostList(params?: {
+export function getPosts(params?: {
   query?: string;
   pageNumber?: number;
   pageSize?: number;
@@ -23,11 +24,11 @@ export function getBlogPostList(params?: {
   return request.get({ path: '/admin/blog/posts', params });
 }
 
-export function getBlogPostCount(): Promise<ResponseBody<{ count: number }>> {
+export function getPostsCount(): Promise<ResponseBody<{ count: number }>> {
   return request.get({ path: '/admin/blog/posts/count' });
 }
 
-export function getBlogPost(
+export function getPost(
   postId: number | string
 ): Promise<ResponseBody<PostFull>> {
   return request.get({ path: `/admin/blog/posts/${postId}` });
@@ -84,7 +85,7 @@ export function deleteBlogPost(
 
 /** Blog Categories */
 
-export function getBlogCategoryList(params?: {
+export function getCategories(params?: {
   query?: string;
   pageNumber?: number;
   pageSize?: number;
@@ -92,34 +93,21 @@ export function getBlogCategoryList(params?: {
   return request.get({ path: '/admin/blog/categories', params });
 }
 
-export function getBlogCategory(
+export function getCategory(
   categoryId: number | string
 ): Promise<ResponseBody<Category>> {
   return request.get({ path: `/admin/blog/categories/${categoryId}` });
 }
 
-export interface BlogCategoryCreationPayload {
-  name: string;
-  isDefault: boolean;
-  pageTitle: Nullable<string>;
-  language: Nullable<string>;
-  pageDescription: Nullable<string>;
-  openGraphImage: Nullable<string>;
-}
-
-export function createBlogCategory(
-  payload: BlogCategoryCreationPayload
+export function createCategory(
+  payload: CategoryPayload
 ): Promise<ResponseBody<Category>> {
   return request.post({ path: '/admin/blog/categories', body: payload });
 }
 
-export type BlogCategoryUpdatePayload = BlogCategoryCreationPayload & {
-  urlAlias: string;
-};
-
-export function updateBlogCategory(
+export function updateCategory(
   categoryId: number | string,
-  payload: BlogCategoryUpdatePayload
+  payload: CategoryPayload
 ): Promise<ResponseBody<Category>> {
   return request.put({
     path: `/admin/blog/categories/${categoryId}`,
@@ -127,7 +115,7 @@ export function updateBlogCategory(
   });
 }
 
-export function deleteBlogCategory(
+export function deleteCategory(
   categoryId: number | string
 ): Promise<{ success: boolean }> {
   return request.delete({
@@ -135,7 +123,7 @@ export function deleteBlogCategory(
   });
 }
 
-export function moveBlogCategory(
+export function moveCategory(
   categoryId: number | string,
   direction: 'up' | 'down'
 ): Promise<{ success: boolean }> {
@@ -144,7 +132,7 @@ export function moveBlogCategory(
   });
 }
 
-export function getBlogModuleConfig(): Promise<ResponseBody<ModuleConfig>> {
+export function getModuleConfig(): Promise<ResponseBody<ModuleConfig>> {
   return request.get({
     path: `/admin/blog/module-info`,
   });
