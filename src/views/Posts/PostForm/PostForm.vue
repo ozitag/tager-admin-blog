@@ -116,6 +116,7 @@
             :label="$t('blog:categories')"
             :options="categoryOptionList"
             :error="errors.categories"
+            @change="handleCategoriesChange"
           />
 
           <form-field-multi-select
@@ -519,6 +520,39 @@ export default defineComponent({
       return result;
     });
 
+    const handleCategoriesChange = (selectedOptions: OptionType<number>[]) => {
+      const newSelectedOptions = [];
+
+      selectedOptions.forEach((selectedOption) => {
+        const findTreeSelectedCategory = (categoryId: number) => {
+          const foundSelectedCategory = categoryList.value.find(
+            ({ id }) => id === categoryId
+          );
+
+          const newSelectedOption = {
+            value: foundSelectedCategory.id,
+            label: foundSelectedCategory.name,
+          };
+
+          if (
+            !newSelectedOptions.some(
+              ({ value }) => value === newSelectedOption.value
+            )
+          ) {
+            newSelectedOptions.push(newSelectedOption);
+          }
+
+          if (foundSelectedCategory.parent) {
+            findTreeSelectedCategory(foundSelectedCategory.parent.id);
+          }
+        };
+
+        findTreeSelectedCategory(selectedOption.value);
+      });
+
+      values.value.categories = newSelectedOptions;
+    };
+
     return {
       isCreation,
       postId,
@@ -542,6 +576,7 @@ export default defineComponent({
       handleTitleChange,
       handleAliasChange,
       urlAliasTemplate,
+      handleCategoriesChange,
     };
   },
 });
