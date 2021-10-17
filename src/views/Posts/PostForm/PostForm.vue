@@ -111,7 +111,7 @@
           />
 
           <form-field-multi-select
-            v-model="values.categories"
+            :selected-options="values.categories"
             name="categories"
             :label="$t('blog:categories')"
             :options="categoryOptionList"
