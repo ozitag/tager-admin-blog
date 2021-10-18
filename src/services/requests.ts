@@ -8,7 +8,7 @@ import {
   PostFull,
   UserModel,
   CategoryPayload,
-} from '@/typings/model';
+} from '../typings/model';
 
 export function getUserProfile(): Promise<ResponseBody<UserModel>> {
   return request.get({ path: '/admin/self' });
@@ -24,7 +24,7 @@ export function getPosts(params?: {
   return request.get({ path: '/admin/blog/posts', params });
 }
 
-export function getPostsCount(): Promise<ResponseBody<{ count: number }>> {
+export function getCountPosts(): Promise<ResponseBody<{ count: number }>> {
   return request.get({ path: '/admin/blog/posts/count' });
 }
 
