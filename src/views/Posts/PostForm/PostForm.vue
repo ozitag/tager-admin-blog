@@ -530,7 +530,7 @@ export default defineComponent({
       const newSelectedOptions: OptionType<number>[] = [];
 
       selectedOptions.forEach((selectedOption) => {
-        const findTreeSelectedCategory = (categoryId: number) => {
+        const findTreeSelectedCategory = (categoryId: Nullable<number>) => {
           const foundSelectedCategory = categoryList.value.find(
             ({ id }) => id === categoryId
           );

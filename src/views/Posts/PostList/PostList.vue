@@ -275,7 +275,7 @@ export default defineComponent({
       confirmMessage: t('blog:cloneConfirm'),
       successMessage: t('blog:cloneSuccess'),
       failureMessage: t('blog:cloneFailure'),
-      onSuccessRedirectTo: (data: PostFull) => `/posts/${data.id}`,
+      onSuccessRedirectTo: (data: PostFull) => `/blog/posts/${data.id}`,
       context,
     });
 

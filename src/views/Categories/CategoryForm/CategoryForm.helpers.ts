@@ -1,3 +1,5 @@
+import { TFunction } from 'i18next';
+
 import { createId, Nullable } from '@tager/admin-services';
 import { OptionType } from '@tager/admin-ui';
 
@@ -6,10 +8,12 @@ import {
   CategoryFormValues,
   CategoryPayload,
 } from '../../../typings/model';
+import { getNameWithDepth } from '../../../utils/common';
 
 export function convertCategoryToFormValues(
   category: Nullable<Category>,
-  languageOptionList: OptionType[]
+  languageOptionList: OptionType[],
+  t: TFunction
 ): CategoryFormValues {
   const currentLangOption = languageOptionList.find(
     ({ value }) => value === category?.language
@@ -19,7 +23,7 @@ export function convertCategoryToFormValues(
     return {
       language: currentLangOption ?? null,
       name: '',
-      parent: null,
+      parent: { value: null, label: t('blog:noParent') },
       urlAlias: '',
 
       pageTitle: '',
@@ -36,7 +40,7 @@ export function convertCategoryToFormValues(
     name: category.name,
     parent: category.parent
       ? { value: category.parent.id, label: category.parent.name }
-      : null,
+      : { value: null, label: t('blog:noParent') },
     urlAlias: category.urlAlias,
 
     pageTitle: category.pageTitle ?? '',
@@ -56,7 +60,7 @@ export function convertCategoryFormValuesToPayload(
   return {
     language: values.language?.value ?? null,
     name: values.name,
-    parent: values.parent?.value ?? null,
+    parent: values.parent.value,
     urlAlias: values.urlAlias,
     isDefault: false,
 
@@ -64,4 +68,20 @@ export function convertCategoryFormValuesToPayload(
     pageDescription: values.pageDescription,
     openGraphImage: values.openGraphImage?.file.id ?? null,
   };
+}
+
+export function convertCategoryListToOptions(
+  categoryList: Category[],
+  languageId: Nullable<string>,
+  t: TFunction
+): OptionType<Nullable<number>>[] {
+  return [
+    { value: null, label: t('blog:noParent') },
+    ...categoryList
+      .filter(({ language }) => (languageId ? language === languageId : true))
+      .map(({ id, name, depth }) => ({
+        value: id,
+        label: getNameWithDepth(name, depth),
+      })),
+  ];
 }

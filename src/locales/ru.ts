@@ -76,6 +76,7 @@ const RU: typeof EN = {
   },
 
   parentCategory: 'Родительская категория',
+  noParent: 'Нет родительской',
 };
 
 export default RU;

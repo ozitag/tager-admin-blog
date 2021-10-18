@@ -74,6 +74,7 @@ const EN = {
   },
 
   parentCategory: 'Parent category',
+  noParent: 'No parent',
 };
 
 export default EN;

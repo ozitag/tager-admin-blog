@@ -22,13 +22,15 @@
             name="name"
             :label="$t('blog:name')"
             :error="errors.name"
+            @input="handleNameChange"
           />
 
           <form-field-select
+            v-if="values.language"
             v-model="values.parent"
             name="parentCategory"
             :label="$t('blog:parentCategory')"
-            :options="categoryOptionList"
+            :options="parentCategoryOptionList"
             :error="errors.parent"
           />
 
@@ -39,6 +41,7 @@
             :label="$t('blog:link')"
             :url-template="pagePath"
             :error="errors.urlAlias"
+            @change="handleAliasChange"
           />
         </template>
 
@@ -67,10 +70,11 @@
             />
 
             <form-field-select
+              v-if="values.language"
               v-model="values.parent"
               name="parentCategory"
               :label="$t('blog:parentCategory')"
-              :options="categoryOptionList"
+              :options="parentCategoryOptionList"
               :error="errors.parent"
             />
 
@@ -121,6 +125,8 @@ import { computed, defineComponent, ref, watch } from '@vue/composition-api';
 import {
   convertRequestErrorToMap,
   getWebsiteOrigin,
+  Nullable,
+  urlTranslit,
 } from '@tager/admin-services';
 import {
   OptionType,
@@ -131,7 +137,6 @@ import {
   useTranslation,
 } from '@tager/admin-ui';
 
-import { convertCategoryListToOptions } from '../../Posts/PostForm/PostForm.helpers';
 import {
   useFetchCategories,
   useFetchCategory,
@@ -146,6 +151,7 @@ import { createCategory, updateCategory } from '../../../services/requests';
 
 import {
   convertCategoryFormValuesToPayload,
+  convertCategoryListToOptions,
   convertCategoryToFormValues,
 } from './CategoryForm.helpers';
 
@@ -200,14 +206,15 @@ export default defineComponent({
     /** Form State */
     const isSubmitting = ref<boolean>(false);
     const values = ref<CategoryFormValues>(
-      convertCategoryToFormValues(category.value, languageOptionList.value)
+      convertCategoryToFormValues(category.value, languageOptionList.value, t)
     );
     const errors = ref<Record<string, string>>({});
 
     watch(category, () => {
       values.value = convertCategoryToFormValues(
         category.value,
-        languageOptionList.value
+        languageOptionList.value,
+        t
       );
     });
 
@@ -237,7 +244,8 @@ export default defineComponent({
           if (event.type === 'create_create-another') {
             values.value = convertCategoryToFormValues(
               null,
-              languageOptionList.value
+              languageOptionList.value,
+              t
             );
           }
 
@@ -267,11 +275,13 @@ export default defineComponent({
 
     /** Category Options */
 
-    const categoryOptionList = computed<OptionType<number>[]>(() =>
-      convertCategoryListToOptions(
-        categories.value,
-        values.value.language?.value ?? null
-      )
+    const parentCategoryOptionList = computed<OptionType<Nullable<number>>[]>(
+      () =>
+        convertCategoryListToOptions(
+          categories.value,
+          values.value.language?.value ?? null,
+          t
+        )
     );
 
     /** Misc */
@@ -310,6 +320,20 @@ export default defineComponent({
 
     const selectedTabId = ref<string>(tabList.value[0].id);
 
+    /** Url Alias **/
+
+    const urlAliasChanged = ref<boolean>(false);
+
+    const handleNameChange = (value: string) => {
+      if (isCreation.value && !urlAliasChanged.value) {
+        values.value.urlAlias = urlTranslit(value);
+      }
+    };
+
+    const handleAliasChange = () => {
+      urlAliasChanged.value = true;
+    };
+
     return {
       isCreation,
       isContentLoading: isContentLoading,
@@ -322,7 +346,9 @@ export default defineComponent({
       submitForm,
       isSubmitting,
       moduleConfig,
-      categoryOptionList,
+      parentCategoryOptionList,
+      handleNameChange,
+      handleAliasChange,
 
       // SEO
       imageScenario,

@@ -28,7 +28,7 @@ export interface Category extends SeoInfo {
   readonly urlTemplate: string;
   readonly urlAlias: string;
   readonly postsCount: string;
-  readonly parent: Nullable<{ id: number; name: string }>;
+  readonly parent: Nullable<{ id: Nullable<number>; name: string }>;
   readonly depth: number;
 }
 
@@ -96,7 +96,7 @@ export interface ModuleConfig {
 export interface CategoryFormValues {
   language: Nullable<OptionType>;
   name: string;
-  parent: Nullable<OptionType<number>>;
+  parent: OptionType<Nullable<number>>;
   urlAlias: string;
 
   pageTitle: Nullable<string>;
