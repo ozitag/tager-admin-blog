@@ -521,7 +521,7 @@ export default defineComponent({
     });
 
     const handleCategoriesChange = (selectedOptions: OptionType<number>[]) => {
-      const newSelectedOptions = [];
+      const newSelectedOptions: OptionType<number>[] = [];
 
       selectedOptions.forEach((selectedOption) => {
         const findTreeSelectedCategory = (categoryId: number) => {
@@ -529,7 +529,11 @@ export default defineComponent({
             ({ id }) => id === categoryId
           );
 
-          const newSelectedOption = {
+          if (!foundSelectedCategory) {
+            return;
+          }
+
+          const newSelectedOption: OptionType<number> = {
             value: foundSelectedCategory.id,
             label: foundSelectedCategory.name,
           };
