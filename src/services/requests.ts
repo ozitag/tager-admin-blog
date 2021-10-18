@@ -6,13 +6,8 @@ import {
   ModuleConfig,
   PostShort,
   PostFull,
-  UserModel,
   CategoryPayload,
 } from '../typings/model';
-
-export function getUserProfile(): Promise<ResponseBody<UserModel>> {
-  return request.get({ path: '/admin/self' });
-}
 
 /** Blog Posts */
 

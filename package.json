@@ -1,6 +1,6 @@
 {
   "name": "@tager/admin-blog",
-  "version": "0.3.32",
+  "version": "0.3.33",
   "license": "MIT",
   "main": "dist/index.umd.js",
   "module": "dist/index.esm.js",
@@ -21,8 +21,7 @@
   "dependencies": {
     "lodash.isequal": "^4.5.0",
     "lodash.pick": "^4.4.0",
-    "path-to-regexp": "^6.1.0",
-    "vuex": "^3.6.2"
+    "path-to-regexp": "^6.1.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^15.0.0",
@@ -40,7 +39,6 @@
     "@vue/cli-plugin-eslint": "~4.5.6",
     "@vue/cli-plugin-router": "~4.5.6",
     "@vue/cli-plugin-typescript": "~4.5.6",
-    "@vue/cli-plugin-vuex": "^4.5.14",
     "@vue/cli-service": "~4.5.6",
     "@vue/composition-api": "^1.0.0-beta.14",
     "@vue/eslint-config-prettier": "^6.0.0",

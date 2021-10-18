@@ -1,16 +1,12 @@
 <template>
   <page
     :title="pageTitle"
-    :header-buttons="
-      [
-        canViewAdministrators
-          ? {
-              text: $t('blog:newPost'),
-              href: getBlogPostFormUrl({ postId: 'create' }),
-            }
-          : null,
-      ].filter(Boolean)
-    "
+    :header-buttons="[
+      {
+        text: $t('blog:newPost'),
+        href: getBlogPostFormUrl({ postId: 'create' }),
+      },
+    ]"
   >
     <template v-slot:content>
       <data-table
@@ -126,12 +122,7 @@ import {
   useResourceDelete,
 } from '@tager/admin-services';
 
-import { Scope } from '../../../constants/scopes';
-import {
-  useFetchModuleConfig,
-  useFetchCategories,
-  useUserPermission,
-} from '../../../hooks';
+import { useFetchModuleConfig, useFetchCategories } from '../../../hooks';
 import {
   clonePost,
   deleteBlogPost,
@@ -152,11 +143,6 @@ export default defineComponent({
   name: 'Posts',
   setup(props, context) {
     const { t } = useTranslation(context);
-
-    const canViewAdministrators = useUserPermission(
-      context,
-      Scope.AdministratorsView
-    );
 
     const categoryId = computed<string>(() => {
       return Array.isArray(context.root.$route.query.category)
@@ -298,11 +284,7 @@ export default defineComponent({
     }
 
     const columnDefs = computed<ColumnDefinition<PostShort>[]>(() =>
-      getPostTableColumnDefs(
-        moduleConfig.value,
-        context.root.$t,
-        canViewAdministrators.value
-      )
+      getPostTableColumnDefs(moduleConfig.value, context.root.$t)
     );
 
     return {
@@ -331,9 +313,6 @@ export default defineComponent({
       toDateFilter,
       tags,
       tagRemovalHandler,
-
-      // Permissions
-      canViewAdministrators,
 
       // Clone
       handleResourceClone,

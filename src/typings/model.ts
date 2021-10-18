@@ -10,25 +10,6 @@ import {
   SingleFileInputValueType,
 } from '@tager/admin-ui';
 
-import { Scope } from '../constants/scopes';
-
-import { Values } from './common';
-
-export type ScopeType = Values<typeof Scope>;
-
-export interface RoleModel {
-  readonly id: number;
-  readonly name: string;
-  readonly scopes: Array<ScopeType>;
-}
-
-export interface UserModel {
-  readonly id: number;
-  readonly name: string;
-  readonly email: string;
-  readonly roles: Array<RoleModel>;
-}
-
 export interface SeoInfo {
   readonly pageTitle: Nullable<string>;
   readonly pageDescription: Nullable<string>;

@@ -1,16 +1,12 @@
 <template>
   <page
     :title="$t('blog:blogCategories')"
-    :header-buttons="
-      [
-        canViewAdministrators
-          ? {
-              text: $t('blog:newCategory'),
-              href: getBlogCategoryFormUrl({ categoryId: 'create' }),
-            }
-          : null,
-      ].filter(Boolean)
-    "
+    :header-buttons="[
+      {
+        text: $t('blog:newCategory'),
+        href: getBlogCategoryFormUrl({ categoryId: 'create' }),
+      },
+    ]"
   >
     <template v-slot:content>
       <data-table
@@ -102,7 +98,7 @@ import isEqual from 'lodash.isequal';
 import { useResourceDelete } from '@tager/admin-services';
 import { useDataTable } from '@tager/admin-ui';
 
-import { useFetchModuleConfig, useUserPermission } from '../../../hooks';
+import { useFetchModuleConfig } from '../../../hooks';
 import { getBlogCategoryFormUrl } from '../../../constants/paths';
 import {
   deleteCategory,
@@ -110,7 +106,6 @@ import {
   moveCategory,
 } from '../../../services/requests';
 import { Category, Language } from '../../../typings/model';
-import { Scope } from '../../../constants/scopes';
 
 import {
   convertCategoryList,
@@ -122,11 +117,6 @@ import { useAdvancedSearch } from './hooks';
 export default defineComponent({
   name: 'BlogCategoryList',
   setup(props, context) {
-    const canViewAdministrators = useUserPermission(
-      context,
-      Scope.AdministratorsView
-    );
-
     /** Fetch module config **/
 
     const {
@@ -232,11 +222,7 @@ export default defineComponent({
     );
 
     const columnDefs = computed(() =>
-      getCategoryTableColumnDefs(
-        moduleConfig.value,
-        context.root.$t,
-        canViewAdministrators.value
-      )
+      getCategoryTableColumnDefs(moduleConfig.value, context.root.$t)
     );
 
     return {
@@ -262,9 +248,6 @@ export default defineComponent({
       languageOptionList,
       tags,
       tagRemovalHandler,
-
-      // Permissions
-      canViewAdministrators,
     };
   },
 });

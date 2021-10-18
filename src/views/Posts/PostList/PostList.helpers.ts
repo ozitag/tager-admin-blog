@@ -38,8 +38,7 @@ export function convertPostList(
 
 export function getPostTableColumnDefs(
   moduleConfig: Nullable<ModuleConfig>,
-  t: TFunction,
-  canViewAdministrators: boolean
+  t: TFunction
 ): ColumnDefinition<PostShort>[] {
   const isLangSpecific = moduleConfig
     ? moduleConfig.languages.length > 0
@@ -91,15 +90,13 @@ export function getPostTableColumnDefs(
       format: ({ row }) =>
         row.categories.map((category) => category.name).join(', '),
     },
-    canViewAdministrators
-      ? {
-          id: 7,
-          name: t('blog:actions'),
-          field: 'actions',
-          style: { whiteSpace: 'nowrap', width: '120px' },
-          headStyle: { whiteSpace: 'nowrap', width: '120px' },
-        }
-      : null,
+    {
+      id: 7,
+      name: t('blog:actions'),
+      field: 'actions',
+      style: { whiteSpace: 'nowrap', width: '120px' },
+      headStyle: { whiteSpace: 'nowrap', width: '120px' },
+    },
   ];
 
   return COLUMN_DEFS.filter(notEmpty);

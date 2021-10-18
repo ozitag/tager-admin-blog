@@ -32,8 +32,7 @@ export function convertCategoryList(
 
 export function getCategoryTableColumnDefs(
   moduleConfig: Nullable<ModuleConfig>,
-  t: TFunction,
-  canViewAdministrators: boolean
+  t: TFunction
 ): ColumnDefinition<Category>[] {
   const isLangSpecific = moduleConfig
     ? moduleConfig.languages.length > 0
@@ -77,16 +76,14 @@ export function getCategoryTableColumnDefs(
       field: 'linkToPosts',
       style: { whiteSpace: 'nowrap', width: '130px' },
     },
-    canViewAdministrators
-      ? {
-          id: 5,
-          name: t('blog:actions'),
-          field: 'actions',
-          style: { whiteSpace: 'nowrap', width: '170px' },
-          headStyle: { whiteSpace: 'nowrap', width: '170px' },
-          class: 'actions-cell',
-        }
-      : null,
+    {
+      id: 5,
+      name: t('blog:actions'),
+      field: 'actions',
+      style: { whiteSpace: 'nowrap', width: '170px' },
+      headStyle: { whiteSpace: 'nowrap', width: '170px' },
+      class: 'actions-cell',
+    },
   ];
 
   return COLUMN_DEFS.filter(notEmpty);
