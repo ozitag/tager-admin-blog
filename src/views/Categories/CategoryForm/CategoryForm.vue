@@ -26,7 +26,7 @@
           />
 
           <form-field-select
-            v-if="values.language"
+            v-if="!isLangSpecific || values.language"
             v-model="values.parent"
             name="parentCategory"
             :label="$t('blog:parentCategory')"
@@ -70,7 +70,7 @@
             />
 
             <form-field-select
-              v-if="values.language"
+              v-if="!isLangSpecific || values.language"
               v-model="values.parent"
               name="parentCategory"
               :label="$t('blog:parentCategory')"
