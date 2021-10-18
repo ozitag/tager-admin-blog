@@ -10,8 +10,9 @@ import {
   SingleFileInputValueType,
 } from '@tager/admin-ui';
 
-import { Values } from '@/typings/common';
-import { Scope } from '@/constants/scopes';
+import { Scope } from '../constants/scopes';
+
+import { Values } from './common';
 
 export type ScopeType = Values<typeof Scope>;
 

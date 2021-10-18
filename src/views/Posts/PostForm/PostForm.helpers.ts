@@ -6,9 +6,12 @@ import {
   universalFieldUtils,
 } from '@tager/admin-dynamic-field';
 
-import { Category, PostFull } from '@/typings/model';
-import { PostCreationPayload, PostUpdatePayload } from '@/services/requests';
-import { getNameWithDepth } from '@/utils/common';
+import {
+  PostCreationPayload,
+  PostUpdatePayload,
+} from '../../../services/requests';
+import { getNameWithDepth } from '../../../utils/common';
+import { Category, PostFull } from '../../../typings/model';
 
 export interface FormValues {
   title: string;

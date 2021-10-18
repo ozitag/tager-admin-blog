@@ -8,12 +8,12 @@ import { AdminLayoutPlugin } from '@tager/admin-layout';
 
 import '@tager/admin-ui/dist/admin-ui.css';
 
-import config from '@/config/config.json';
-import App from '@/views/App.vue';
-import EN from '@/locales/en';
-import RU from '@/locales/ru';
-import router from '@/router';
-import store from '@/store';
+import router from './router';
+import store from './store';
+import config from './config/config.json';
+import App from './views/App.vue';
+import EN from './locales/en';
+import RU from './locales/ru';
 
 configStore.setConfig(config);
 

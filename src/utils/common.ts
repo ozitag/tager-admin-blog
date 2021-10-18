@@ -1,4 +1,4 @@
-import { USER_MODULE_NAMESPACE } from '@/store/user';
+import { USER_MODULE_NAMESPACE } from '../store/user';
 
 export function namespace(namespace: string, name: string): string {
   return `${namespace}/${name}`;

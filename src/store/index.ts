@@ -4,7 +4,7 @@ import Vuex from 'vuex';
 import userModule, {
   USER_MODULE_NAMESPACE,
   UserModuleStateModel,
-} from '@/store/user';
+} from '../store/user';
 
 Vue.use(Vuex);
 

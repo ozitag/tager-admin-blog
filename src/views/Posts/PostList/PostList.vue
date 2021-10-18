@@ -126,15 +126,24 @@ import {
   useResourceDelete,
 } from '@tager/admin-services';
 
-import { Category, Language, PostFull, PostShort } from '@/typings/model';
-import { clonePost, deleteBlogPost, getPosts } from '@/services/requests';
-import { getBlogPostFormUrl } from '@/constants/paths';
+import { Scope } from '../../../constants/scopes';
 import {
   useFetchModuleConfig,
   useFetchCategories,
   useUserPermission,
-} from '@/hooks';
-import { Scope } from '@/constants/scopes';
+} from '../../../hooks';
+import {
+  clonePost,
+  deleteBlogPost,
+  getPosts,
+} from '../../../services/requests';
+import { getBlogPostFormUrl } from '../../../constants/paths';
+import {
+  Category,
+  Language,
+  PostFull,
+  PostShort,
+} from '../../../typings/model';
 
 import { convertPostList, getPostTableColumnDefs } from './PostList.helpers';
 import { useAdvancedSearch } from './hooks';

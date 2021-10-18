@@ -2,8 +2,8 @@ import { onMounted, Ref, SetupContext, watch } from '@vue/composition-api';
 
 import { Nullable, ResourceRef, useResource } from '@tager/admin-services';
 
-import { Category } from '@/typings/model';
-import { getCategory } from '@/services/requests';
+import { Category } from '../typings/model';
+import { getCategory } from '../services/requests';
 
 export function useFetchCategory({
   context,

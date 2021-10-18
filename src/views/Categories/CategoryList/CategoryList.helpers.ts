@@ -3,9 +3,12 @@ import { TFunction } from 'i18next';
 import { getWebsiteOrigin, notEmpty, Nullable } from '@tager/admin-services';
 import { ColumnDefinition } from '@tager/admin-ui';
 
-import { Category, Language, ModuleConfig } from '@/typings/model';
-import { getBlogCategoryFormUrl, getBlogPostListUrl } from '@/constants/paths';
-import { getNameWithDepth } from '@/utils/common';
+import { Category, Language, ModuleConfig } from '../../../typings/model';
+import {
+  getBlogCategoryFormUrl,
+  getBlogPostListUrl,
+} from '../../../constants/paths';
+import { getNameWithDepth } from '../../../utils/common';
 
 export function convertCategoryList(
   categoryList: Category[],

@@ -7,10 +7,10 @@
 <script lang="ts">
 import { defineComponent, onMounted, SetupContext } from '@vue/composition-api';
 
-import { getBlogMenuItem } from '@/constants/menu';
-import { useStore } from '@/hooks';
-import { USER_ACTION_TYPES } from '@/store/user';
-import { userNamespace } from '@/utils/common';
+import { userNamespace } from '../utils/common';
+import { useStore } from '../hooks';
+import { USER_ACTION_TYPES } from '../store/user';
+import { getBlogMenuItem } from '../constants/menu';
 
 export default defineComponent({
   name: 'App',

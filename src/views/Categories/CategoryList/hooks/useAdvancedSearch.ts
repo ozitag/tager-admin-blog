@@ -14,7 +14,7 @@ import {
   OptionType,
 } from '@tager/admin-ui';
 
-import { Language } from '@/typings/model';
+import { Language } from '../../../../typings/model';
 
 interface Params {
   context: SetupContext;

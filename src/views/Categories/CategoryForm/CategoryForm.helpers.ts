@@ -1,7 +1,11 @@
 import { createId, Nullable } from '@tager/admin-services';
 import { OptionType } from '@tager/admin-ui';
 
-import { Category, CategoryFormValues, CategoryPayload } from '@/typings/model';
+import {
+  Category,
+  CategoryFormValues,
+  CategoryPayload,
+} from '../../../typings/model';
 
 export function convertCategoryToFormValues(
   category: Nullable<Category>,

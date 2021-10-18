@@ -2,8 +2,8 @@ import { onMounted, SetupContext } from '@vue/composition-api';
 
 import { ResourceRef, useResource } from '@tager/admin-services';
 
-import { PostShort } from '@/typings/model';
-import { getPosts } from '@/services/requests';
+import { PostShort } from '../typings/model';
+import { getPosts } from '../services/requests';
 
 export function useFetchPosts(params: {
   context: SetupContext;

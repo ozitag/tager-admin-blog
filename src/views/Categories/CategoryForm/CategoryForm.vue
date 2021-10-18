@@ -131,18 +131,18 @@ import {
   useTranslation,
 } from '@tager/admin-ui';
 
-import { createCategory, updateCategory } from '@/services/requests';
-import { CategoryFormValues, Language } from '@/typings/model';
-import {
-  getBlogCategoryFormUrl,
-  getBlogCategoryListUrl,
-} from '@/constants/paths';
+import { convertCategoryListToOptions } from '../../Posts/PostForm/PostForm.helpers';
 import {
   useFetchCategories,
   useFetchCategory,
   useFetchModuleConfig,
-} from '@/hooks';
-import { convertCategoryListToOptions } from '@/views/Posts/PostForm/PostForm.helpers';
+} from '../../../hooks';
+import {
+  getBlogCategoryFormUrl,
+  getBlogCategoryListUrl,
+} from '../../../constants/paths';
+import { CategoryFormValues, Language } from '../../../typings/model';
+import { createCategory, updateCategory } from '../../../services/requests';
 
 import {
   convertCategoryFormValuesToPayload,

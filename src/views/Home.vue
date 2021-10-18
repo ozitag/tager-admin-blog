@@ -7,7 +7,7 @@ import { defineComponent, ref } from '@vue/composition-api';
 
 import { NavigationGridItem } from '@tager/admin-ui';
 
-import { getBlogCategoryListUrl, getBlogPostListUrl } from '@/constants/paths';
+import { getBlogCategoryListUrl, getBlogPostListUrl } from '../constants/paths';
 
 export default defineComponent({
   name: 'Home',

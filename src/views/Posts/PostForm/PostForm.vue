@@ -196,10 +196,16 @@ import {
 } from '@tager/admin-ui';
 import { DynamicField } from '@tager/admin-dynamic-field';
 
-import { createBlogPost, getPost, updateBlogPost } from '@/services/requests';
-import { Language, PostFull } from '@/typings/model';
-import { getBlogPostFormUrl, getBlogPostListUrl } from '@/constants/paths';
-
+import {
+  getBlogPostFormUrl,
+  getBlogPostListUrl,
+} from '../../../constants/paths';
+import {
+  createBlogPost,
+  getPost,
+  updateBlogPost,
+} from '../../../services/requests';
+import { Language, PostFull } from '../../../typings/model';
 import {
   useFetchModuleConfig,
   useFetchCategories,

@@ -16,8 +16,8 @@ import {
 } from '@tager/admin-ui';
 import { isNotNullish } from '@tager/admin-services';
 
-import { Category, Language } from '@/typings/model';
-import { getNameWithDepth } from '@/utils/common';
+import { Category, Language } from '../../../../typings/model';
+import { getNameWithDepth } from '../../../../utils/common';
 
 interface Params {
   context: SetupContext;

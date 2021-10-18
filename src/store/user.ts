@@ -2,10 +2,11 @@ import { GetterTree, Module } from 'vuex';
 
 import { FETCH_STATUSES, FetchStatus } from '@tager/admin-services';
 
-import { ScopeType, UserModel } from '@/typings/model';
-import { getUserProfile } from '@/services/requests';
-import { RootState } from '@/store';
-import { Scope } from '@/constants/scopes';
+import { ScopeType, UserModel } from '../typings/model';
+import { getUserProfile } from '../services/requests';
+import { Scope } from '../constants/scopes';
+
+import { RootState } from './index';
 
 export interface UserModuleStateModel {
   profile: UserModel | null;

@@ -102,15 +102,15 @@ import isEqual from 'lodash.isequal';
 import { useResourceDelete } from '@tager/admin-services';
 import { useDataTable } from '@tager/admin-ui';
 
-import { Scope } from '@/constants/scopes';
-import { Category, Language } from '@/typings/model';
+import { useFetchModuleConfig, useUserPermission } from '../../../hooks';
+import { getBlogCategoryFormUrl } from '../../../constants/paths';
 import {
   deleteCategory,
   getCategories,
   moveCategory,
-} from '@/services/requests';
-import { getBlogCategoryFormUrl } from '@/constants/paths';
-import { useFetchModuleConfig, useUserPermission } from '@/hooks';
+} from '../../../services/requests';
+import { Category, Language } from '../../../typings/model';
+import { Scope } from '../../../constants/scopes';
 
 import {
   convertCategoryList,
