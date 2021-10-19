@@ -210,7 +210,7 @@ export default defineComponent({
     );
     const errors = ref<Record<string, string>>({});
 
-    watch(category, () => {
+    watch([category, languageOptionList], () => {
       values.value = convertCategoryToFormValues(
         category.value,
         languageOptionList.value,
