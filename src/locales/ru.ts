@@ -34,6 +34,7 @@ const RU: typeof EN = {
   updatePost: 'Обновить пост',
   title: 'Заголовок',
   link: 'Ссылка',
+  status: 'Статус',
   excerpt: 'Краткое описание',
   defaultCategory: 'Категория по-умолчанию',
   body: 'Содержание',
@@ -77,6 +78,10 @@ const RU: typeof EN = {
 
   parentCategory: 'Родительская категория',
   noParent: 'Нет родительской',
+
+  statusPublished: 'Опубликован',
+  statusDraft: 'Черновик',
+  statusArchived: 'Снят с публикации'
 };
 
 export default RU;

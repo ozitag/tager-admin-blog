@@ -31,6 +31,7 @@ const EN = {
   actions: 'Actions',
   updatePost: 'Update post',
   title: 'Title',
+  status: 'Status',
   link: 'Link',
   excerpt: 'Excerpt',
   body: 'Body',
@@ -75,6 +76,10 @@ const EN = {
 
   parentCategory: 'Parent category',
   noParent: 'No parent',
+
+  statusPublished: 'Published',
+  statusDraft: 'Draft',
+  statusArchived: 'Archived'
 };
 
 export default EN;

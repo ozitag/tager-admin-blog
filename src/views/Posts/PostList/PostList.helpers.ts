@@ -7,7 +7,7 @@ import {
   Category,
   ModuleConfig,
   Language,
-  PostShort,
+  PostShort
 } from '../../../typings/model';
 import { getBlogPostFormUrl } from '../../../constants/paths';
 
@@ -28,12 +28,20 @@ export function convertPostList(
 
         return {
           ...post,
-          language: foundLanguage ? foundLanguage.name : post.language,
+          language: foundLanguage ? foundLanguage.name : post.language
         };
       }
 
       return post;
     });
+}
+
+export function getStatuses(t: TFunction): Record<string, string> {
+  return {
+    PUBLISHED: t('blog:statusPublished'),
+    DRAFT: t('blog:statusDraft'),
+    ARCHIVED: t('blog:statusArchived'),
+  }
 }
 
 export function getPostTableColumnDefs(
@@ -50,7 +58,17 @@ export function getPostTableColumnDefs(
       name: 'ID',
       field: 'id',
       style: { width: '50px', textAlign: 'center' },
-      headStyle: { width: '50px', textAlign: 'center' },
+      headStyle: { width: '50px', textAlign: 'center' }
+    },
+    {
+      id: 2,
+      name: t('blog:status'),
+      field: 'status',
+      style: { width: '120px' },
+      headStyle: { width: '120px' },
+      format: ({ row }) => {
+        return getStatuses(t)[row.status];
+      }
     },
     {
       id: 2,
@@ -60,16 +78,16 @@ export function getPostTableColumnDefs(
       format: ({ row }) => ({
         adminLink: {
           text: row.title,
-          url: getBlogPostFormUrl({ postId: row.id }),
+          url: getBlogPostFormUrl({ postId: row.id })
         },
         websiteLink: {
           text: row.url,
           url: [
             process.env.VUE_APP_WEBSITE_URL || window.location.origin,
-            row.url,
-          ].join(''),
-        },
-      }),
+            row.url
+          ].join('')
+        }
+      })
     },
     {
       id: 3,
@@ -77,26 +95,26 @@ export function getPostTableColumnDefs(
       field: 'image',
       type: 'image',
       style: { width: '250px' },
-      headStyle: { width: '250px' },
+      headStyle: { width: '250px' }
     },
     isLangSpecific
       ? { id: 4, name: t('blog:language'), field: 'language' }
       : null,
-    { id: 5, name: t('blog:date'), field: 'date', type: 'date' },
+    { id: 5, name: t('blog:date'), field: 'datetime', type: 'datetime', options: { ignoreStartOfDayTime: true } },
     {
       id: 6,
       name: t('blog:categories'),
       field: 'categories',
       format: ({ row }) =>
-        row.categories.map((category) => category.name).join(', '),
+        row.categories.map((category) => category.name).join(', ')
     },
     {
       id: 7,
       name: t('blog:actions'),
       field: 'actions',
       style: { whiteSpace: 'nowrap', width: '120px' },
-      headStyle: { whiteSpace: 'nowrap', width: '120px' },
-    },
+      headStyle: { whiteSpace: 'nowrap', width: '120px' }
+    }
   ];
 
   return COLUMN_DEFS.filter(notEmpty);

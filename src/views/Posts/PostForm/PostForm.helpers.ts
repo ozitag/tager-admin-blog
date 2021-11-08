@@ -17,7 +17,7 @@ export interface FormValues {
   title: string;
   excerpt: string;
   body: string;
-  date: string;
+  datetime: string;
   coverImage: Nullable<SingleFileInputValueType>;
   image: Nullable<SingleFileInputValueType>;
   imageMobile: Nullable<SingleFileInputValueType>;
@@ -43,7 +43,7 @@ export function convertPostToFormValues(
       title: '',
       excerpt: '',
       body: '',
-      date: '',
+      datetime: '',
       coverImage: null,
       image: null,
       imageMobile: null,
@@ -73,7 +73,7 @@ export function convertPostToFormValues(
     title: post.title,
     excerpt: post.excerpt,
     body: post.body,
-    date: post.date,
+    datetime: post.datetime.substr(0, 10),
     coverImage: post.coverImage
       ? { id: createId(), file: post.coverImage }
       : null,
@@ -114,7 +114,7 @@ export function convertFormValuesToCreationPayload(
     excerpt: values.excerpt,
     urlAlias: values.urlAlias,
     body: values.body,
-    date: values.date,
+    datetime: values.datetime,
     coverImage: values.coverImage?.file.id ?? null,
     image: values.image?.file.id ?? null,
     imageMobile: values.imageMobile?.file.id ?? null,

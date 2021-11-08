@@ -40,7 +40,7 @@ export interface PostCreationPayload {
   urlAlias: string;
   excerpt: string;
   body: string;
-  date: string;
+  datetime: string;
   coverImage: Nullable<string>;
   image: Nullable<string>;
   imageMobile: Nullable<string>;

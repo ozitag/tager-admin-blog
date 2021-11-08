@@ -40,7 +40,7 @@ export interface PostShort {
   readonly status: string;
   readonly language: string;
   readonly categories: Category[];
-  readonly date: string;
+  readonly datetime: string;
   readonly image: Nullable<FileType>;
 }
 
@@ -51,7 +51,7 @@ export interface PostFull extends SeoInfo {
   readonly url: string;
   readonly urlTemplate: string;
   readonly urlAlias: string;
-  readonly date: string;
+  readonly datetime: string;
   readonly status: string;
   readonly excerpt: string;
   readonly image: Nullable<FileType>;

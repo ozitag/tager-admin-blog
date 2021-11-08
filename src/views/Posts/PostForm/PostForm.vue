@@ -66,11 +66,11 @@
           />
 
           <form-field
-            v-model="values.date"
-            name="date"
+            v-model="values.datetime"
+            name="datetime"
             :label="$t('blog:date')"
             type="date"
-            :error="errors.date"
+            :error="errors.datetime"
           />
         </template>
 
