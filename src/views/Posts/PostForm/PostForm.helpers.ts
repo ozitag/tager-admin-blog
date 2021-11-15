@@ -73,7 +73,7 @@ export function convertPostToFormValues(
     title: post.title,
     excerpt: post.excerpt,
     body: post.body,
-    datetime: post.datetime.substr(0, 10),
+    datetime: post.datetime ? post.datetime.substr(0, 10) : '',
     coverImage: post.coverImage
       ? { id: createId(), file: post.coverImage }
       : null,

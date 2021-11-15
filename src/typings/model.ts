@@ -51,7 +51,7 @@ export interface PostFull extends SeoInfo {
   readonly url: string;
   readonly urlTemplate: string;
   readonly urlAlias: string;
-  readonly datetime: string;
+  readonly datetime: string|null;
   readonly status: string;
   readonly excerpt: string;
   readonly image: Nullable<FileType>;
