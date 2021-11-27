@@ -23,6 +23,7 @@ interface Params {
   context: SetupContext;
   categoryList: ComputedRef<Category[]>;
   languageList: ComputedRef<Language[]>;
+  statusOptionList: ComputedRef<OptionType[]>;
 }
 
 interface State {
@@ -32,6 +33,7 @@ interface State {
   languageOptionList: ComputedRef<OptionType[]>;
   fromDateFilter: Ref<string>;
   toDateFilter: Ref<string>;
+  statusFilter: Ref<OptionType[]>;
   filterParams: ComputedRef<Record<string, string | string[]>>;
   tags: ComputedRef<FilterTagType[]>;
   tagRemovalHandler(event: FilterTagType): void;
@@ -42,6 +44,7 @@ enum FilterTypes {
   LANGUAGE = 'language',
   FROM_DATE = 'from-date',
   TO_DATE = 'to-date',
+  STATUS = 'status',
 }
 
 export const dateFormat = (date: string) => date.split('-').reverse().join('.');
@@ -50,6 +53,7 @@ export function useAdvancedSearch({
   context,
   categoryList,
   languageList,
+  statusOptionList,
 }: Params): State {
   /** Category **/
 
@@ -161,12 +165,31 @@ export function useAdvancedSearch({
     };
   });
 
+  /** Status **/
+
+  const initialStatusFilter = computed<OptionType[]>(() => {
+    const queryValue = getFilterParamAsStringArray(
+      context.root.$route.query,
+      FilterTypes.STATUS
+    );
+    return statusOptionList.value.filter(({ value }) =>
+      queryValue.some((selected) => selected === value)
+    );
+  });
+
+  const statusFilter = ref<OptionType[]>(initialStatusFilter.value);
+
+  watch(initialStatusFilter, () => {
+    statusFilter.value = initialStatusFilter.value;
+  });
+
   /** Params **/
 
   const filterParams = computed(() => {
     const filters: Record<string, string | string[]> = {
       [FilterTypes.CATEGORY]: categoryFilter.value.map(({ value }) => value),
       [FilterTypes.LANGUAGE]: languageFilter.value.map(({ value }) => value),
+      [FilterTypes.STATUS]: statusFilter.value.map(({ value }) => value),
     };
 
     if (fromDateFilter.value) {
@@ -197,6 +220,11 @@ export function useAdvancedSearch({
       fromDateFilter.value = '';
       toDateFilter.value = '';
     }
+    if (event.name === FilterTypes.STATUS) {
+      statusFilter.value = statusFilter.value.filter(
+        ({ value }) => value !== event.value
+      );
+    }
   }
 
   /** Tags **/
@@ -216,6 +244,12 @@ export function useAdvancedSearch({
         title: context.root.$t('blog:language'),
       })),
       date.value,
+      ...statusFilter.value.map(({ value, label }) => ({
+        value,
+        label,
+        name: FilterTypes.STATUS,
+        title: context.root.$t('blog:status'),
+      })),
     ].filter(isNotNullish)
   );
 
@@ -243,6 +277,7 @@ export function useAdvancedSearch({
     languageOptionList,
     fromDateFilter,
     toDateFilter,
+    statusFilter,
     tagRemovalHandler,
     tags: tags,
     filterParams,

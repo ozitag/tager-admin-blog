@@ -19,6 +19,15 @@
 
         <template v-if="selectedTabId === 'common'">
           <form-field-select
+            v-model="values.status"
+            name="status"
+            :error="errors.status"
+            :label="$t('blog:status')"
+            :no-options-message="$t('blog:noTemplates')"
+            :options="statusOptions"
+          />
+
+          <form-field-select
             v-if="isCreation && isLangSpecific"
             v-model="values.language"
             name="language"
@@ -52,6 +61,7 @@
             type="textarea"
             :error="errors.excerpt"
           />
+
           <form-field-rich-text-input
             v-model="values.body"
             name="body"
@@ -59,6 +69,7 @@
             :error="errors.body"
             :get-upload-adapter-options="getUploadAdapterOptions"
           />
+
           <ShortCodeConstructor
             :short-code-config-list="
               moduleConfig ? moduleConfig.shortcodes : []
@@ -218,6 +229,7 @@ import {
   convertFormValuesToUpdatePayload,
   convertPostToFormValues,
   FormValues,
+  getStatusOptions,
 } from './PostForm.helpers';
 
 export default defineComponent({
@@ -228,6 +240,10 @@ export default defineComponent({
     const isCreation = computed<boolean>(() => postId.value === 'create');
 
     const urlAliasChanged = ref<boolean>(false);
+
+    const statusOptions = computed<OptionType[]>(() =>
+      getStatusOptions(context.root.$t)
+    );
 
     /** Fetch module config **/
 
@@ -300,7 +316,8 @@ export default defineComponent({
         post.value,
         languageOptionList.value,
         postOptionList.value,
-        moduleConfig.value?.fields ?? []
+        moduleConfig.value?.fields ?? [],
+        statusOptions.value
       )
     );
     const errors = ref<Record<string, string>>({});
@@ -310,7 +327,8 @@ export default defineComponent({
         post.value,
         languageOptionList.value,
         postOptionList.value,
-        moduleConfig.value?.fields ?? []
+        moduleConfig.value?.fields ?? [],
+        statusOptions.value
       );
     });
 
@@ -347,7 +365,8 @@ export default defineComponent({
               null,
               languageOptionList.value,
               postOptionList.value,
-              moduleConfig.value?.fields ?? []
+              moduleConfig.value?.fields ?? [],
+              statusOptions.value
             );
           }
 
@@ -587,6 +606,8 @@ export default defineComponent({
       handleAliasChange,
       urlAliasTemplate,
       handleCategoriesChange,
+
+      statusOptions,
     };
   },
 });

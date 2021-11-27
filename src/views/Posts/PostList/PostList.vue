@@ -69,6 +69,15 @@
                   />
                 </div>
               </div>
+
+              <form-field-multi-select
+                v-model="statusFilter"
+                :options="statusOptionList"
+                name="statusFilter"
+                :searchable="true"
+                :label="$t('blog:status')"
+                class="filter"
+              />
             </div>
           </advanced-search>
         </template>
@@ -113,6 +122,7 @@ import pick from 'lodash.pick';
 
 import {
   ColumnDefinition,
+  OptionType,
   useDataTable,
   useTranslation,
 } from '@tager/admin-ui';
@@ -135,6 +145,7 @@ import {
   PostFull,
   PostShort,
 } from '../../../typings/model';
+import { getStatusOptions } from '../PostForm/PostForm.helpers';
 
 import { convertPostList, getPostTableColumnDefs } from './PostList.helpers';
 import { useAdvancedSearch } from './hooks';
@@ -149,6 +160,8 @@ export default defineComponent({
         ? context.root.$route.query.category[0] ?? ''
         : context.root.$route.query.category;
     });
+
+    const statusOptionList = computed<OptionType[]>(() => getStatusOptions(t));
 
     /** Fetch module config **/
 
@@ -196,10 +209,12 @@ export default defineComponent({
       filterParams,
       tags,
       tagRemovalHandler,
+      statusFilter,
     } = useAdvancedSearch({
       context,
       categoryList,
       languageList,
+      statusOptionList,
     });
 
     const isLangSpecific = computed<boolean>(
@@ -311,6 +326,8 @@ export default defineComponent({
       languageOptionList,
       fromDateFilter,
       toDateFilter,
+      statusFilter,
+      statusOptionList,
       tags,
       tagRemovalHandler,
 

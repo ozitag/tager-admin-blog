@@ -1,3 +1,5 @@
+import { TFunction } from 'i18next';
+
 import { createId, Nullable } from '@tager/admin-services';
 import { OptionType, SingleFileInputValueType } from '@tager/admin-ui';
 import {
@@ -12,6 +14,12 @@ import {
 } from '../../../services/requests';
 import { getNameWithDepth } from '../../../utils/common';
 import { Category, PostFull } from '../../../typings/model';
+
+export const getStatusOptions = (t: TFunction): OptionType[] => [
+  { label: t('blog:statusPublished'), value: 'PUBLISHED' },
+  { label: t('blog:statusDraft'), value: 'DRAFT' },
+  { label: t('blog:statusArchived'), value: 'ARCHIVED' },
+];
 
 export interface FormValues {
   title: string;
@@ -30,13 +38,15 @@ export interface FormValues {
   relatedPosts: OptionType<number>[];
   tags: string;
   additionalFields: FieldUnion[];
+  status: OptionType;
 }
 
 export function convertPostToFormValues(
   post: Nullable<PostFull>,
   languageOptionList: OptionType[],
   postOptionList: OptionType<number>[],
-  additionalFieldList: FieldConfigUnion[]
+  additionalFieldList: FieldConfigUnion[],
+  statusOptions: OptionType[]
 ): FormValues {
   if (!post) {
     return {
@@ -58,6 +68,7 @@ export function convertPostToFormValues(
       additionalFields: additionalFieldList.map((fieldConfig) =>
         universalFieldUtils.createFormField(fieldConfig, null)
       ),
+      status: statusOptions[0],
     };
   }
 
@@ -68,6 +79,10 @@ export function convertPostToFormValues(
   const selectedPostOptionList = postOptionList.filter((option) =>
     post.relatedPosts.some((relatedPost) => relatedPost.id === option.value)
   );
+
+  const foundStatus =
+    statusOptions.find(({ value }) => value === post.status) ??
+    statusOptions[0];
 
   return {
     title: post.title,
@@ -94,15 +109,16 @@ export function convertPostToFormValues(
     language: currentLangOption ?? null,
     relatedPosts: selectedPostOptionList,
     tags: post.tags.join(','),
-    additionalFields: additionalFieldList.map((fieldConfig, index) => {
+    additionalFields: additionalFieldList.map((fieldConfig) => {
       const postAdditionalField = post.additionalFields.find(
-        (item) => item.name === fieldConfig.name
+        ({ name }) => name === fieldConfig.name
       );
       return universalFieldUtils.createFormField(
         fieldConfig,
         postAdditionalField?.value
       );
     }),
+    status: foundStatus,
   };
 }
 
@@ -121,7 +137,6 @@ export function convertFormValuesToCreationPayload(
     pageTitle: values.pageTitle,
     pageDescription: values.pageDescription,
     openGraphImage: values.openGraphImage?.file.id ?? null,
-    status: 'PUBLISHED',
     categories: values.categories.map((option) => option.value),
     language: values.language?.value ?? null,
     relatedPosts: values.relatedPosts.map(
@@ -132,6 +147,7 @@ export function convertFormValuesToCreationPayload(
       name: field.config.name,
       value: universalFieldUtils.getOutgoingValue(field),
     })),
+    status: values.status.value,
   };
 }
 
