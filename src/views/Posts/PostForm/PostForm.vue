@@ -518,7 +518,7 @@ export default defineComponent({
     }
 
     function handleTitleChange(value: string) {
-      if (urlAliasChanged.value === false) {
+      if (isCreation.value && urlAliasChanged.value === false) {
         values.value.urlAlias = urlTranslit(value);
       }
     }
