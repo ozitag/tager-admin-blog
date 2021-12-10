@@ -25,6 +25,7 @@ export function convertCategoryToFormValues(
       name: '',
       parent: { value: null, label: t('blog:noParent') },
       urlAlias: '',
+      isDefault: false,
 
       pageTitle: '',
       pageDescription: '',
@@ -37,6 +38,7 @@ export function convertCategoryToFormValues(
 
   return {
     language: currentLangOption ?? null,
+    isDefault: category.isDefault,
     name: category.name,
     parent: category.parent
       ? { value: category.parent.id, label: category.parent.name }
@@ -62,7 +64,7 @@ export function convertCategoryFormValuesToPayload(
     name: values.name,
     parent: values.parent.value,
     urlAlias: values.urlAlias,
-    isDefault: false,
+    isDefault: values.isDefault,
 
     pageTitle: values.pageTitle,
     pageDescription: values.pageDescription,

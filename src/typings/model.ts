@@ -98,6 +98,7 @@ export interface CategoryFormValues {
   name: string;
   parent: OptionType<Nullable<number>>;
   urlAlias: string;
+  isDefault: boolean;
 
   pageTitle: Nullable<string>;
   pageDescription: Nullable<string>;

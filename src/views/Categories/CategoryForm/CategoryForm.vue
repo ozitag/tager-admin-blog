@@ -62,6 +62,13 @@
               :error="errors.language"
             />
 
+            <form-field-checkbox
+              v-model="values.isDefault"
+              name="isDefault"
+              :label="$t('blog:defaultCategory')"
+              :error="errors.isDefault"
+            />
+
             <form-field
               v-model="values.name"
               name="name"
