@@ -64,8 +64,8 @@ export function getPostTableColumnDefs(
       id: 2,
       name: t('blog:status'),
       field: 'status',
-      style: { width: '120px' },
-      headStyle: { width: '120px' },
+      style: { width: '140px' },
+      headStyle: { width: '140px' },
     },
     {
       id: 3,

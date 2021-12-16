@@ -86,7 +86,7 @@
           <div class='status'>
             <span>{{ getStatuses(t)[row.status] }}</span>
             <span v-if='row.status === "PUBLISHED" && row.archiveAt'>
-              {{ t('blog:publishAtLabel') }}: <i>{{ formatDateTime(new Date(row.archiveAt), true) }}</i>
+              {{ t('blog:archiveAtLabel') }}: <i>{{ formatDateTime(new Date(row.archiveAt), true) }}</i>
              </span>
             <span v-if='row.status === "DRAFT" && row.publishAt'>
               {{ t('blog:publishAtLabel') }}: <i>{{ formatDateTime(new Date(row.publishAt), true) }}</i>
