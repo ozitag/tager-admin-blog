@@ -82,6 +82,13 @@ const RU: typeof EN = {
   statusPublished: 'Опубликован',
   statusDraft: 'Черновик',
   statusArchived: 'В архиве',
+
+  scheduleArchive: 'Запланировать перенос в архив',
+  schedulePublish: 'Запланировать публикацию',
+  archiveAt: 'Перенести в архив в',
+  publishAt: 'Опубликовать в',
+  archiveAtLabel: 'Перенос в архив',
+  publishAtLabel: 'Публикация',
 };
 
 export default RU;

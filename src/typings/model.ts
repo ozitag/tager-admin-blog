@@ -62,6 +62,8 @@ export interface PostFull extends SeoInfo {
   readonly relatedPosts: Pick<PostShort, 'id' | 'title'>[];
   readonly tags: string[];
   readonly additionalFields: FieldShortType<IncomingValueUnion>[];
+  readonly archiveAt: Nullable<string>;
+  readonly publishAt: Nullable<string>;
 }
 
 export interface Language {

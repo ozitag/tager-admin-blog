@@ -1,6 +1,6 @@
 <template>
   <page
-    :title="pageTitle"
+    :title='pageTitle'
     :header-buttons="[
       {
         text: $t('blog:newPost'),
@@ -10,104 +10,116 @@
   >
     <template v-slot:content>
       <data-table
-        :column-defs="columnDefs"
-        :row-data="rowData"
-        :loading="isRowDataLoading"
-        :error-message="errorMessage"
-        :search-query="searchQuery"
-        :pagination="{
+        :column-defs='columnDefs'
+        :row-data='rowData'
+        :loading='isRowDataLoading'
+        :error-message='errorMessage'
+        :search-query='searchQuery'
+        :pagination='{
           pageNumber,
           pageCount,
           pageSize,
           disabled: isRowDataLoading,
-        }"
-        data-table="blog-post"
-        @change="handleChange"
+        }'
+        data-table='blog-post'
+        @change='handleChange'
       >
         <template v-slot:filters>
-          <advanced-search :tags="tags" @click:tag="tagRemovalHandler">
-            <div class="filters">
+          <advanced-search :tags='tags' @click:tag='tagRemovalHandler'>
+            <div class='filters'>
               <form-field-multi-select
-                v-model="categoryFilter"
-                :options="categoryOptionList"
-                name="categoryFilter"
-                :searchable="true"
+                v-model='categoryFilter'
+                :options='categoryOptionList'
+                name='categoryFilter'
+                :searchable='true'
                 :label="$t('blog:category')"
-                class="filter"
+                class='filter'
               />
 
               <form-field-multi-select
-                v-if="isLangSpecific"
-                v-model="languageFilter"
-                :options="languageOptionList"
-                name="languageFilter"
-                :searchable="true"
+                v-if='isLangSpecific'
+                v-model='languageFilter'
+                :options='languageOptionList'
+                name='languageFilter'
+                :searchable='true'
                 :label="$t('blog:language')"
-                class="filter"
+                class='filter'
               />
 
-              <div class="filter">
-                <div class="date-label">
+              <div class='filter'>
+                <div class='date-label'>
                   {{ $t('blog:dateOfPublication') }}
                 </div>
 
-                <div class="date-content">
+                <div class='date-content'>
                   <form-field
-                    v-model="fromDateFilter"
+                    v-model='fromDateFilter'
                     :label="$t('blog:From')"
-                    name="fromDateFilter"
-                    type="date"
-                    :max="toDateFilter"
+                    name='fromDateFilter'
+                    type='date'
+                    :max='toDateFilter'
                   />
 
                   <form-field
-                    v-model="toDateFilter"
+                    v-model='toDateFilter'
                     :label="$t('blog:To')"
-                    name="toDateFilter"
-                    type="date"
-                    :min="fromDateFilter"
+                    name='toDateFilter'
+                    type='date'
+                    :min='fromDateFilter'
                   />
                 </div>
               </div>
 
               <form-field-multi-select
-                v-model="statusFilter"
-                :options="statusOptionList"
-                name="statusFilter"
-                :searchable="true"
+                v-model='statusFilter'
+                :options='statusOptionList'
+                name='statusFilter'
+                :searchable='true'
                 :label="$t('blog:status')"
-                class="filter"
+                class='filter'
               />
             </div>
           </advanced-search>
         </template>
 
-        <template v-slot:cell(actions)="{ row }">
+        <template v-slot:cell(status)='{ row }'>
+          <div class='status'>
+            <span>{{ getStatuses(t)[row.status] }}</span>
+            <span v-if='row.status === "PUBLISHED" && row.archiveAt'>
+              {{ t('blog:publishAtLabel') }}: <i>{{ formatDateTime(new Date(row.archiveAt), true) }}</i>
+             </span>
+            <span v-if='row.status === "DRAFT" && row.publishAt'>
+              {{ t('blog:publishAtLabel') }}: <i>{{ formatDateTime(new Date(row.publishAt), true) }}</i>
+            </span>
+          </div>
+        </template>
+
+        <template v-slot:cell(actions)='{ row }'>
           <base-button
-            variant="icon"
+            variant='icon'
             :title="$t('blog:edit')"
-            :disabled="isBusy(row.id)"
-            :href="getBlogPostFormUrl({ postId: row.id })"
+            :disabled='isBusy(row.id)'
+            :href='getBlogPostFormUrl({ postId: row.id })'
           >
-            <svg-icon name="edit" />
+            <svg-icon name='edit' />
           </base-button>
 
           <base-button
-            variant="icon"
+            variant='icon'
             :title="$t('blog:clone')"
-            :disabled="isBusy(row.id)"
-            @click="handleResourceClone(row.id)"
+            :disabled='isBusy(row.id)'
+            @click='handleResourceClone(row.id)'
           >
-            <svg-icon name="contentCopy" />
+            <svg-icon name='contentCopy' />
           </base-button>
 
           <base-button
-            variant="icon"
+            variant='icon'
             :title="$t('blog:remove')"
-            :disabled="isBusy(row.id)"
-            @click="handleResourceDelete(row.id)"
+            :disabled='isBusy(row.id)'
+            @click='handleResourceDelete(row.id)'
           >
-            <svg-icon name="delete" />
+            <svg-icon name='delete' />
           </base-button>
         </template>
       </data-table>
@@ -115,7 +127,7 @@
   </page>
 </template>
 
-<script lang="ts">
+<script lang='ts'>
 import { computed, defineComponent, watch } from '@vue/composition-api';
 import isEqual from 'lodash.isequal';
 import pick from 'lodash.pick';
@@ -125,29 +137,30 @@ import {
   OptionType,
   useDataTable,
   useTranslation,
+  formatDateTime
 } from '@tager/admin-ui';
 import {
   Nullable,
   useResourceClone,
-  useResourceDelete,
+  useResourceDelete
 } from '@tager/admin-services';
 
 import { useFetchModuleConfig, useFetchCategories } from '../../../hooks';
 import {
   clonePost,
   deleteBlogPost,
-  getPosts,
+  getPosts
 } from '../../../services/requests';
 import { getBlogPostFormUrl } from '../../../constants/paths';
 import {
   Category,
   Language,
   PostFull,
-  PostShort,
+  PostShort
 } from '../../../typings/model';
 import { getStatusOptions } from '../PostForm/PostForm.helpers';
 
-import { convertPostList, getPostTableColumnDefs } from './PostList.helpers';
+import { convertPostList, getPostTableColumnDefs, getStatuses } from './PostList.helpers';
 import { useAdvancedSearch } from './hooks';
 
 export default defineComponent({
@@ -167,7 +180,7 @@ export default defineComponent({
 
     const {
       data: moduleConfig,
-      loading: isModuleConfigLoading,
+      loading: isModuleConfigLoading
     } = useFetchModuleConfig({ context });
 
     const languageList = computed<Language[]>(
@@ -178,22 +191,22 @@ export default defineComponent({
 
     const {
       data: categoryList,
-      loading: isCategoryListLoading,
+      loading: isCategoryListLoading
     } = useFetchCategories({ context });
 
     const selectedCategory = computed<Nullable<Category>>(() =>
       categoryId.value
         ? categoryList.value.find(
-            ({ id }) => String(id) === String(categoryId.value)
-          ) ?? null
+        ({ id }) => String(id) === String(categoryId.value)
+      ) ?? null
         : null
     );
 
     const pageTitle = computed<string>(() => {
       return selectedCategory.value
         ? `${context.root.$t('blog:postsByCategory')} "${
-            selectedCategory.value.name
-          }"`
+          selectedCategory.value.name
+        }"`
         : context.root.$t('blog:posts');
     });
 
@@ -209,12 +222,12 @@ export default defineComponent({
       filterParams,
       tags,
       tagRemovalHandler,
-      statusFilter,
+      statusFilter
     } = useAdvancedSearch({
       context,
       categoryList,
       languageList,
-      statusOptionList,
+      statusOptionList
     });
 
     const isLangSpecific = computed<boolean>(
@@ -232,19 +245,19 @@ export default defineComponent({
       handleChange,
       pageNumber,
       pageCount,
-      pageSize,
+      pageSize
     } = useDataTable<PostShort>({
       fetchEntityList: (params) =>
         getPosts({
           query: params.searchQuery,
           pageNumber: params.pageNumber,
           pageSize: params.pageSize,
-          ...filterParams.value,
+          ...filterParams.value
         }),
       initialValue: [],
       context,
       resourceName: 'Blog post list',
-      pageSize: 100,
+      pageSize: 100
     });
 
     watch(filterParams, () => {
@@ -254,7 +267,7 @@ export default defineComponent({
 
       const newQuery = {
         ...pick(context.root.$route.query, ['query', 'pageNumber']),
-        ...filterParams.value,
+        ...filterParams.value
       };
 
       if (!isEqual(context.root.$route.query, newQuery)) {
@@ -282,7 +295,7 @@ export default defineComponent({
       deleteResource: deleteBlogPost,
       resourceName: 'Post',
       onSuccess: fetchPostList,
-      context,
+      context
     });
 
     const { isCloning, handleResourceClone } = useResourceClone({
@@ -291,7 +304,7 @@ export default defineComponent({
       successMessage: t('blog:cloneSuccess'),
       failureMessage: t('blog:cloneFailure'),
       onSuccessRedirectTo: (data: PostFull) => `/blog/posts/${data.id}`,
-      context,
+      context
     });
 
     function isBusy(postId: number): boolean {
@@ -303,6 +316,8 @@ export default defineComponent({
     );
 
     return {
+      t,
+      formatDateTime,
       columnDefs,
       rowData: displayedPostList,
       handleResourceDelete,
@@ -330,16 +345,17 @@ export default defineComponent({
       statusOptionList,
       tags,
       tagRemovalHandler,
+      getStatuses,
 
       // Clone
       handleResourceClone,
-      isBusy,
+      isBusy
     };
-  },
+  }
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped lang='scss'>
 .filters {
   display: flex;
   margin: 0 -10px;
@@ -363,5 +379,22 @@ export default defineComponent({
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   column-gap: 10px;
+}
+
+.status {
+  span:first-child {
+    display: block;
+  }
+
+  span:nth-child(2) {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.8rem;
+
+    i {
+      display: block;
+    }
+  }
+;
 }
 </style>

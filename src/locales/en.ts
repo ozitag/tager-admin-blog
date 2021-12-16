@@ -80,6 +80,13 @@ const EN = {
   statusPublished: 'Published',
   statusDraft: 'Draft',
   statusArchived: 'Archived',
+
+  scheduleArchive: 'Schedule archive',
+  schedulePublish: 'Schedule publish',
+  archiveAt: 'Archive at',
+  publishAt: 'Publish at',
+  archiveAtLabel: 'Archive at',
+  publishAtLabel: 'Publish at',
 };
 
 export default EN;

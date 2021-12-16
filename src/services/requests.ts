@@ -53,6 +53,8 @@ export interface PostCreationPayload {
   relatedPosts: number[];
   tags: string[];
   additionalFields: FieldShortType<OutgoingValueUnion>[];
+  archiveAt: Nullable<string>;
+  publishAt: Nullable<string>;
 }
 
 export function createBlogPost(

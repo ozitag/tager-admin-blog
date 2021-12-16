@@ -66,10 +66,9 @@ export function getPostTableColumnDefs(
       field: 'status',
       style: { width: '120px' },
       headStyle: { width: '120px' },
-      format: ({ row }) => getStatuses(t)[row.status],
     },
     {
-      id: 2,
+      id: 3,
       name: t('blog:name'),
       field: 'name',
       type: 'name',
@@ -88,7 +87,7 @@ export function getPostTableColumnDefs(
       }),
     },
     {
-      id: 3,
+      id: 4,
       name: t('blog:image'),
       field: 'image',
       type: 'image',
@@ -96,24 +95,24 @@ export function getPostTableColumnDefs(
       headStyle: { width: '250px' },
     },
     isLangSpecific
-      ? { id: 4, name: t('blog:language'), field: 'language' }
+      ? { id: 5, name: t('blog:language'), field: 'language' }
       : null,
     {
-      id: 5,
+      id: 6,
       name: t('blog:date'),
       field: 'datetime',
       type: 'datetime',
       options: { ignoreStartOfDayTime: true },
     },
     {
-      id: 6,
+      id: 7,
       name: t('blog:categories'),
       field: 'categories',
       format: ({ row }) =>
         row.categories.map((category) => category.name).join(', '),
     },
     {
-      id: 7,
+      id: 8,
       name: t('blog:actions'),
       field: 'actions',
       style: { whiteSpace: 'nowrap', width: '120px' },

@@ -5,12 +5,12 @@ import { OptionType, SingleFileInputValueType } from '@tager/admin-ui';
 import {
   FieldConfigUnion,
   FieldUnion,
-  universalFieldUtils,
+  universalFieldUtils
 } from '@tager/admin-dynamic-field';
 
 import {
   PostCreationPayload,
-  PostUpdatePayload,
+  PostUpdatePayload
 } from '../../../services/requests';
 import { getNameWithDepth } from '../../../utils/common';
 import { Category, PostFull } from '../../../typings/model';
@@ -18,7 +18,7 @@ import { Category, PostFull } from '../../../typings/model';
 export const getStatusOptions = (t: TFunction): OptionType[] => [
   { label: t('blog:statusPublished'), value: 'PUBLISHED' },
   { label: t('blog:statusDraft'), value: 'DRAFT' },
-  { label: t('blog:statusArchived'), value: 'ARCHIVED' },
+  { label: t('blog:statusArchived'), value: 'ARCHIVED' }
 ];
 
 export interface FormValues {
@@ -39,6 +39,8 @@ export interface FormValues {
   tags: string;
   additionalFields: FieldUnion[];
   status: OptionType;
+  statusDateEnabled: boolean;
+  statusDate: Nullable<string>;
 }
 
 export function convertPostToFormValues(
@@ -69,6 +71,8 @@ export function convertPostToFormValues(
         universalFieldUtils.createFormField(fieldConfig, null)
       ),
       status: statusOptions[0],
+      statusDateEnabled: false,
+      statusDate: null
     };
   }
 
@@ -104,7 +108,7 @@ export function convertPostToFormValues(
     urlAlias: post.urlAlias,
     categories: post.categories.map((category) => ({
       value: category.id,
-      label: category.name,
+      label: category.name
     })),
     language: currentLangOption ?? null,
     relatedPosts: selectedPostOptionList,
@@ -119,6 +123,8 @@ export function convertPostToFormValues(
       );
     }),
     status: foundStatus,
+    statusDateEnabled: post.status === 'PUBLISHED' ? !!post.archiveAt : (post.status === 'DRAFT' ? !!post.publishAt : false),
+    statusDate: post.status === 'PUBLISHED' && post.archiveAt ? post.archiveAt.substr(0, 10) : (post.status === 'DRAFT' && post.publishAt ? post.publishAt.substr(0, 10) : null)
   };
 }
 
@@ -145,9 +151,11 @@ export function convertFormValuesToCreationPayload(
     tags: values.tags.split(',').filter((tag) => tag.trim().length > 0),
     additionalFields: values.additionalFields.map((field) => ({
       name: field.config.name,
-      value: universalFieldUtils.getOutgoingValue(field),
+      value: universalFieldUtils.getOutgoingValue(field)
     })),
     status: values.status.value,
+    archiveAt: values.status.value === 'PUBLISHED' && values.statusDateEnabled && values.statusDate ? values.statusDate : null,
+    publishAt: values.status.value === 'DRAFT' && values.statusDateEnabled && values.statusDate ? values.statusDate : null
   };
 }
 
@@ -156,7 +164,7 @@ export function convertFormValuesToUpdatePayload(
 ): PostUpdatePayload {
   return {
     ...convertFormValuesToCreationPayload(values),
-    urlAlias: values.urlAlias,
+    urlAlias: values.urlAlias
   };
 }
 
@@ -168,6 +176,6 @@ export function convertCategoryListToOptions(
     .filter(({ language }) => (languageId ? language === languageId : true))
     .map(({ id, name, depth }) => ({
       value: id,
-      label: getNameWithDepth(name, depth),
+      label: getNameWithDepth(name, depth)
     }));
 }
