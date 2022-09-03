@@ -7,7 +7,7 @@ import { Category, Language, ModuleConfig } from '../../../typings/model';
 import {
   getBlogCategoryFormUrl,
   getBlogPostListUrl,
-} from '../../../constants/paths';
+} from '../../../utils/paths';
 import { getNameWithDepth } from '../../../utils/common';
 
 export function convertCategoryList(

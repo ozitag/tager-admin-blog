@@ -16,11 +16,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 
 import { TabType } from './TabList.types';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'TabList',
   props: {
     tabList: {

@@ -1,11 +1,6 @@
-import {
-  computed,
-  ComputedRef,
-  Ref,
-  ref,
-  SetupContext,
-  watch,
-} from '@vue/composition-api';
+import { computed, ComputedRef, Ref, ref, SetupContext, watch } from 'vue';
+import { RouteLocationNormalizedLoaded } from 'vue-router';
+import { TFunction } from 'i18next';
 
 import {
   FilterTagType,
@@ -17,8 +12,9 @@ import {
 import { Language } from '../../../../typings/model';
 
 interface Params {
-  context: SetupContext;
+  t: TFunction;
   languageList: ComputedRef<Language[]>;
+  route: RouteLocationNormalizedLoaded;
 }
 
 interface State {
@@ -26,6 +22,7 @@ interface State {
   languageOptionList: ComputedRef<OptionType[]>;
   filterParams: ComputedRef<Record<string, string | string[]>>;
   tags: ComputedRef<FilterTagType[]>;
+
   tagRemovalHandler(event: FilterTagType): void;
 }
 
@@ -33,7 +30,7 @@ enum FilterTypes {
   LANGUAGE = 'language',
 }
 
-export function useAdvancedSearch({ context, languageList }: Params): State {
+export function useAdvancedSearch({ languageList, route, t }: Params): State {
   /** Language **/
 
   const languageOptionList = computed<OptionType[]>(() =>
@@ -42,7 +39,7 @@ export function useAdvancedSearch({ context, languageList }: Params): State {
 
   const initialLanguageFilter = computed<OptionType[]>(() => {
     const queryValue = getFilterParamAsStringArray(
-      context.root.$route.query,
+      route.query,
       FilterTypes.LANGUAGE
     );
     return languageOptionList.value.filter(({ value }) =>
@@ -81,7 +78,7 @@ export function useAdvancedSearch({ context, languageList }: Params): State {
       value,
       label,
       name: FilterTypes.LANGUAGE,
-      title: context.root.$t('blog:language'),
+      title: t('blog:language'),
     })),
   ]);
 

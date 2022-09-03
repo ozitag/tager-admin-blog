@@ -1,4 +1,4 @@
-import { onMounted, Ref, SetupContext, watch } from '@vue/composition-api';
+import { onMounted, Ref, watch } from 'vue';
 
 import { Nullable, ResourceRef, useResource } from '@tager/admin-services';
 
@@ -6,23 +6,20 @@ import { Category } from '../typings/model';
 import { getCategory } from '../services/requests';
 
 export function useFetchCategory({
-  context,
   categoryId,
   isCreation,
 }: {
-  context: SetupContext;
   categoryId: Ref<string>;
   isCreation: Ref<boolean>;
 }): ResourceRef<Nullable<Category>> {
   const [fetchCategory, resource] = useResource<Nullable<Category>>({
     fetchResource: () => getCategory(categoryId.value),
     initialValue: null,
-    context,
     resourceName: 'Blog category',
   });
 
   onMounted(() => {
-    if (isCreation.value) {
+    if (isCreation.value || !categoryId.value) {
       return;
     }
 
@@ -30,7 +27,7 @@ export function useFetchCategory({
   });
 
   watch(categoryId, () => {
-    if (isCreation.value) {
+    if (isCreation.value || !categoryId.value) {
       return;
     }
 

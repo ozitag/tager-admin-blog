@@ -1,44 +1,46 @@
 <template>
-  <page
+  <Page
     :title="
-      isCreation ? $t('blog:createBlogCategory') : $t('blog:updateBlogCategory')
+      isCreation
+        ? $i18n.t('blog:createBlogCategory')
+        : $i18n.t('blog:updateBlogCategory')
     "
     :is-content-loading="isContentLoading"
   >
-    <template v-slot:content>
+    <template #content>
       <form novalidate @submit.prevent="submitForm">
         <template v-if="isCreation">
-          <form-field-select
+          <FormFieldSelect
             v-if="isLangSpecific"
-            v-model="values.language"
+            v-model:value="values.language"
             name="language"
-            :label="$t('blog:language')"
+            :label="$i18n.t('blog:language')"
             :options="languageOptionList"
             :error="errors.language"
           />
 
-          <form-field
-            v-model="values.name"
+          <FormField
+            v-model:value="values.name"
             name="name"
-            :label="$t('blog:name')"
+            :label="$i18n.t('blog:name')"
             :error="errors.name"
             @input="handleNameChange"
           />
 
-          <form-field-select
+          <FormFieldSelect
             v-if="!isLangSpecific || values.language"
-            v-model="values.parent"
+            v-model:value="values.parent"
             name="parentCategory"
-            :label="$t('blog:parentCategory')"
+            :label="$i18n.t('blog:parentCategory')"
             :options="parentCategoryOptionList"
             :error="errors.parent"
           />
 
-          <form-field-url-alias-input
+          <FormFieldUrlAliasInput
             id="urlAlias"
-            v-model="values.urlAlias"
+            v-model:value="values.urlAlias"
             name="urlAlias"
-            :label="$t('blog:link')"
+            :label="$i18n.t('blog:link')"
             :url-template="pagePath"
             :error="errors.urlAlias"
             @change="handleAliasChange"
@@ -46,57 +48,57 @@
         </template>
 
         <template v-else>
-          <tab-list
+          <TabList
             :tab-list="tabList"
             :selected-tab-id="selectedTabId"
             @tab:update="selectedTabId = $event.tabId"
           />
 
           <template v-if="selectedTabId === 'common'">
-            <form-field-select
+            <FormFieldSelect
               v-if="isLangSpecific"
-              v-model="values.language"
+              v-model:value="values.language"
               name="language"
-              :label="$t('blog:language')"
+              :label="$i18n.t('blog:language')"
               :options="languageOptionList"
               :error="errors.language"
             />
 
-            <form-field-checkbox
-              v-model="values.isDefault"
+            <FormFieldCheckbox
+              v-model:checked="values.isDefault"
               name="isDefault"
-              :label="$t('blog:defaultCategory')"
+              :label="$i18n.t('blog:defaultCategory')"
               :error="errors.isDefault"
             />
 
-            <form-field
-              v-model="values.name"
+            <FormField
+              v-model:value="values.name"
               name="name"
-              :label="$t('blog:name')"
+              :label="$i18n.t('blog:name')"
               :error="errors.name"
             />
 
-            <form-field-select
+            <FormFieldSelect
               v-if="!isLangSpecific || values.language"
-              v-model="values.parent"
+              v-model:value="values.parent"
               name="parentCategory"
-              :label="$t('blog:parentCategory')"
+              :label="$i18n.t('blog:parentCategory')"
               :options="parentCategoryOptionList"
               :error="errors.parent"
             />
 
-            <form-field-url-alias-input
+            <FormFieldUrlAliasInput
               id="urlAlias"
-              v-model="values.urlAlias"
+              v-model:value="values.urlAlias"
               name="urlAlias"
-              :label="$t('blog:link')"
+              :label="$i18n.t('blog:link')"
               :url-template="pagePath"
               :error="errors.urlAlias"
             />
           </template>
 
           <template v-if="selectedTabId === 'seo'">
-            <seo-field-group
+            <SeoFieldGroup
               :title="values.pageTitle"
               :title-error-message="errors.pageTitle"
               :description="values.pageDescription"
@@ -114,26 +116,30 @@
       </form>
     </template>
 
-    <template v-slot:footer>
+    <template #footer>
       <FormFooter
         :back-href="categoryListUrl"
-        :on-submit="submitForm"
         :is-submitting="isSubmitting"
         :is-creation="isCreation"
         :can-create-another="isCreation"
+        @submit="submitForm"
       />
     </template>
-  </page>
+  </Page>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from '@vue/composition-api';
+import { computed, defineComponent, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 import {
   convertRequestErrorToMap,
   getWebsiteOrigin,
+  navigateBack,
   Nullable,
   urlTranslit,
+  useI18n,
+  useToast,
 } from '@tager/admin-services';
 import {
   OptionType,
@@ -141,8 +147,13 @@ import {
   TagerFormSubmitEvent,
   SeoChangeEvent,
   TabType,
-  useTranslation,
+  FormFieldSelect,
+  FormField,
+  FormFieldUrlAliasInput,
+  FormFieldCheckbox,
+  SeoFieldGroup,
 } from '@tager/admin-ui';
+import { Page } from '@tager/admin-layout';
 
 import {
   useFetchCategories,
@@ -152,9 +163,10 @@ import {
 import {
   getBlogCategoryFormUrl,
   getBlogCategoryListUrl,
-} from '../../../constants/paths';
+} from '../../../utils/paths';
 import { CategoryFormValues, Language } from '../../../typings/model';
 import { createCategory, updateCategory } from '../../../services/requests';
+import TabList from '../../Posts/PostForm/components/TabList/TabList.vue';
 
 import {
   convertCategoryFormValuesToPayload,
@@ -164,20 +176,31 @@ import {
 
 export default defineComponent({
   name: 'CategoryForm',
-  components: { FormFooter },
-  setup(props, context) {
-    const { t } = useTranslation(context);
+  components: {
+    Page,
+    SeoFieldGroup,
+    FormFieldCheckbox,
+    TabList,
+    FormFieldUrlAliasInput,
+    FormField,
+    FormFieldSelect,
+    FormFooter,
+  },
+  setup() {
+    const { t } = useI18n();
+    const router = useRouter();
+    const route = useRoute();
+    const toast = useToast();
+
     const categoryId = computed<string>(
-      () => context.root.$route.params.categoryId
+      () => route.params.categoryId as string
     );
     const isCreation = computed<boolean>(() => categoryId.value === 'create');
 
     /** Fetch module config */
 
-    const {
-      data: moduleConfig,
-      loading: isModuleConfigLoading,
-    } = useFetchModuleConfig({ context });
+    const { data: moduleConfig, loading: isModuleConfigLoading } =
+      useFetchModuleConfig();
 
     const languageList = computed<Language[]>(
       () => moduleConfig.value?.languages ?? []
@@ -197,15 +220,12 @@ export default defineComponent({
 
     /** Fetch Categories */
 
-    const {
-      data: categories,
-      loading: isCategoriesLoading,
-    } = useFetchCategories({ context });
+    const { data: categories, loading: isCategoriesLoading } =
+      useFetchCategories();
 
     /** Fetch Category */
 
     const { data: category, loading: isCategoryLoading } = useFetchCategory({
-      context,
       categoryId,
       isCreation,
     });
@@ -239,13 +259,13 @@ export default defineComponent({
           errors.value = {};
 
           if (event.type === 'create') {
-            context.root.$router.push(
+            router.push(
               getBlogCategoryFormUrl({ categoryId: String(data.id) })
             );
           }
 
           if (event.type === 'create_exit' || event.type === 'save_exit') {
-            context.root.$router.push(getBlogCategoryListUrl());
+            navigateBack(router, getBlogCategoryListUrl());
           }
 
           if (event.type === 'create_create-another') {
@@ -256,23 +276,23 @@ export default defineComponent({
             );
           }
 
-          context.root.$toast({
+          toast.show({
             variant: 'success',
-            title: context.root.$t('blog:success'),
+            title: t('blog:success'),
             body: isCreation.value
-              ? context.root.$t('blog:blogCategoryWasSuccessfullyCreated')
-              : context.root.$t('blog:blogCategoryWasSuccessfullyUpdated'),
+              ? t('blog:blogCategoryWasSuccessfullyCreated')
+              : t('blog:blogCategoryWasSuccessfullyUpdated'),
           });
         })
         .catch((error) => {
           console.error(error);
           errors.value = convertRequestErrorToMap(error);
-          context.root.$toast({
+          toast.show({
             variant: 'danger',
-            title: context.root.$t('blog:error'),
+            title: t('blog:error'),
             body: isCreation.value
-              ? context.root.$t('blog:blogCategoryCreationWasFailed')
-              : context.root.$t('blog:blogCategoryUpdateWasFailed'),
+              ? t('blog:blogCategoryCreationWasFailed')
+              : t('blog:blogCategoryUpdateWasFailed'),
           });
         })
         .finally(() => {

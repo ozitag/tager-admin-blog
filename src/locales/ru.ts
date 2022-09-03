@@ -1,6 +1,6 @@
-import EN from './en';
+import { EN } from './en';
 
-const RU: typeof EN = {
+export const RU: typeof EN = {
   yes: 'Да',
   no: 'Нет',
   blog: 'Блог',
@@ -25,6 +25,8 @@ const RU: typeof EN = {
   languages: 'Языки',
   date: 'Дата',
   dateOfPublication: 'Дата публикации',
+  dateOfPublicationFrom: 'Дата публикации - От',
+  dateOfPublicationTo: 'Дата публикации - До',
   from: 'от',
   to: 'до',
   From: 'От',

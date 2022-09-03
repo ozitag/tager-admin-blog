@@ -1,223 +1,246 @@
 <template>
-  <page
-    :title="isCreation ? $t('blog:createPost') : $t('blog:updatePost')"
-    :is-content-loading='isContentLoading'
-    :header-buttons='headerButtonList'
-    :footer='{
+  <Page
+    :title="
+      isCreation ? $i18n.t('blog:createPost') : $i18n.t('blog:updatePost')
+    "
+    :is-content-loading="isContentLoading"
+    :header-buttons="headerButtonList"
+    :footer="{
       backHref: postListUrl,
       onSubmit: submitForm,
       isSubmitting: isSubmitting,
-    }'
+    }"
   >
-    <template v-slot:content>
-      <form novalidate @submit.prevent='submitForm'>
-        <tab-list
-          :tab-list='tabList'
-          :selected-tab-id='selectedTabId'
-          @tab:update='selectedTabId = $event.tabId'
+    <template #content>
+      <form novalidate @submit.prevent="submitForm">
+        <TabList
+          :tab-list="tabList"
+          :selected-tab-id="selectedTabId"
+          @tab:update="selectedTabId = $event.tabId"
         />
 
         <template v-if="selectedTabId === 'common'">
-
-          <form-field-select
-            v-if='isCreation && isLangSpecific'
-            v-model='values.language'
-            name='language'
-            :label="$t('blog:language')"
-            :options='languageOptionList'
-            :error='errors.language'
+          <FormFieldSelect
+            v-if="isCreation && isLangSpecific"
+            v-model:value="values.language"
+            name="language"
+            :label="$i18n.t('blog:language')"
+            :options="languageOptionList"
+            :error="errors.language"
           />
 
-          <form-field
-            v-model='values.title'
-            name='title'
-            :label="$t('blog:title')"
-            :error='errors.title'
-            @input='handleTitleChange'
+          <FormField
+            v-model:value="values.title"
+            name="title"
+            :label="$i18n.t('blog:title')"
+            :error="errors.title"
+            @input="handleTitleChange"
           />
 
-          <form-field-url-alias-input
-            id='urlAlias'
-            v-model='values.urlAlias'
-            name='urlAlias'
-            :label="$t('blog:link')"
-            :url-template='urlAliasTemplate'
-            :error='errors.urlAlias'
-            @change='handleAliasChange'
+          <FormFieldUrlAliasInput
+            id="urlAlias"
+            v-model:value="values.urlAlias"
+            name="urlAlias"
+            :label="$i18n.t('blog:link')"
+            :url-template="urlAliasTemplate"
+            :error="errors.urlAlias"
+            @change="handleAliasChange"
           />
 
-          <div class='status'>
-            <div class='status-value'>
-              <form-field-select
-                v-model='values.status'
-                name='status'
-                :error='errors.status'
-                :label="$t('blog:status')"
-                :no-options-message="$t('blog:noTemplates')"
-                :options='statusOptions'
+          <div class="status">
+            <div class="status-value">
+              <FormFieldSelect
+                v-model:value="values.status"
+                name="status"
+                :error="errors.status"
+                :label="$i18n.t('blog:status')"
+                :no-options-message="$i18n.t('blog:noTemplates')"
+                :options="statusOptions"
               />
             </div>
-            <div class='status-checkbox' v-if='values.status.value === "PUBLISHED" || values.status.value === "DRAFT"'>
-              <form-field-checkbox
-                v-model='values.statusDateEnabled'
-                name='statusDateEnabled'
-                :label="$t(values.status.value === 'PUBLISHED' ? 'blog:scheduleArchive' : 'blog:schedulePublish')"
-                :error='errors.status'
+            <div
+              v-if="
+                values.status.value === 'PUBLISHED' ||
+                values.status.value === 'DRAFT'
+              "
+              class="status-checkbox"
+            >
+              <FormFieldCheckbox
+                v-model:checked="values.statusDateEnabled"
+                name="statusDateEnabled"
+                :label="
+                  $i18n.t(
+                    values.status.value === 'PUBLISHED'
+                      ? 'blog:scheduleArchive'
+                      : 'blog:schedulePublish'
+                  )
+                "
+                :error="errors.status"
               />
             </div>
-            <div class='status-date'
-                 v-if='values.statusDateEnabled && (values.status.value === "PUBLISHED" || values.status.value === "DRAFT")'>
-              <form-field
-                v-model='values.statusDate'
-                name='statusDate'
-                type='date'
-                :label="$t(values.status.value === 'PUBLISHED' ? 'blog:archiveAt' : 'blog:publishAt')"
-                :error='errors.statusDate'
+            <div
+              v-if="
+                values.statusDateEnabled &&
+                (values.status.value === 'PUBLISHED' ||
+                  values.status.value === 'DRAFT')
+              "
+              class="status-date"
+            >
+              <FormField
+                v-model:value="values.statusDate"
+                name="statusDate"
+                type="date"
+                :label="
+                  $i18n.t(
+                    values.status.value === 'PUBLISHED'
+                      ? 'blog:archiveAt'
+                      : 'blog:publishAt'
+                  )
+                "
+                :error="errors.statusDate"
               />
             </div>
           </div>
 
-          <form-field
-            v-model='values.datetime'
-            name='datetime'
-            :label="$t('blog:date')"
-            type='date'
-            :error='errors.datetime'
+          <FormField
+            v-model:value="values.datetime"
+            name="datetime"
+            :label="$i18n.t('blog:date')"
+            type="date"
+            :error="errors.datetime"
           />
 
-          <form-field
-            v-model='values.excerpt'
-            name='excerpt'
-            :label="$t('blog:excerpt')"
-            type='textarea'
-            :error='errors.excerpt'
+          <FormField
+            v-model:value="values.excerpt"
+            name="excerpt"
+            :label="$i18n.t('blog:excerpt')"
+            type="textarea"
+            :error="errors.excerpt"
           />
 
-          <form-field-rich-text-input
-            v-model='values.body'
-            name='body'
-            :label="$t('blog:body')"
-            :error='errors.body'
-            :get-upload-adapter-options='getUploadAdapterOptions'
+          <FormFieldRichTextInput
+            v-model:value="values.body"
+            name="body"
+            :label="$i18n.t('blog:body')"
+            :error="errors.body"
+            :get-upload-adapter-options="getUploadAdapterOptions"
           />
 
           <ShortCodeConstructor
-            :short-code-config-list='
+            :short-code-config-list="
               moduleConfig ? moduleConfig.shortcodes : []
-            '
+            "
           />
         </template>
 
         <template v-if="selectedTabId === 'images'">
-          <form-field-file-input
-            v-model='values.coverImage'
-            :label="$t('blog:coverImage')"
-            name='coverImage'
-            file-type='image'
-            :scenario='moduleConfig ? moduleConfig.fileScenarios.cover : null'
+          <FormFieldFileInput
+            v-model:value="values.coverImage"
+            :label="$i18n.t('blog:coverImage')"
+            name="coverImage"
+            file-type="image"
+            :scenario="moduleConfig ? moduleConfig.fileScenarios.cover : null"
           />
 
-          <form-field-file-input
-            v-model='values.image'
-            name='image'
-            :label="$t('blog:innerImage')"
-            file-type='image'
-            :scenario='moduleConfig ? moduleConfig.fileScenarios.image : null'
+          <FormFieldFileInput
+            v-model:value="values.image"
+            name="image"
+            :label="$i18n.t('blog:innerImage')"
+            file-type="image"
+            :scenario="moduleConfig ? moduleConfig.fileScenarios.image : null"
           />
 
-          <form-field-file-input
-            v-model='values.imageMobile'
-            name='imageMobile'
-            :label="$t('blog:innerImageMobile')"
-            file-type='image'
-            :scenario='
+          <FormFieldFileInput
+            v-model:value="values.imageMobile"
+            name="imageMobile"
+            :label="$i18n.t('blog:innerImageMobile')"
+            file-type="image"
+            :scenario="
               moduleConfig ? moduleConfig.fileScenarios.imageMobile : null
-            '
+            "
           />
         </template>
 
         <template v-if="selectedTabId === 'relations'">
-          <form-field
-            v-model='values.tags'
-            name='tags'
-            :label="$t('blog:tags')"
-            :error='errors.tags'
+          <FormField
+            v-model:value="values.tags"
+            name="tags"
+            :label="$i18n.t('blog:tags')"
+            :error="errors.tags"
           />
 
-          <form-field-multi-select
-            :selected-options='values.categories'
-            name='categories'
-            :label="$t('blog:categories')"
-            :options='categoryOptionList'
-            :error='errors.categories'
-            @change='handleCategoriesChange'
+          <FormFieldMultiSelect
+            v-model:selected-options="values.categories"
+            name="categories"
+            :label="$i18n.t('blog:categories')"
+            :options="categoryOptionList"
+            :error="errors.categories"
+            @change="handleCategoriesChange"
           />
 
-          <form-field-multi-select
-            v-model='values.relatedPosts'
-            name='relatedPosts'
-            :label="$t('blog:relatedPosts')"
-            :options='postOptionList'
-            :error='errors.relatedPosts'
-            :searchable='true'
+          <FormFieldMultiSelect
+            v-model:selected-options="values.relatedPosts"
+            name="relatedPosts"
+            :label="$i18n.t('blog:relatedPosts')"
+            :options="postOptionList"
+            :error="errors.relatedPosts"
+            :searchable="true"
           />
         </template>
 
         <template v-if="selectedTabId === 'additional'">
           <DynamicField
-            v-for='field of values.additionalFields'
-            :key='field.name'
-            :field='field'
+            v-for="field of values.additionalFields"
+            :key="field.name"
+            :field="field"
           />
         </template>
 
         <template v-if="selectedTabId === 'seo'">
-          <seo-field-group
-            :title='values.pageTitle'
-            :title-error-message='errors.pageTitle'
-            :title-label="$t('blog:pageTitle')"
-            :description='values.pageDescription'
-            :description-error-message='errors.pageDescription'
-            :description-label="$t('blog:pageDescription')"
-            :image='values.openGraphImage'
-            :image-error-message='errors.openGraphImage'
-            :image-label="$t('blog:openGraphImage')"
-            :image-scenario='
+          <SeoFieldGroup
+            :title="values.pageTitle"
+            :title-error-message="errors.pageTitle"
+            :title-label="$i18n.t('blog:pageTitle')"
+            :description="values.pageDescription"
+            :description-error-message="errors.pageDescription"
+            :description-label="$i18n.t('blog:pageDescription')"
+            :image="values.openGraphImage"
+            :image-error-message="errors.openGraphImage"
+            :image-label="$i18n.t('blog:openGraphImage')"
+            :image-scenario="
               moduleConfig ? moduleConfig.fileScenarios.openGraph : null
-            '
-            @change='handleSeoFieldGroupChange'
+            "
+            @change="handleSeoFieldGroupChange"
           />
         </template>
       </form>
     </template>
 
-    <template v-slot:footer>
+    <template #footer>
       <FormFooter
-        :back-href='postListUrl'
-        :on-submit='submitForm'
-        :is-submitting='isSubmitting'
-        :is-creation='isCreation'
-        :can-create-another='isCreation'
+        :back-href="postListUrl"
+        :is-submitting="isSubmitting"
+        :is-creation="isCreation"
+        :can-create-another="isCreation"
+        @submit="submitForm"
       />
     </template>
-  </page>
+  </Page>
 </template>
 
-<script lang='ts'>
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  ref,
-  watch
-} from '@vue/composition-api';
+<script lang="ts">
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 import {
   convertRequestErrorToMap,
   isNotNullish,
   Nullable,
   useResource,
-  urlTranslit
+  urlTranslit,
+  useI18n,
+  useToast,
+  navigateBack,
 } from '@tager/admin-services';
 import {
   createTabErrorFinder,
@@ -226,24 +249,30 @@ import {
   ShortCodeConstructor,
   SeoChangeEvent,
   FormFooter,
-  TagerFormSubmitEvent
+  TagerFormSubmitEvent,
+  FormFieldSelect,
+  FormField,
+  FormFieldUrlAliasInput,
+  FormFieldCheckbox,
+  FormFieldRichTextInput,
+  FormFieldFileInput,
+  FormFieldMultiSelect,
+  SeoFieldGroup,
 } from '@tager/admin-ui';
 import { DynamicField } from '@tager/admin-dynamic-field';
+import { Page } from '@tager/admin-layout';
 
-import {
-  getBlogPostFormUrl,
-  getBlogPostListUrl
-} from '../../../constants/paths';
+import { getBlogPostFormUrl, getBlogPostListUrl } from '../../../utils/paths';
 import {
   createBlogPost,
   getPost,
-  updateBlogPost
+  updateBlogPost,
 } from '../../../services/requests';
 import { Language, PostFull } from '../../../typings/model';
 import {
   useFetchModuleConfig,
   useFetchCategories,
-  useFetchPosts
+  useFetchPosts,
 } from '../../../hooks';
 
 import {
@@ -252,28 +281,44 @@ import {
   convertFormValuesToUpdatePayload,
   convertPostToFormValues,
   FormValues,
-  getStatusOptions
+  getStatusOptions,
 } from './PostForm.helpers';
+import TabList from './components/TabList/TabList.vue';
 
 export default defineComponent({
   name: 'BlogPostForm',
-  components: { DynamicField, ShortCodeConstructor, FormFooter },
-  setup(props, context) {
-    const postId = computed<string>(() => context.root.$route.params.postId);
+  components: {
+    SeoFieldGroup,
+    FormFieldMultiSelect,
+    FormFieldFileInput,
+    FormFieldRichTextInput,
+    FormFieldCheckbox,
+    FormFieldUrlAliasInput,
+    FormField,
+    FormFieldSelect,
+    TabList,
+    Page,
+    DynamicField,
+    ShortCodeConstructor,
+    FormFooter,
+  },
+  setup() {
+    const route = useRoute();
+    const router = useRouter();
+    const toast = useToast();
+    const { t } = useI18n();
+
+    const postId = computed<string>(() => route.params.postId as string);
     const isCreation = computed<boolean>(() => postId.value === 'create');
 
     const urlAliasChanged = ref<boolean>(false);
 
-    const statusOptions = computed<OptionType[]>(() =>
-      getStatusOptions(context.root.$t)
-    );
+    const statusOptions = computed<OptionType[]>(() => getStatusOptions(t));
 
     /** Fetch module config **/
 
-    const {
-      data: moduleConfig,
-      loading: isModuleConfigLoading
-    } = useFetchModuleConfig({ context });
+    const { data: moduleConfig, loading: isModuleConfigLoading } =
+      useFetchModuleConfig();
 
     const languageList = computed<Language[]>(
       () => moduleConfig.value?.languages ?? []
@@ -282,7 +327,7 @@ export default defineComponent({
     const languageOptionList = computed<OptionType[]>(() =>
       languageList.value.map(({ id, name }) => ({
         value: id,
-        label: name
+        label: name,
       }))
     );
 
@@ -290,18 +335,18 @@ export default defineComponent({
 
     /** Fetch category list */
 
-    const {
-      data: categoryList,
-      loading: isCategoryListLoading
-    } = useFetchCategories({ context });
+    const { data: categoryList, loading: isCategoryListLoading } =
+      useFetchCategories();
 
     /** Fetch Post */
 
-    const [fetchPost, { data: post, loading: isPostLoading }] = useResource<Nullable<PostFull>>({
-      fetchResource: () => getPost(postId.value),
+    const [fetchPost, { data: post, loading: isPostLoading }] = useResource<
+      Nullable<PostFull>
+    >({
+      fetchResource: () =>
+        postId.value ? getPost(postId.value) : new Promise(() => null),
       initialValue: null,
-      context,
-      resourceName: 'Post'
+      resourceName: 'Post',
     });
 
     onMounted(() => {
@@ -317,16 +362,14 @@ export default defineComponent({
     });
 
     /** Fetch post list */
-    const { data: postList, loading: isPostListLoading } = useFetchPosts({
-      context
-    });
+    const { data: postList, loading: isPostListLoading } = useFetchPosts();
 
     const postOptionList = computed<OptionType<number>[]>(() =>
       postList.value
         .filter((relatedPost) => relatedPost.id !== post.value?.id)
         .map((post) => ({
           value: post.id,
-          label: post.title
+          label: post.title,
         }))
     );
 
@@ -368,17 +411,11 @@ export default defineComponent({
           errors.value = {};
 
           if (event.type === 'create') {
-            context.root.$router.push(
-              getBlogPostFormUrl({ postId: String(data.id) })
-            );
+            router.push(getBlogPostFormUrl({ postId: String(data.id) }));
           }
 
           if (event.type === 'create_exit' || event.type === 'save_exit') {
-            if (context.root.$previousRoute) {
-              context.root.$router.back();
-            } else {
-              context.root.$router.push(getBlogPostListUrl());
-            }
+            navigateBack(router, getBlogPostListUrl());
           }
 
           if (event.type === 'create_create-another') {
@@ -391,23 +428,23 @@ export default defineComponent({
             );
           }
 
-          context.root.$toast({
+          toast.show({
             variant: 'success',
-            title: context.root.$t('blog:success'),
+            title: t('blog:success'),
             body: isCreation.value
-              ? context.root.$t('blog:blogPostWasSuccessfullyCreated')
-              : context.root.$t('blog:blogPostWasSuccessfullyUpdated')
+              ? t('blog:blogPostWasSuccessfullyCreated')
+              : t('blog:blogPostWasSuccessfullyUpdated'),
           });
         })
         .catch((error) => {
           console.error(error);
           errors.value = convertRequestErrorToMap(error);
-          context.root.$toast({
+          toast.show({
             variant: 'danger',
-            title: context.root.$t('blog:error'),
+            title: t('blog:error'),
             body: isCreation.value
-              ? context.root.$t('blog:blogPostCreationWasFailed')
-              : context.root.$t('blog:blogPostUpdateWasFailed')
+              ? t('blog:blogPostCreationWasFailed')
+              : t('blog:blogPostUpdateWasFailed'),
           });
         })
         .finally(() => {
@@ -473,32 +510,32 @@ export default defineComponent({
       return [
         {
           id: 'common',
-          label: context.root.$t('blog:common'),
+          label: t('blog:common'),
           hasErrors: hasErrors([
             'title',
             'language',
             'urlAlias',
             'excerpt',
             'body',
-            'date'
-          ])
+            'date',
+          ]),
         },
         {
           id: 'images',
-          label: context.root.$t('blog:images'),
-          hasErrors: hasErrors(['coverImage', 'image'])
+          label: t('blog:images'),
+          hasErrors: hasErrors(['coverImage', 'image']),
         },
         {
           id: 'relations',
-          label: context.root.$t('blog:relations'),
-          hasErrors: hasErrors(['categories', 'relatedPosts', 'tags'])
+          label: t('blog:relations'),
+          hasErrors: hasErrors(['categories', 'relatedPosts', 'tags']),
         },
         values.value.additionalFields.length > 0
           ? {
-            id: 'additional',
-            label: context.root.$t('blog:additionalFields'),
-            hasErrors: hasErrors([])
-          }
+              id: 'additional',
+              label: t('blog:additionalFields'),
+              hasErrors: hasErrors([]),
+            }
           : null,
         {
           id: 'seo',
@@ -506,31 +543,33 @@ export default defineComponent({
           hasErrors: hasErrors([
             'pageTitle',
             'pageDescription',
-            'openGraphImage'
-          ])
-        }
+            'openGraphImage',
+          ]),
+        },
       ].filter(isNotNullish);
     });
 
     const selectedTabId = ref<string>(tabList.value[0].id);
 
-    const headerButtonList = computed<{ text: string; href: string; target?: string }[]>(() =>
+    const headerButtonList = computed<
+      { text: string; href: string; target?: string }[]
+    >(() =>
       [
         post.value
           ? {
-            text: context.root.$t('blog:viewPost'),
-            href: process.env.VUE_APP_WEBSITE_URL + post.value.url,
-            target: '_blank'
-          }
-          : null
+              text: t('blog:viewPost'),
+              href: process.env.VUE_APP_WEBSITE_URL + post.value.url,
+              target: '_blank',
+            }
+          : null,
       ].filter(isNotNullish)
     );
 
     function handleSeoFieldGroupChange({
-                                         title,
-                                         description,
-                                         image
-                                       }: SeoChangeEvent) {
+      title,
+      description,
+      image,
+    }: SeoChangeEvent) {
       values.value.pageTitle = title;
       values.value.pageDescription = description;
       values.value.openGraphImage = image;
@@ -579,7 +618,7 @@ export default defineComponent({
 
           const newSelectedOption: OptionType<number> = {
             value: foundSelectedCategory.id,
-            label: foundSelectedCategory.name
+            label: foundSelectedCategory.name,
           };
 
           if (
@@ -626,13 +665,13 @@ export default defineComponent({
       urlAliasTemplate,
       handleCategoriesChange,
 
-      statusOptions
+      statusOptions,
     };
-  }
+  },
 });
 </script>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .status {
   display: flex;
   align-items: flex-end;

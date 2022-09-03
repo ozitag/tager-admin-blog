@@ -1,15 +1,15 @@
 <template>
-  <page
-    :title="$t('blog:blogCategories')"
+  <Page
+    :title="$i18n.t('blog:blogCategories')"
     :header-buttons="[
       {
-        text: $t('blog:newCategory'),
+        text: $i18n.t('blog:newCategory'),
         href: getBlogCategoryFormUrl({ categoryId: 'create' }),
       },
     ]"
   >
-    <template v-slot:content>
-      <data-table
+    <template #content>
+      <DataTable
         :column-defs="columnDefs"
         :row-data="rowData"
         :loading="isRowDataLoading"
@@ -24,88 +24,102 @@
         data-table="blog-category"
         @change="handleChange"
       >
-        <template v-if="isLangSpecific" v-slot:filters>
-          <advanced-search :tags="tags" @click:tag="tagRemovalHandler">
+        <template v-if="isLangSpecific" #filters>
+          <AdvancedSearch :tags="tags" @click:tag="tagRemovalHandler">
             <div class="filters">
-              <form-field-multi-select
-                v-model="languageFilter"
+              <FormFieldMultiSelect
+                v-model:values="languageFilter"
                 :options="languageOptionList"
                 name="languageFilter"
                 :searchable="true"
-                :label="$t('blog:language')"
+                :label="$i18n.t('blog:language')"
                 class="filter"
               />
             </div>
-          </advanced-search>
+          </AdvancedSearch>
         </template>
 
-        <template v-slot:cell(link-to-posts)="{ row }">
-          <count-button
+        <template #cell(link-to-posts)="{ row }">
+          <CountButton
             :href="getLinkToPostsByCategory(row.id)"
             variant="outline-secondary"
             :count="row.postsCount"
           >
-            {{ $t('blog:posts') }}
-          </count-button>
+            {{ $i18n.t('blog:posts') }}
+          </CountButton>
         </template>
 
-        <template v-slot:cell(actions)="{ row, rowIndex }">
-          <base-button
+        <template #cell(actions)="{ row, rowIndex }">
+          <BaseButton
             variant="icon"
-            :title="$t('blog:edit')"
+            :title="$i18n.t('blog:edit')"
             :disabled="isDeleting(row.id)"
             :href="getBlogCategoryFormUrl({ categoryId: row.id })"
           >
-            <svg-icon name="edit" />
-          </base-button>
+            <EditIcon />
+          </BaseButton>
 
-          <base-button
+          <BaseButton
             variant="icon"
-            :title="$t('blog:moveUp')"
+            :title="$i18n.t('blog:moveUp')"
             :disabled="rowIndex === 0 || isCategoryMoving"
             @click="startMoveCategory(row.id, 'up')"
           >
-            <svg-icon name="north" />
-          </base-button>
+            <NorthIcon />
+          </BaseButton>
 
-          <base-button
+          <BaseButton
             variant="icon"
-            :title="$t('blog:moveDown')"
+            :title="$i18n.t('blog:moveDown')"
             :disabled="rowIndex === rowData.length - 1 || isCategoryMoving"
             @click="startMoveCategory(row.id, 'down')"
           >
-            <svg-icon name="south" />
-          </base-button>
+            <SouthIcon />
+          </BaseButton>
 
-          <base-button
+          <BaseButton
             variant="icon"
-            :title="$t('blog:remove')"
+            :title="$i18n.t('blog:remove')"
             :disabled="isDeleting(row.id) || row.postsCount > 0"
             @click="handleCategoryDelete(row.id)"
           >
-            <svg-icon name="delete" />
-          </base-button>
+            <DeleteIcon />
+          </BaseButton>
         </template>
-      </data-table>
+      </DataTable>
     </template>
-  </page>
+  </Page>
 </template>
 
 <script lang="ts">
-import { computed, ref, defineComponent, watch } from '@vue/composition-api';
+import { computed, ref, defineComponent, watch } from 'vue';
 import isEqual from 'lodash.isequal';
+import { useRoute, useRouter } from 'vue-router';
 
-import { useResourceDelete } from '@tager/admin-services';
-import { useDataTable } from '@tager/admin-ui';
+import { useI18n, useResourceDelete } from '@tager/admin-services';
+import {
+  AdvancedSearch,
+  BaseButton,
+  CountButton,
+  DeleteIcon,
+  EditIcon,
+  FormFieldMultiSelect,
+  NorthIcon,
+  SouthIcon,
+  useDataTable,
+  DataTable,
+} from '@tager/admin-ui';
+import { Page } from '@tager/admin-layout';
 
 import { useFetchModuleConfig } from '../../../hooks';
-import { getBlogCategoryFormUrl } from '../../../constants/paths';
+import { getBlogCategoryFormUrl } from '../../../utils/paths';
 import {
   deleteCategory,
   getCategories,
   moveCategory,
 } from '../../../services/requests';
 import { Category, Language } from '../../../typings/model';
+import { BLOG_ROUTE_PATHS } from '../../../constants/paths';
 
 import {
   convertCategoryList,
@@ -116,13 +130,27 @@ import { useAdvancedSearch } from './hooks';
 
 export default defineComponent({
   name: 'BlogCategoryList',
-  setup(props, context) {
+  components: {
+    DeleteIcon,
+    SouthIcon,
+    NorthIcon,
+    EditIcon,
+    BaseButton,
+    CountButton,
+    FormFieldMultiSelect,
+    AdvancedSearch,
+    Page,
+    DataTable,
+  },
+  setup() {
+    const { t } = useI18n();
+    const route = useRoute();
+    const router = useRouter();
+
     /** Fetch module config **/
 
-    const {
-      data: moduleConfig,
-      loading: isModuleConfigLoading,
-    } = useFetchModuleConfig({ context });
+    const { data: moduleConfig, loading: isModuleConfigLoading } =
+      useFetchModuleConfig();
 
     const languageList = computed<Language[]>(
       () => moduleConfig.value?.languages ?? []
@@ -136,7 +164,7 @@ export default defineComponent({
       filterParams,
       tags,
       tagRemovalHandler,
-    } = useAdvancedSearch({ context, languageList });
+    } = useAdvancedSearch({ languageList, route, t });
 
     const isLangSpecific = computed<boolean>(
       () => languageOptionList.value.length > 1
@@ -163,7 +191,6 @@ export default defineComponent({
           ...filterParams.value,
         }),
       initialValue: [],
-      context,
       resourceName: 'Blog categories',
       pageSize: 100,
     });
@@ -173,26 +200,27 @@ export default defineComponent({
         return;
       }
 
+      if (route.path !== BLOG_ROUTE_PATHS.CATEGORY_LIST) {
+        return;
+      }
+
       const newQuery = {
         ...filterParams.value,
-        query: (context.root.$route.query.query ?? '') as string,
+        query: (route.query.query ?? '') as string,
       };
 
-      if (!isEqual(context.root.$route.query, newQuery)) {
-        context.root.$router.replace({ query: newQuery });
+      if (!isEqual(route.query, newQuery)) {
+        router.replace({ query: newQuery });
         fetchCategoryList();
       }
     });
 
-    const {
-      isDeleting,
-      handleResourceDelete: handleCategoryDelete,
-    } = useResourceDelete({
-      deleteResource: deleteCategory,
-      resourceName: 'Post',
-      onSuccess: fetchCategoryList,
-      context,
-    });
+    const { isDeleting, handleResourceDelete: handleCategoryDelete } =
+      useResourceDelete({
+        deleteResource: deleteCategory,
+        resourceName: 'Post',
+        onSuccess: fetchCategoryList,
+      });
 
     const isCategoryMoving = ref<boolean>(false);
 
@@ -222,7 +250,7 @@ export default defineComponent({
     );
 
     const columnDefs = computed(() =>
-      getCategoryTableColumnDefs(moduleConfig.value, context.root.$t)
+      getCategoryTableColumnDefs(moduleConfig.value, t)
     );
 
     return {

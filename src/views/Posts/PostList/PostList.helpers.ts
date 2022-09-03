@@ -9,7 +9,7 @@ import {
   Language,
   PostShort,
 } from '../../../typings/model';
-import { getBlogPostFormUrl } from '../../../constants/paths';
+import { getBlogPostFormUrl } from '../../../utils/paths';
 
 export function convertPostList(
   postList: PostShort[],

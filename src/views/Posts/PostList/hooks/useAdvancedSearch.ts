@@ -1,11 +1,6 @@
-import {
-  computed,
-  ComputedRef,
-  Ref,
-  ref,
-  SetupContext,
-  watch,
-} from '@vue/composition-api';
+import { computed, ComputedRef, Ref, ref, watch } from 'vue';
+import { TFunction } from 'i18next';
+import { RouteLocationNormalizedLoaded } from 'vue-router';
 
 import {
   FilterTagType,
@@ -20,10 +15,12 @@ import { Category, Language } from '../../../../typings/model';
 import { getNameWithDepth } from '../../../../utils/common';
 
 interface Params {
-  context: SetupContext;
-  categoryList: ComputedRef<Category[]>;
+  categoryList: Ref<Category[]>;
   languageList: ComputedRef<Language[]>;
   statusOptionList: ComputedRef<OptionType[]>;
+
+  t: TFunction;
+  route: RouteLocationNormalizedLoaded;
 }
 
 interface State {
@@ -36,6 +33,7 @@ interface State {
   statusFilter: Ref<OptionType[]>;
   filterParams: ComputedRef<Record<string, string | string[]>>;
   tags: ComputedRef<FilterTagType[]>;
+
   tagRemovalHandler(event: FilterTagType): void;
 }
 
@@ -50,7 +48,8 @@ enum FilterTypes {
 export const dateFormat = (date: string) => date.split('-').reverse().join('.');
 
 export function useAdvancedSearch({
-  context,
+  t,
+  route,
   categoryList,
   languageList,
   statusOptionList,
@@ -66,9 +65,10 @@ export function useAdvancedSearch({
 
   const initialCategoryFilter = computed<OptionType[]>(() => {
     const queryValue = getFilterParamAsStringArray(
-      context.root.$route.query,
+      route.query,
       FilterTypes.CATEGORY
     );
+
     return categoryOptionList.value.filter(({ value }) =>
       queryValue.some((selected) => selected === value)
     );
@@ -88,7 +88,7 @@ export function useAdvancedSearch({
 
   const initialLanguageFilter = computed<OptionType[]>(() => {
     const queryValue = getFilterParamAsStringArray(
-      context.root.$route.query,
+      route.query,
       FilterTypes.LANGUAGE
     );
     return languageOptionList.value.filter(({ value }) =>
@@ -105,11 +105,7 @@ export function useAdvancedSearch({
   /** From date **/
 
   const initialFromDateFilter = computed<string>(
-    () =>
-      getFilterParamAsString(
-        context.root.$route.query,
-        FilterTypes.FROM_DATE
-      ) ?? ''
+    () => getFilterParamAsString(route.query, FilterTypes.FROM_DATE) ?? ''
   );
 
   const fromDateFilter = ref<string>(initialFromDateFilter.value);
@@ -121,9 +117,7 @@ export function useAdvancedSearch({
   /** To date **/
 
   const initialToDateFilter = computed<string>(
-    () =>
-      getFilterParamAsString(context.root.$route.query, FilterTypes.TO_DATE) ??
-      ''
+    () => getFilterParamAsString(route.query, FilterTypes.TO_DATE) ?? ''
   );
 
   const toDateFilter = ref<string>(initialToDateFilter.value);
@@ -148,20 +142,18 @@ export function useAdvancedSearch({
     }
 
     if (fromDateFilter.value && !toDateFilter.value) {
-      label = `${context.root.$t('blog:from')} ${dateFormat(
-        fromDateFilter.value
-      )}`;
+      label = `${t('blog:from')} ${dateFormat(fromDateFilter.value)}`;
     }
 
     if (!fromDateFilter.value && toDateFilter.value) {
-      label = `${context.root.$t('blog:to')} ${dateFormat(toDateFilter.value)}`;
+      label = `${t('blog:to')} ${dateFormat(toDateFilter.value)}`;
     }
 
     return {
       value: '',
       label,
       name: FilterTypes.FROM_DATE,
-      title: context.root.$t('blog:dateOfPublication'),
+      title: t('blog:dateOfPublication'),
     };
   });
 
@@ -169,7 +161,7 @@ export function useAdvancedSearch({
 
   const initialStatusFilter = computed<OptionType[]>(() => {
     const queryValue = getFilterParamAsStringArray(
-      context.root.$route.query,
+      route.query,
       FilterTypes.STATUS
     );
     return statusOptionList.value.filter(({ value }) =>
@@ -235,20 +227,20 @@ export function useAdvancedSearch({
         value,
         label,
         name: FilterTypes.CATEGORY,
-        title: context.root.$t('blog:category'),
+        title: t('blog:category'),
       })),
       ...languageFilter.value.map(({ value, label }) => ({
         value,
         label,
         name: FilterTypes.LANGUAGE,
-        title: context.root.$t('blog:language'),
+        title: t('blog:language'),
       })),
       date.value,
       ...statusFilter.value.map(({ value, label }) => ({
         value,
         label,
         name: FilterTypes.STATUS,
-        title: context.root.$t('blog:status'),
+        title: t('blog:status'),
       })),
     ].filter(isNotNullish)
   );

@@ -1,4 +1,4 @@
-const EN = {
+export const EN = {
   yes: 'Yes',
   no: 'no',
   blog: 'Blog',
@@ -23,6 +23,8 @@ const EN = {
   languages: 'Languages',
   date: 'Date',
   dateOfPublication: 'Date of publication',
+  dateOfPublicationFrom: 'Date of publication - From',
+  dateOfPublicationTo: 'Date of publication - To',
   from: 'from',
   to: 'to',
   From: 'From',
@@ -88,5 +90,3 @@ const EN = {
   archiveAtLabel: 'Archive at',
   publishAtLabel: 'Publish at',
 };
-
-export default EN;
