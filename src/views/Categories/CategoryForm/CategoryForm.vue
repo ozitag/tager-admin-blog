@@ -48,11 +48,7 @@
         </template>
 
         <template v-else>
-          <TabList
-            :tab-list="tabList"
-            :selected-tab-id="selectedTabId"
-            @tab:update="selectedTabId = $event.tabId"
-          />
+          <TabList v-model:tab-id="selectedTabId" :tab-list="tabList" />
 
           <template v-if="selectedTabId === 'common'">
             <FormFieldSelect
@@ -152,6 +148,7 @@ import {
   FormFieldUrlAliasInput,
   FormFieldCheckbox,
   SeoFieldGroup,
+  TabList,
 } from '@tager/admin-ui';
 import { Page } from '@tager/admin-layout';
 
@@ -166,7 +163,6 @@ import {
 } from '../../../utils/paths';
 import { CategoryFormValues, Language } from '../../../typings/model';
 import { createCategory, updateCategory } from '../../../services/requests';
-import TabList from '../../Posts/PostForm/components/TabList/TabList.vue';
 
 import {
   convertCategoryFormValuesToPayload,

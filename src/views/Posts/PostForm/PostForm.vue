@@ -13,11 +13,7 @@
   >
     <template #content>
       <form novalidate @submit.prevent="submitForm">
-        <TabList
-          :tab-list="tabList"
-          :selected-tab-id="selectedTabId"
-          @tab:update="selectedTabId = $event.tabId"
-        />
+        <TabList v-model:tab-id="selectedTabId" :tab-list="tabList" />
 
         <template v-if="selectedTabId === 'common'">
           <FormFieldSelect
@@ -258,6 +254,7 @@ import {
   FormFieldFileInput,
   FormFieldMultiSelect,
   SeoFieldGroup,
+  TabList,
 } from '@tager/admin-ui';
 import { DynamicField } from '@tager/admin-dynamic-field';
 import { Page } from '@tager/admin-layout';
@@ -283,7 +280,6 @@ import {
   FormValues,
   getStatusOptions,
 } from './PostForm.helpers';
-import TabList from './components/TabList/TabList.vue';
 
 export default defineComponent({
   name: 'BlogPostForm',
