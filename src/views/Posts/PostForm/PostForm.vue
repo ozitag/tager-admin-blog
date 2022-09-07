@@ -254,7 +254,7 @@ import {
   FormFieldFileInput,
   FormFieldMultiSelect,
   SeoFieldGroup,
-  TabList,
+  TabList, formatDateTime, formatDate,
 } from '@tager/admin-ui';
 import { DynamicField } from '@tager/admin-dynamic-field';
 import { Page } from '@tager/admin-layout';
@@ -365,9 +365,14 @@ export default defineComponent({
         .filter((relatedPost) => relatedPost.id !== post.value?.id)
         .map((post) => ({
           value: post.id,
-          label: post.title,
+          label:
+            (post.status === 'ARCHIVED'
+              ? `${t('blog:statusArchived')} - `
+              : post.status === 'DRAFT'
+              ? `${t('blog:statusDraft')} - `
+              : (post.datetime ? formatDate(new Date(post.datetime)) + ' - ' : '')) + post.title,
         }))
-    );
+    )
 
     /** Form State **/
     const isSubmitting = ref<boolean>(false);

@@ -19,7 +19,7 @@ export const RU: typeof EN = {
   edit: 'Редактировать',
   remove: 'Удалить',
   postsByCategory: 'Посты по категориям',
-  name: 'Название',
+  name: 'Заголовок',
   image: 'Изображение',
   language: 'Язык',
   languages: 'Языки',
@@ -91,6 +91,12 @@ export const RU: typeof EN = {
   publishAt: 'Опубликовать в',
   archiveAtLabel: 'Перенос в архив',
   publishAtLabel: 'Публикация',
+
+  sortDateTimeAsc: 'Дате - По возрастанию',
+  sortDateTimeDesc: 'Дате - По убыванию',
+  sortTitleAsc: 'Заголовку - А-Я',
+  sortTitleDesc: 'Заголовку - Я-А',
+  sortStatus: 'Статусу',
 };
 
 export default RU;

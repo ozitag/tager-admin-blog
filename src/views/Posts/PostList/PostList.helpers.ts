@@ -1,7 +1,7 @@
 import { TFunction } from 'i18next';
 
 import { notEmpty, Nullable } from '@tager/admin-services';
-import { ColumnDefinition } from '@tager/admin-ui';
+import { ColumnDefinition, OptionType } from '@tager/admin-ui';
 
 import {
   Category,
@@ -121,4 +121,29 @@ export function getPostTableColumnDefs(
   ];
 
   return COLUMN_DEFS.filter(notEmpty);
+}
+
+export function getPostTableSortOptions(t: TFunction): Array<OptionType> {
+  return [
+    {
+      value: 'datetime_desc',
+      label: t('blog:sortDateTimeDesc'),
+    },
+    {
+      value: 'datetime_asc',
+      label: t('blog:sortDateTimeAsc'),
+    },
+    {
+      value: 'title_asc',
+      label: t('blog:sortTitleAsc'),
+    },
+    {
+      value: 'title_desc',
+      label: t('blog:sortTitleDesc'),
+    },
+    {
+      value: 'status',
+      label: t('blog:sortStatus'),
+    },
+  ];
 }

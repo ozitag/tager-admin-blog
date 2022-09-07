@@ -7,7 +7,8 @@ import { getPosts } from '../services/requests';
 
 export function useFetchPosts(): ResourceRef<PostShort[]> {
   const [fetchPosts, resource] = useResource<PostShort[]>({
-    fetchResource: () => getPosts({ pageNumber: 1, pageSize: 99999 }),
+    fetchResource: () =>
+      getPosts({ pageNumber: 1, pageSize: 99999, sort: 'status' }),
     initialValue: [],
     resourceName: 'Blog posts',
   });

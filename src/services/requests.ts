@@ -15,6 +15,7 @@ export function getPosts(params?: {
   query?: string;
   pageNumber?: number;
   pageSize?: number;
+  sort?: string;
 }): Promise<ResponseBody<PostShort[]>> {
   return request.get({ path: '/admin/blog/posts', params });
 }

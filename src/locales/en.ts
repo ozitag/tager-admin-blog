@@ -17,7 +17,7 @@ export const EN = {
   edit: 'Edit',
   remove: 'Remove',
   postsByCategory: 'Posts by category',
-  name: 'Name',
+  name: 'Title',
   image: 'Image',
   language: 'Language',
   languages: 'Languages',
@@ -89,4 +89,10 @@ export const EN = {
   publishAt: 'Publish at',
   archiveAtLabel: 'Archive at',
   publishAtLabel: 'Publish at',
+
+  sortDateTimeAsc: 'Date - Newest to Oldest',
+  sortDateTimeDesc: 'Date - Oldest to Newest',
+  sortTitleAsc: 'Title - A-Z',
+  sortTitleDesc: 'Title - Z-A',
+  sortStatus: 'Status',
 };
