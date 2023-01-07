@@ -10,10 +10,10 @@
       onSubmit: submitForm,
       isSubmitting: isSubmitting,
     }"
+    v-model:tab-id="selectedTabId" :tabs="tabList"
   >
     <template #content>
       <form novalidate @submit.prevent="submitForm">
-        <TabList v-model:tab-id="selectedTabId" :tab-list="tabList" />
 
         <template v-if="selectedTabId === 'common'">
           <FormFieldSelect
@@ -254,7 +254,7 @@ import {
   FormFieldFileInput,
   FormFieldMultiSelect,
   SeoFieldGroup,
-  TabList, formatDateTime, formatDate,
+  formatDateTime, formatDate,
 } from '@tager/admin-ui';
 import { DynamicField } from '@tager/admin-dynamic-field';
 import { Page } from '@tager/admin-layout';
@@ -292,7 +292,6 @@ export default defineComponent({
     FormFieldUrlAliasInput,
     FormField,
     FormFieldSelect,
-    TabList,
     Page,
     DynamicField,
     ShortCodeConstructor,
