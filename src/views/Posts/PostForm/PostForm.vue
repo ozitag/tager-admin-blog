@@ -1,5 +1,6 @@
 <template>
   <Page
+    v-model:tab-id="selectedTabId"
     :title="
       isCreation ? $i18n.t('blog:createPost') : $i18n.t('blog:updatePost')
     "
@@ -9,8 +10,7 @@
       backHref: postListUrl,
       onSubmit: submitForm,
       isSubmitting: isSubmitting,
-    }"
-    v-model:tab-id="selectedTabId" :tabs="tabList"
+    }" :tabs="tabList"
   >
     <template #content>
       <form novalidate @submit.prevent>
@@ -254,7 +254,7 @@ import {
   FormFieldFileInput,
   FormFieldMultiSelect,
   SeoFieldGroup,
-  formatDateTime, formatDate,
+  formatDate,
 } from '@tager/admin-ui';
 import { DynamicField } from '@tager/admin-dynamic-field';
 import { Page } from '@tager/admin-layout';

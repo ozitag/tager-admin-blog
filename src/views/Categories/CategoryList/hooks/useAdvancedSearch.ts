@@ -1,4 +1,4 @@
-import { computed, type ComputedRef, type Ref, ref, type SetupContext, watch } from 'vue';
+import { computed, type ComputedRef, type Ref, ref, watch } from 'vue';
 import { type RouteLocationNormalizedLoaded } from 'vue-router';
 import { type TFunction } from 'i18next';
 
