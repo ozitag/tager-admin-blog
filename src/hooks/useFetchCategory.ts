@@ -1,8 +1,8 @@
-import { onMounted, Ref, watch } from 'vue';
+import { onMounted, type Ref, watch } from 'vue';
 
-import { Nullable, ResourceRef, useResource } from '@tager/admin-services';
+import { type Nullable, type ResourceRef, useResource } from '@tager/admin-services';
 
-import { Category } from '../typings/model';
+import { type Category } from '../typings/model';
 import { getCategory } from '../services/requests';
 
 export function useFetchCategory({

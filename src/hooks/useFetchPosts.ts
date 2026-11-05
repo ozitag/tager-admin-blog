@@ -1,8 +1,8 @@
 import { onMounted } from 'vue';
 
-import { ResourceRef, useResource } from '@tager/admin-services';
+import { type ResourceRef, useResource } from '@tager/admin-services';
 
-import { PostShort } from '../typings/model';
+import { type PostShort } from '../typings/model';
 import { getPosts } from '../services/requests';
 
 export function useFetchPosts(): ResourceRef<PostShort[]> {

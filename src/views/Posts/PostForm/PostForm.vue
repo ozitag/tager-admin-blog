@@ -13,7 +13,7 @@
     v-model:tab-id="selectedTabId" :tabs="tabList"
   >
     <template #content>
-      <form novalidate @submit.prevent="submitForm">
+      <form novalidate @submit.prevent>
 
         <template v-if="selectedTabId === 'common'">
           <FormFieldSelect
@@ -187,7 +187,7 @@
         <template v-if="selectedTabId === 'additional'">
           <DynamicField
             v-for="field of values.additionalFields"
-            :key="field.name"
+            :key="field.id"
             :field="field"
           />
         </template>
@@ -231,7 +231,7 @@ import { useRoute, useRouter } from 'vue-router';
 import {
   convertRequestErrorToMap,
   isNotNullish,
-  Nullable,
+  type Nullable,
   useResource,
   urlTranslit,
   useI18n,
@@ -240,12 +240,12 @@ import {
 } from '@tager/admin-services';
 import {
   createTabErrorFinder,
-  OptionType,
-  TabType,
+  type OptionType,
+  type TabType,
   ShortCodeConstructor,
-  SeoChangeEvent,
+  type SeoChangeEvent,
   FormFooter,
-  TagerFormSubmitEvent,
+  type TagerFormSubmitEvent,
   FormFieldSelect,
   FormField,
   FormFieldUrlAliasInput,
@@ -265,7 +265,7 @@ import {
   getPost,
   updateBlogPost,
 } from '../../../services/requests';
-import { Language, PostFull } from '../../../typings/model';
+import { type Language, type PostFull } from '../../../typings/model';
 import {
   useFetchModuleConfig,
   useFetchCategories,
@@ -277,7 +277,7 @@ import {
   convertFormValuesToCreationPayload,
   convertFormValuesToUpdatePayload,
   convertPostToFormValues,
-  FormValues,
+  type FormValues,
   getStatusOptions,
 } from './PostForm.helpers';
 

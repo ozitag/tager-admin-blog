@@ -1,9 +1,9 @@
-import { TFunction } from 'i18next';
+import { type TFunction } from 'i18next';
 
-import { getWebsiteOrigin, notEmpty, Nullable } from '@tager/admin-services';
-import { ColumnDefinition } from '@tager/admin-ui';
+import { getWebsiteOrigin, notEmpty, type Nullable } from '@tager/admin-services';
+import { type ColumnDefinition } from '@tager/admin-ui';
 
-import { Category, Language, ModuleConfig } from '../../../typings/model';
+import { type Category, type Language, type ModuleConfig } from '../../../typings/model';
 import {
   getBlogCategoryFormUrl,
   getBlogPostListUrl,

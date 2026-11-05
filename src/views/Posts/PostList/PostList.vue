@@ -132,8 +132,8 @@ import pick from 'lodash.pick';
 import {useRoute, useRouter} from 'vue-router';
 
 import {
-  ColumnDefinition,
-  OptionType,
+  type ColumnDefinition,
+  type OptionType,
   useDataTable,
   formatDateTime,
   AdvancedSearch,
@@ -146,7 +146,7 @@ import {
   DataTable,
 } from '@tager/admin-ui';
 import {
-  Nullable,
+  type Nullable,
   useI18n,
   useResourceClone,
   useResourceDelete,
@@ -161,10 +161,10 @@ import {
 } from '../../../services/requests';
 import {getBlogPostFormUrl} from '../../../utils/paths';
 import {
-  Category,
-  Language,
-  PostFull,
-  PostShort,
+  type Category,
+  type Language,
+  type PostFull,
+  type PostShort,
 } from '../../../typings/model';
 import {getStatusOptions} from '../PostForm/PostForm.helpers';
 

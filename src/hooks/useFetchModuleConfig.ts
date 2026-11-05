@@ -1,8 +1,8 @@
 import { onMounted } from 'vue';
 
-import { Nullable, ResourceRef, useResource } from '@tager/admin-services';
+import { type Nullable, type ResourceRef, useResource } from '@tager/admin-services';
 
-import { ModuleConfig } from '../typings/model';
+import { type ModuleConfig } from '../typings/model';
 import { getModuleConfig } from '../services/requests';
 
 export function useFetchModuleConfig(): ResourceRef<Nullable<ModuleConfig>> {

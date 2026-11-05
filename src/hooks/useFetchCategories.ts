@@ -1,8 +1,8 @@
 import { onMounted } from 'vue';
 
-import { ResourceRef, useResource } from '@tager/admin-services';
+import { type ResourceRef, useResource } from '@tager/admin-services';
 
-import { Category } from '../typings/model';
+import { type Category } from '../typings/model';
 import { getCategories } from '../services/requests';
 
 export function useFetchCategories(): ResourceRef<Category[]> {

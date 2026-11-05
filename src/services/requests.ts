@@ -1,12 +1,12 @@
-import { request, Nullable, ResponseBody } from '@tager/admin-services';
-import { FieldShortType, OutgoingValueUnion } from '@tager/admin-dynamic-field';
+import { request, type Nullable, type ResponseBody } from '@tager/admin-services';
+import { type FieldShortType, type OutgoingValueUnion } from '@tager/admin-dynamic-field';
 
 import {
-  Category,
-  ModuleConfig,
-  PostShort,
-  PostFull,
-  CategoryPayload,
+  type Category,
+  type ModuleConfig,
+  type PostShort,
+  type PostFull,
+  type CategoryPayload,
 } from '../typings/model';
 
 /** Blog Posts */

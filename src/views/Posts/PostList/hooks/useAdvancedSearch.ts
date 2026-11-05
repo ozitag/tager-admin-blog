@@ -1,17 +1,17 @@
-import { computed, ComputedRef, Ref, ref, watch } from 'vue';
-import { TFunction } from 'i18next';
-import { RouteLocationNormalizedLoaded } from 'vue-router';
+import { computed, type ComputedRef, type Ref, ref, watch } from 'vue';
+import { type TFunction } from 'i18next';
+import { type RouteLocationNormalizedLoaded } from 'vue-router';
 
 import {
-  FilterTagType,
+  type FilterTagType,
   getFilterParamAsString,
   getFilterParamAsStringArray,
   getFilterParams,
-  OptionType,
+  type OptionType,
 } from '@tager/admin-ui';
 import { isNotNullish } from '@tager/admin-services';
 
-import { Category, Language } from '../../../../typings/model';
+import { type Category, type Language } from '../../../../typings/model';
 import { getNameWithDepth } from '../../../../utils/common';
 
 interface Params {

@@ -1,12 +1,12 @@
-import { TFunction } from 'i18next';
+import { type TFunction } from 'i18next';
 
-import { createId, Nullable } from '@tager/admin-services';
-import { OptionType } from '@tager/admin-ui';
+import { createId, type Nullable } from '@tager/admin-services';
+import { type OptionType } from '@tager/admin-ui';
 
 import {
-  Category,
-  CategoryFormValues,
-  CategoryPayload,
+  type Category,
+  type CategoryFormValues,
+  type CategoryPayload,
 } from '../../../typings/model';
 import { getNameWithDepth } from '../../../utils/common';
 

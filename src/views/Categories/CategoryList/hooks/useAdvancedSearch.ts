@@ -1,15 +1,15 @@
-import { computed, ComputedRef, Ref, ref, SetupContext, watch } from 'vue';
-import { RouteLocationNormalizedLoaded } from 'vue-router';
-import { TFunction } from 'i18next';
+import { computed, type ComputedRef, type Ref, ref, type SetupContext, watch } from 'vue';
+import { type RouteLocationNormalizedLoaded } from 'vue-router';
+import { type TFunction } from 'i18next';
 
 import {
-  FilterTagType,
+  type FilterTagType,
   getFilterParamAsStringArray,
   getFilterParams,
-  OptionType,
+  type OptionType,
 } from '@tager/admin-ui';
 
-import { Language } from '../../../../typings/model';
+import { type Language } from '../../../../typings/model';
 
 interface Params {
   t: TFunction;

@@ -1,13 +1,13 @@
-import { TFunction } from 'i18next';
+import { type TFunction } from 'i18next';
 
-import { notEmpty, Nullable } from '@tager/admin-services';
-import { ColumnDefinition, OptionType } from '@tager/admin-ui';
+import { notEmpty, type Nullable } from '@tager/admin-services';
+import { type ColumnDefinition, type OptionType } from '@tager/admin-ui';
 
 import {
-  Category,
-  ModuleConfig,
-  Language,
-  PostShort,
+  type Category,
+  type ModuleConfig,
+  type Language,
+  type PostShort,
 } from '../../../typings/model';
 import { getBlogPostFormUrl } from '../../../utils/paths';
 

@@ -1,19 +1,19 @@
-import { TFunction } from 'i18next';
+import { type TFunction } from 'i18next';
 
-import { createId, Nullable } from '@tager/admin-services';
-import { OptionType, SingleFileInputValueType } from '@tager/admin-ui';
+import { createId, type Nullable } from '@tager/admin-services';
+import { type OptionType, type SingleFileInputValueType } from '@tager/admin-ui';
 import {
-  FieldConfigUnion,
-  FieldUnion,
+  type FieldConfigUnion,
+  type FieldUnion,
   universalFieldUtils
 } from '@tager/admin-dynamic-field';
 
 import {
-  PostCreationPayload,
-  PostUpdatePayload
+  type PostCreationPayload,
+  type PostUpdatePayload
 } from '../../../services/requests';
 import { getNameWithDepth } from '../../../utils/common';
-import { Category, PostFull } from '../../../typings/model';
+import { type Category, type PostFull } from '../../../typings/model';
 
 export const getStatusOptions = (t: TFunction): OptionType[] => [
   { label: t('blog:statusPublished'), value: 'PUBLISHED' },

@@ -118,7 +118,7 @@ import {
   getCategories,
   moveCategory,
 } from '../../../services/requests';
-import { Category, Language } from '../../../typings/model';
+import { type Category, type Language } from '../../../typings/model';
 import { BLOG_ROUTE_PATHS } from '../../../constants/paths';
 
 import {

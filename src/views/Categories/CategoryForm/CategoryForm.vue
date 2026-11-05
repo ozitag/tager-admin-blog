@@ -8,7 +8,7 @@
     :is-content-loading="isContentLoading"
   >
     <template #content>
-      <form novalidate @submit.prevent="submitForm">
+      <form novalidate @submit.prevent>
         <template v-if="isCreation">
           <FormFieldSelect
             v-if="isLangSpecific"
@@ -132,17 +132,17 @@ import {
   convertRequestErrorToMap,
   getWebsiteOrigin,
   navigateBack,
-  Nullable,
+  type Nullable,
   urlTranslit,
   useI18n,
   useToast,
 } from '@tager/admin-services';
 import {
-  OptionType,
+  type OptionType,
   FormFooter,
-  TagerFormSubmitEvent,
-  SeoChangeEvent,
-  TabType,
+  type TagerFormSubmitEvent,
+  type SeoChangeEvent,
+  type TabType,
   FormFieldSelect,
   FormField,
   FormFieldUrlAliasInput,
@@ -161,7 +161,7 @@ import {
   getBlogCategoryFormUrl,
   getBlogCategoryListUrl,
 } from '../../../utils/paths';
-import { CategoryFormValues, Language } from '../../../typings/model';
+import { type CategoryFormValues, type Language } from '../../../typings/model';
 import { createCategory, updateCategory } from '../../../services/requests';
 
 import {
