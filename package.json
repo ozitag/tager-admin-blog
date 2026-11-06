@@ -1,6 +1,6 @@
 {
   "name": "@tager/admin-blog",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "license": "MIT",
   "main": "dist/index.umd.js",
   "module": "dist/index.esm.js",
@@ -62,6 +62,7 @@
     "vue-tsc": "^3.3.14"
   },
   "peerDependencies": {
+    "@tager/admin-dynamic-field": "^2.0.0",
     "@tager/admin-layout": "^2.0.0",
     "@tager/admin-services": "^2.0.0",
     "@tager/admin-ui": "^2.0.0",
