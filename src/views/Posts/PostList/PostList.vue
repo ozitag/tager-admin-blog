@@ -128,7 +128,6 @@
 <script lang="ts">
 import {computed, defineComponent, watch} from 'vue';
 import isEqual from 'lodash.isequal';
-import pick from 'lodash.pick';
 import {useRoute, useRouter} from 'vue-router';
 
 import {
@@ -175,6 +174,21 @@ import {
   getStatuses,
 } from './PostList.helpers';
 import {useAdvancedSearch} from './hooks';
+
+/**
+ * Выбрать заданные ключи из объекта.
+ *
+ * Заменяет lodash.pick: у него открытая уязвимость prototype pollution,
+ * и патча к ней нет — пакет не поддерживается.
+ */
+function pickKeys<T extends Record<string, unknown>, K extends keyof T>(
+  source: T,
+  keys: ReadonlyArray<K>
+): Partial<T> {
+  return Object.fromEntries(
+    Object.entries(source).filter(([key]) => keys.includes(key as K))
+  ) as Partial<T>;
+}
 
 export default defineComponent({
   name: 'PostList',
@@ -291,7 +305,7 @@ export default defineComponent({
       }
 
       const newQuery = {
-        ...pick(route.query, ['query', 'pageNumber', 'sort']),
+        ...pickKeys(route.query, ['query', 'pageNumber', 'sort']),
         ...filterParams.value,
       };
 
