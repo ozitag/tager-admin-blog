@@ -95,15 +95,15 @@
 
           <template v-if="selectedTabId === 'seo'">
             <SeoFieldGroup
-              :title="values.pageTitle"
+              :title="values.pageTitle ?? ''"
               :title-error-message="errors.pageTitle"
-              :description="values.pageDescription"
+              :description="values.pageDescription ?? ''"
               :description-error-message="errors.pageDescription"
               :should-display-keywords="false"
-              :keywords="values.pageKeywords"
+              :keywords="values.pageKeywords ?? ''"
               :keywords-error-message="errors.pageKeywords"
               :image="values.openGraphImage"
-              :image-scenario="imageScenario"
+              :image-scenario="imageScenario ?? undefined"
               :image-error-message="errors.openGraphImage"
               @change="handleSeoFieldGroupChange"
             />

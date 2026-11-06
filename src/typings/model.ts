@@ -10,7 +10,7 @@ import {
   type SingleFileInputValueType,
 } from '@tager/admin-ui';
 
-export interface SeoInfo {
+export type SeoInfo = {
   readonly pageTitle: Nullable<string>;
   readonly pageDescription: Nullable<string>;
   readonly pageKeywords: Nullable<string>;
@@ -19,7 +19,7 @@ export interface SeoInfo {
   readonly openGraphImage: Nullable<FileType>;
 }
 
-export interface Category extends SeoInfo {
+export type Category = SeoInfo & {
   readonly id: number;
   readonly name: string;
   readonly isDefault: boolean;
@@ -32,7 +32,7 @@ export interface Category extends SeoInfo {
   readonly depth: number;
 }
 
-export interface PostShort {
+export type PostShort = {
   readonly id: number;
   readonly title: string;
   readonly url: string;

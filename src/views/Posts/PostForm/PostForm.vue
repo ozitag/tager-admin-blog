@@ -204,7 +204,7 @@
             :image-error-message="errors.openGraphImage"
             :image-label="$i18n.t('blog:openGraphImage')"
             :image-scenario="
-              moduleConfig ? moduleConfig.fileScenarios.openGraph : null
+              moduleConfig ? (moduleConfig.fileScenarios.openGraph ?? undefined) : undefined
             "
             @change="handleSeoFieldGroupChange"
           />
